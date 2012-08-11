@@ -209,6 +209,15 @@ namespace Owin.Builder.Tests
             var app = builder.Build<AppTwo>();
             app("0").ShouldBe("0321");
         }
+
+        [Fact]
+        public Task TheDefaultDefaultShouldBe404()
+        {
+            var builder = new AppBuilder();
+            var app = builder.Build<AppDelegate>();
+
+            return app(new CallParameters()).Then(result => result.Status.ShouldBe(404));
+        }
     }
 }
 
