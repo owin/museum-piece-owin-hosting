@@ -181,7 +181,7 @@ namespace Owin.Builder.Utils
             return true;
         }
 
-        public static Func<object,object> EmitConversion(Type givenType, Type neededType)
+        public static Func<object, object> EmitConversion(Type givenType, Type neededType)
         {
             if (neededType.IsAssignableFrom(givenType))
             {
@@ -194,13 +194,94 @@ namespace Owin.Builder.Utils
             }
             else if (IsAppAction(givenType) && IsAppDelegate(neededType))
             {
-                
+                return EmitAppDelegateCallingAppAction(givenType, neededType);
             }
-            else if (IsAppDelegate(givenType) && IsAppDelegate(givenType))
+            else if (IsAppDelegate(givenType) && IsAppDelegate(neededType))
             {
-                
+
             }
             return null;
+        }
+
+        static Func<object, object> EmitAppDelegateCallingAppAction(Type appActionType, Type appDelegateType)
+        {
+            //Expression<Func<AppAction, AppDelegate>> conversion =
+            //    app => call =>
+            //        app(call.Environment,
+            //            call.Headers,
+            //            call.Body).Then(result =>
+            //                new ResultParameters
+            //                {
+            //                    Properties = result.Item1,
+            //                    Status = result.Item2,
+            //                    Headers = result.Item3,
+            //                    Body = result.Item4,
+            //                },
+            //                default(CancellationToken),
+            //                false);
+
+            Expression<Action> b = () => TaskHelpers.FromResult(4).Then(x => "", default(CancellationToken), true);
+            var thenMethod = ((MethodCallExpression)b.Body).Method.GetGenericMethodDefinition();
+
+
+            var appDelegateMethod = appDelegateType.GetMethod("Invoke");
+            var taskOfResultParametersType = appDelegateMethod.ReturnType;
+            var callParametersType = appDelegateMethod.GetParameters()[0].ParameterType;
+            var resultParametersType = taskOfResultParametersType.GetGenericArguments()[0];
+
+            var appActionMethod = appActionType.GetMethod("Invoke");
+            var resultTupleType = appActionMethod.ReturnType.GetGenericArguments()[0];
+
+            var appParameter = Expression.Parameter(appActionType, "app");
+            var callParameter = Expression.Parameter(callParametersType, "call");
+            var resultParameter = Expression.Parameter(resultTupleType, "result");
+
+            var appInvoke = Expression.Invoke(
+                appParameter,
+                Expression.Field(callParameter, "Environment"),
+                Expression.Field(callParameter, "Headers"),
+                Expression.Field(callParameter, "Body"));
+
+            var newResultParameters = Expression.MemberInit(
+                Expression.New(resultParametersType),
+                Expression.Bind(
+                    resultParametersType.GetField("Properties"),
+                    Expression.Property(resultParameter, "Item1")),
+                Expression.Bind(
+                    resultParametersType.GetField("Status"),
+                    Expression.Property(resultParameter, "Item2")),
+                Expression.Bind(
+                    resultParametersType.GetField("Headers"),
+                    Expression.Property(resultParameter, "Item3")),
+                Expression.Bind(
+                    resultParametersType.GetField("Body"),
+                    Expression.Property(resultParameter, "Item4")));
+
+            var resultLambda = Expression.Lambda(
+                Expression.GetFuncType(resultTupleType, resultParametersType),
+                newResultParameters,
+                resultParameter);
+
+            var thenInvoke = Expression.Call(
+                thenMethod.MakeGenericMethod(resultTupleType, resultParametersType),
+                appInvoke,
+                resultLambda,
+                Expression.Constant(default(CancellationToken), typeof(CancellationToken)),
+                Expression.Constant(false, typeof(bool)));
+
+            var appLambda = Expression.Lambda(
+                appDelegateType,
+                thenInvoke,
+                callParameter);
+
+            var conversionLambda = Expression.Lambda(
+                Expression.GetFuncType(appActionType, appDelegateType),
+                appLambda,
+                appParameter);
+
+            var conversion = conversionLambda.Compile();
+
+            return app => conversion.DynamicInvoke(app);
         }
 
         static Func<object, object> EmitAppActionCallingAppDelegate(Type appDelegateType, Type appActionType)
@@ -222,6 +303,9 @@ namespace Owin.Builder.Utils
             //            default(CancellationToken),
             //            false);
 
+            Expression<Action> b = () => TaskHelpers.FromResult(4).Then(x => "", default(CancellationToken), true);
+            var thenMethod = ((MethodCallExpression)b.Body).Method.GetGenericMethodDefinition();
+
             var appDelegateMethod = appDelegateType.GetMethod("Invoke");
             var taskOfResultParametersType = appDelegateMethod.ReturnType;
             var callParametersType = appDelegateMethod.GetParameters()[0].ParameterType;
@@ -229,9 +313,6 @@ namespace Owin.Builder.Utils
 
             var appActionMethod = appActionType.GetMethod("Invoke");
             var resultTupleType = appActionMethod.ReturnType.GetGenericArguments()[0];
-
-            Expression<Action> b = () => TaskHelpers.FromResult(4).Then(x => "", default(CancellationToken), true);
-            var thenMethod = ((MethodCallExpression)b.Body).Method.GetGenericMethodDefinition();
 
             var appParameter = Expression.Parameter(appDelegateType, "app");
             var envParameter = Expression.Parameter(typeof(IDictionary<string, object>), "env");
@@ -255,7 +336,7 @@ namespace Owin.Builder.Utils
                 Expression.Field(resultParameter, "Status"),
                 Expression.Field(resultParameter, "Headers"),
                 Expression.Field(resultParameter, "Body"));
-            
+
             var resultLambda = Expression.Lambda(
                 Expression.GetFuncType(resultParametersType, resultTupleType),
                 newTuple,
@@ -269,15 +350,15 @@ namespace Owin.Builder.Utils
                 Expression.Constant(false, typeof(bool)));
 
             var appLambda = Expression.Lambda(
-                appActionType, 
+                appActionType,
                 thenInvoke,
-                envParameter, 
-                headersParameter, 
+                envParameter,
+                headersParameter,
                 bodyParameter);
 
             var conversionLambda = Expression.Lambda(
-                Expression.GetFuncType(appDelegateType,appActionType),
-                appLambda, 
+                Expression.GetFuncType(appDelegateType, appActionType),
+                appLambda,
                 appParameter);
 
             var conversion = conversionLambda.Compile();

@@ -20,12 +20,12 @@ namespace Owin
             return (dynamic)builder.Build(typeof(TApp));
         }
 
-        public static IAppBuilder UseTypeof<TMiddleware>(this IAppBuilder builder, params object[] args)
+        public static IAppBuilder UseType<TMiddleware>(this IAppBuilder builder, params object[] args)
         {
             return builder.Use(typeof(TMiddleware), args);
         }
 
-        public static IAppBuilder Use<TApp>(this IAppBuilder builder, Func<TApp, TApp> middleware)
+        public static IAppBuilder UseFunc<TApp>(this IAppBuilder builder, Func<TApp, TApp> middleware)
         {
             return builder.Use(middleware);
         }

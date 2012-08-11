@@ -110,16 +110,16 @@ namespace Owin.Builder.Tests
         [Fact]
         public Task CallToAppDelegateFromAppActionShouldBeCreatable()
         {
-            var convert = Conversions.EmitConversion(typeof (AppDelegate), typeof (AppAction));
+            var convert = Conversions.EmitConversion(typeof(AppDelegate), typeof(AppAction));
 
             var theCall = default(CallParameters);
-            var theResult = new ResultParameters{Status=655321};
+            var theResult = new ResultParameters { Status = 655321 };
             AppDelegate given = call =>
             {
                 theCall = call;
                 return TaskHelpers.FromResult(theResult);
             };
-            
+
             var needed = (AppAction)convert(given);
 
             var env = new Dictionary<string, object>();
@@ -131,6 +131,61 @@ namespace Owin.Builder.Tests
                 {
                     result.Item2.ShouldBe(655321);
                     theCall.Environment.ShouldBeSameAs(env);
+                });
+        }
+
+        void Prototype()
+        {
+            //Expression<Func<AppAction, AppDelegate>> conversion =
+            //    app => call =>
+            //        app(call.Environment,
+            //            call.Headers,
+            //            call.Body).Then(result =>
+            //                new ResultParameters
+            //                {
+            //                    Properties = result.Item1,
+            //                    Status = result.Item2,
+            //                    Headers = result.Item3,
+            //                    Body = result.Item4,
+            //                },
+            //                default(CancellationToken),
+            //                false);
+        }
+
+        [Fact]
+        public Task CallToAppActionFromAppDelegateShouldBeCreatable()
+        {
+
+
+            var convert = Conversions.EmitConversion(typeof(AppAction), typeof(AppDelegate));
+
+            var theEnv = default(IDictionary<string, object>);
+            var theResult = TaskHelpers.FromResult(new ResultTuple(
+                new Dictionary<string, object>(),
+                655321,
+                new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase),
+                output => TaskHelpers.Completed()));
+
+            AppAction given = (env, headers, body) =>
+            {
+                theEnv = env;
+                return theResult;
+            };
+
+            var needed = (AppDelegate)convert(given);
+
+            var call = new CallParameters
+            {
+                Environment = new Dictionary<string, object>(),
+                Headers = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase),
+                Body = Stream.Null,
+            };
+
+            return needed(call)
+                .Then(result =>
+                {
+                    result.Status.ShouldBe(655321);
+                    theEnv.ShouldBeSameAs(call.Environment);
                 });
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Owin.Builder.Utils;
 
 namespace Owin.Builder
 {
@@ -114,6 +115,13 @@ namespace Owin.Builder
                 {
                     return conversion.Value.DynamicInvoke(app);
                 }
+            }
+            var owinConversion = Conversions.EmitConversion(app.GetType(), signature);
+            if (owinConversion != null)
+            {
+                var key = Tuple.Create(signature, app.GetType());
+                _conversions[key] = owinConversion;
+                return owinConversion(app);
             }
             throw new ApplicationException("No conversion available");
         }

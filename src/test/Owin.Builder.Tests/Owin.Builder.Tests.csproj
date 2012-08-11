@@ -51,7 +51,8 @@
     <Compile Include="App_Packages\TaskHelpers.Sources.0.1\TaskHelpers.cs" />
     <Compile Include="App_Packages\TaskHelpers.Sources.0.1\TaskHelpersExtensions.cs" />
     <Compile Include="ConversionsTests.cs" />
-    <Compile Include="Middlewares\Middlewares.cs" />
+    <Compile Include="Middlewares\AppActionMiddlewares.cs" />
+    <Compile Include="Middlewares\AppDelegateMiddlewares.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

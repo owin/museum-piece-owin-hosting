@@ -34,11 +34,15 @@ namespace StartupConvention1
 
             builder.Use(typeof(Gamma), "a", "b");
 
-            builder.Use<AppDelegate>(app => new Gamma(app, "a", "b").Invoke);
+            builder.UseType<Gamma>("a", "b");
+
+            builder.UseFunc<AppDelegate>(app => new Gamma(app, "a", "b").Invoke);
 
             builder.Use(typeof(Delta), "a", "b");
 
-            builder.Use<AppAction>(app => new Delta(app, "a", "b").Invoke);
+            builder.UseType<Delta>("a", "b");
+
+            builder.UseFunc<AppAction>(app => new Delta(app, "a", "b").Invoke);
 
             builder.Run(this);
         }

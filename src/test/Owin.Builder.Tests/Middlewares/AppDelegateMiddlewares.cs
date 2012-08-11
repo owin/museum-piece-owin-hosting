@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Owin.Builder.Tests.Middlewares
 {
-    public class StandardBehavior
+    public static partial class StandardBehavior
     {
         public static Task<ResultParameters> Execute(CallParameters call, AppDelegate app, string arg1, string arg2)
         {
@@ -25,7 +25,7 @@ namespace Owin.Builder.Tests.Middlewares
         }
     }
 
-    public class Alpha
+    public class AlphaAppDelegate
     {
         public AppDelegate Invoke(AppDelegate app, string arg1, string arg2)
         {
@@ -33,13 +33,13 @@ namespace Owin.Builder.Tests.Middlewares
         }
     }
 
-    public class Beta
+    public class BetaAppDelegate
     {
         readonly AppDelegate _app;
         readonly string _arg1;
         readonly string _arg2;
 
-        public Beta(AppDelegate app, string arg1, string arg2)
+        public BetaAppDelegate(AppDelegate app, string arg1, string arg2)
         {
             _app = app;
             _arg1 = arg1;
@@ -52,11 +52,12 @@ namespace Owin.Builder.Tests.Middlewares
         }
     }
 
-    public class Gamma
+    public class GammaAppDelegate
     {
-        public Beta Middleware(AppDelegate app, string arg1, string arg2)
+        public BetaAppDelegate Middleware(AppDelegate app, string arg1, string arg2)
         {
-            return new Beta(app, arg1, arg2);
+            return new BetaAppDelegate(app, arg1, arg2);
         }
     }
+
 }

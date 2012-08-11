@@ -174,19 +174,24 @@ namespace Owin.Builder.Tests
 
             var builder = new AppBuilder();
             builder.Properties["builder.DefaultApp"] = theDefault;
-            builder.Use(new Alpha(), "1", "a");
-            builder.Use(typeof(Beta), "2", "b");
-            builder.UseTypeof<Beta>("3", "c");
-            builder.Use(new Gamma(), "4", "d");
+            builder.Use(new AlphaAppDelegate(), "1", "a");
+            builder.Use(new AlphaAppAction(), "2", "b");
+            builder.Use(typeof(BetaAppDelegate), "3", "c");
+            builder.Use(typeof(BetaAppDelegate), "", "");
+            builder.Use(typeof(BetaAppAction), "4", "d");
+            builder.UseType<BetaAppDelegate>("5", "e");
+            builder.UseType<BetaAppAction>("6", "f");
+            builder.Use(new GammaAppDelegate(), "7", "g");
+            builder.Use(new GammaAppAction(), "8", "h");
 
             var app = builder.Build<AppDelegate>();
             var call = new CallParameters { Environment = new Dictionary<string, object>() };
             return app(call)
                 .Then(result =>
                 {
-                    call.Environment["arg1"].ShouldBe("1234");
-                    call.Environment["arg2"].ShouldBe("dcba");
-                    result.Properties["arg2"].ShouldBe("dcba");
+                    call.Environment["arg1"].ShouldBe("12345678");
+                    call.Environment["arg2"].ShouldBe("hgfedcba");
+                    result.Properties["arg2"].ShouldBe("hgfedcba");
                 });
         }
 
@@ -198,9 +203,9 @@ namespace Owin.Builder.Tests
         {
             var builder = new AppBuilder();
             builder.Properties["builder.DefaultApp"] = new Func<string, string>(call => call);
-            builder.Use<AppOne>(next => call => next(call) + "1");
-            builder.Use<AppTwo>(next => call => next(call) + "2");
-            builder.Use<Func<string, string>>(next => call => next(call) + "3");
+            builder.UseFunc<AppOne>(next => call => next(call) + "1");
+            builder.UseFunc<AppTwo>(next => call => next(call) + "2");
+            builder.UseFunc<Func<string, string>>(next => call => next(call) + "3");
             var app = builder.Build<AppTwo>();
             app("0").ShouldBe("0321");
         }
