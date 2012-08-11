@@ -21,3 +21,20 @@ namespace Owin
         IAppBuilder AddSignatureConversion(Delegate conversion);
     }
 }
+
+namespace Owin.Startup
+{
+    [ComImport]
+    [Guid("24d2798f-18c3-461a-97bf-83d5a0fd726e")]
+    public interface IStartupLoader
+    {
+        IStartupMethod Load(string startup);
+    }
+
+    [ComImport]
+    [Guid("24d27990-18c3-461a-97bf-83d5a0fd726e")]
+    public interface IStartupMethod
+    {
+        void Invoke(IAppBuilder builder);
+    }
+}

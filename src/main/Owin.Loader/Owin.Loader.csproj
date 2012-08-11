@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{480FD49E-9C69-4FCE-B93A-3E65AFBF82D9}</ProjectGuid>
+    <ProjectGuid>{DF967ED4-C320-421C-859C-81034EFF615E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Owin</RootNamespace>
-    <AssemblyName>Owin.Startup</AssemblyName>
+    <RootNamespace>Owin.Loader</RootNamespace>
+    <AssemblyName>Owin.Loader</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,23 +30,30 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Owin.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interop.cs" />
+    <Compile Include="DefaultLoader.cs" />
+    <Compile Include="NullLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StartupMethod.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Owin.snk" />
-    <None Include="Owin.Startup.nuspec" />
+    <ProjectReference Include="..\Owin.Startup\Owin.Startup.csproj">
+      <Project>{480FD49E-9C69-4FCE-B93A-3E65AFBF82D9}</Project>
+      <Name>Owin.Startup</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Owin.Loader.nuspec" />
+    <None Include="Owin.Loader.Sources.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
