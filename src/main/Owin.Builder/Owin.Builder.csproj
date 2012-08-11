@@ -57,6 +57,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Owin.Builder.Sources.nuspec" />
+    <None Include="Owin.Builder.nuspec" />
     <None Include="Owin.snk" />
     <None Include="packages.config" />
   </ItemGroup>
