@@ -1,0 +1,53 @@
+
+var PROJECT='Owin.Hosting'
+var VERSION='0.2'
+var FULL_VERSION='${VERSION}'
+var AUTHORS='${PROJECT} contributors'
+
+var BASE_DIR='${Directory.GetCurrentDirectory()}'
+var TARGET_DIR='${Path.Combine(BASE_DIR, "target")}'
+var BUILD_DIR='${Path.Combine(TARGET_DIR, "build")}'
+var TEST_DIR='${Path.Combine(TARGET_DIR, "test")}'
+
+var NUGET_DEPLOY='http://www.myget.org/F/gate/'
+
+
+-// include range of standard general targets. run "sake targets" to display
+use-standard-lifecycle
+
+-// include sets of standard work targets. features include 'nuget,xunit,nunit'
+use-standard-goals features='nuget,xunit'
+
+-// additional work targets are defined below
+
+#release
+  @{
+    // To publish, call `build release deploy`
+    NUGET_DEPLOY = '';
+    FULL_VERSION = VERSION;
+  }
+
+#nuget-deploy target='deploy' description='Upload NuGet packages to gallery'
+  var extra=''
+  set extra='${extra} -Source ${NUGET_DEPLOY}' if='!string.IsNullOrEmpty(NUGET_DEPLOY)'
+  nuget-push each='var nupkgFile in Files.Include("target/*.nupkg")'
+
+#sources-package-prepare target='package-prepare'
+  for each='var file in Files.Include("src/**/*.Sources.nuspec")'
+    var projectDir='${Path.GetDirectoryName(file)}'
+    var projectName='${Path.GetFileName(projectDir)}'
+    
+    copy sourceDir='${projectDir}' include='**/*.cs' exclude='**/App_Packages/**/*' outputDir='${BUILD_DIR}\${projectName}' overwrite='${true}'
+    
+    for each='var deleteFile in Files.Include(BUILD_DIR + "/" + projectName + "/**/AssemblyInfo.cs")' -File.Delete(deleteFile);
+
+    update-file each='var updateFile in Files.Include(BUILD_DIR + "/" + projectName + "/**/*.cs")'
+      @{
+        updateText = updateText
+          .Replace("public static partial class", "internal static partial class")
+          .Replace("public static class", "internal static class")
+          .Replace("public class", "internal class")
+          .Replace("public enum", "internal enum")
+		  .Replace("public delegate", "internal delegate")
+          .Replace("public interface", "internal interface");
+      }
