@@ -1,4 +1,4 @@
-﻿using Owin.Startup;
+﻿using System;
 
 namespace Owin.Loader
 {
@@ -8,7 +8,7 @@ namespace Owin.Loader
 
         public static IStartupLoader Instance { get { return Singleton; } }
 
-        public IStartupMethod Load(string startup)
+        public Action<IAppBuilder> Load(string startup)
         {
             return null;
         }

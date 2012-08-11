@@ -53,7 +53,7 @@
     <ProjectReference Include="..\Owin.Startup\Owin.Startup.csproj">
       <Project>{480FD49E-9C69-4FCE-B93A-3E65AFBF82D9}</Project>
       <Name>Owin.Startup</Name>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

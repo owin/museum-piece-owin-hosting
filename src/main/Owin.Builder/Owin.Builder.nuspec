@@ -3,7 +3,6 @@
   <metadata>
     <id>$id$</id>
     <version>$version$</version>
-    <title>OWIN common builder</title>
     <authors>$authors$</authors>
     <owners>$authors$</owners>
     <licenseUrl>https://github.com/owin-contrib/owin-hosting/blob/master/LICENSE.txt</licenseUrl>

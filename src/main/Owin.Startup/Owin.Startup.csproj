@@ -41,7 +41,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interop.cs" />
+    <Compile Include="StartupExtensions.cs" />
+    <Compile Include="IAppBuilder.cs" />
+    <Compile Include="Loader\IStartupLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

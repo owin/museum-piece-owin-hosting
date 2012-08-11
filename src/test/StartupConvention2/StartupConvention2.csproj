@@ -50,10 +50,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\main\Owin\Owin.csproj">
-      <Project>{43568FF4-CB01-4EC4-9645-434E1DC7FB6C}</Project>
-      <Name>Owin</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MiddlewareConvention2\MiddlewareConvention2.csproj">
       <Project>{7F67B407-628C-403D-9235-EEE6AF64D32A}</Project>
       <Name>MiddlewareConvention2</Name>

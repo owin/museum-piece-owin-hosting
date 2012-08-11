@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Owin.Startup;
 
 namespace Owin.Loader
 {   public class DefaultLoader : IStartupLoader
@@ -20,14 +19,8 @@ namespace Owin.Loader
             _next = next ?? NullLoader.Instance;
         }
 
-        public IStartupMethod Load(string startup)
-        {
-            var action = LoadFromAssembly(startup);
-            return action != null ? new StartupMethod(action) : _next.Load(startup);
-        }
-
-        static Action<IAppBuilder> LoadFromAssembly(string startupName)
-        {
+        public Action<IAppBuilder> Load(string startupName)
+        {            
             if (string.IsNullOrWhiteSpace(startupName))
             {
                 startupName = GetDefaultConfigurationString(

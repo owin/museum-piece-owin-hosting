@@ -43,7 +43,6 @@
     <Compile Include="DefaultLoader.cs" />
     <Compile Include="NullLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StartupMethod.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Owin.Startup\Owin.Startup.csproj">

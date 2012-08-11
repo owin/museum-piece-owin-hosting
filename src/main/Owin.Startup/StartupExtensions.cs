@@ -2,24 +2,8 @@
 
 namespace Owin
 {
-    public delegate void BuilderDelegate(IAppBuilder builder);
-
-    public static class AppBuilderExtensions
+    public static class StartupExtensions
     {
-        public static TApp BuildNew<TApp>(
-           this IAppBuilder builder,
-           BuilderDelegate configuration)
-        {
-            var nested = builder.New();
-            configuration(nested);
-            return nested.Build<TApp>();
-        }
-
-        public static TApp Build<TApp>(this IAppBuilder builder)
-        {
-            return (dynamic)builder.Build(typeof(TApp));
-        }
-
         public static IAppBuilder UseType<TMiddleware>(this IAppBuilder builder, params object[] args)
         {
             return builder.Use(typeof(TMiddleware), args);
@@ -33,6 +17,20 @@ namespace Owin
         public static void Run(this IAppBuilder builder, object app)
         {
             builder.Use(new Func<object, object>(ignored => app));
+        }
+
+        public static TApp Build<TApp>(this IAppBuilder builder)
+        {
+            return (TApp)builder.Build(typeof(TApp));
+        }
+
+        public static TApp BuildNew<TApp>(
+           this IAppBuilder builder,
+           Action<IAppBuilder> configuration)
+        {
+            var nested = builder.New();
+            configuration(nested);
+            return nested.Build<TApp>();
         }
     }
 }
