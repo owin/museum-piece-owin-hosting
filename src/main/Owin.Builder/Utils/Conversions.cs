@@ -13,10 +13,6 @@ namespace Owin.Builder.Utils
     {
         public static bool IsOwinDelegate(Type delegateType)
         {
-            var method = delegateType.GetMethod("Invoke");
-            var parameterTypes = method.GetParameters().Select(p => p.ParameterType).ToArray();
-            var returnType = method.ReturnType;
-
             return
                 IsAppDelegate(delegateType) ||
                 IsAppAction(delegateType);
@@ -25,6 +21,11 @@ namespace Owin.Builder.Utils
         public static bool IsAppDelegate(Type delegateType)
         {
             var method = delegateType.GetMethod("Invoke");
+            if (method == null)
+            {
+                return false;
+            }
+
             var parameterTypes = method.GetParameters().Select(p => p.ParameterType).ToArray();
             var returnType = method.ReturnType;
 
@@ -99,6 +100,11 @@ namespace Owin.Builder.Utils
         public static bool IsAppAction(Type delegateType)
         {
             var method = delegateType.GetMethod("Invoke");
+            if (method == null)
+            {
+                return false;
+            }
+
             var parameterTypes = method.GetParameters().Select(p => p.ParameterType).ToArray();
             var returnType = method.ReturnType;
 
