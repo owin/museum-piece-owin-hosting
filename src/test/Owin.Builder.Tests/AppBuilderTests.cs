@@ -218,6 +218,23 @@ namespace Owin.Builder.Tests
 
             return app(new CallParameters()).Then(result => result.Status.ShouldBe(404));
         }
+
+        public class DifferentType
+        {
+
+        }
+
+        [Fact]
+        public void ConverterCombinationWillBeInvokedIfNeeded()
+        {
+            var builder = new AppBuilder();
+            Func<AppDelegate, DifferentType> convert1 = _ => new DifferentType();
+            Func<DifferentType, AppDelegate> convert2 = _ => call => { throw new NotImplementedException(); };
+            builder.AddSignatureConversion(convert1);
+            builder.AddSignatureConversion(convert2);
+
+            var diff = builder.Build<DifferentType>();
+        }
     }
 }
 
