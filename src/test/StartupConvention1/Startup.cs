@@ -8,17 +8,7 @@ using Owin;
 
 namespace StartupConvention1
 {
-    using AppAction = Func< // Call
-      IDictionary<string, object>, // Environment
-      IDictionary<string, string[]>, // Headers
-      Stream, // Body
-      Task<Tuple< // Result
-          IDictionary<string, object>, // Properties
-          int, // Status
-          IDictionary<string, string[]>, // Headers
-          Func< // CopyTo
-              Stream, // Body
-              Task>>>>; // Done
+    using AppFunc = Func<IDictionary<string, object>, Task>;
 
     public class Startup
     {
@@ -26,9 +16,13 @@ namespace StartupConvention1
         {
             builder.UseAlpha("a", "b");
 
-            builder.Use(Alpha.Middleware("a", "b"));
+            builder.UseFunc(app => Alpha.Middleware(app, "a", "b"));
+
+            builder.UseFunc(Alpha.Middleware, "a", "b");
 
             builder.Use(Beta.Middleware("a", "b"));
+
+            builder.UseFunc(Beta.Middleware, "a", "b");
 
             builder.UseGamma("a", "b");
 
@@ -36,18 +30,18 @@ namespace StartupConvention1
 
             builder.UseType<Gamma>("a", "b");
 
-            builder.UseFunc<AppDelegate>(app => new Gamma(app, "a", "b").Invoke);
+            builder.UseFunc<AppFunc>(app => new Gamma(app, "a", "b").Invoke);
 
             builder.Use(typeof(Delta), "a", "b");
 
             builder.UseType<Delta>("a", "b");
 
-            builder.UseFunc<AppAction>(app => new Delta(app, "a", "b").Invoke);
+            builder.UseFunc<AppFunc>(app => new Delta(app, "a", "b").Invoke);
 
             builder.Run(this);
         }
 
-        public Task<ResultParameters> Invoke(CallParameters call)
+        public Task Invoke(IDictionary<string, object> env)
         {
             throw new NotImplementedException();
         }

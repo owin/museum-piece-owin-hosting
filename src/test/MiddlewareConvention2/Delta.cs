@@ -2,95 +2,40 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Utils;
 
 namespace MiddlewareConvention2
 {
-    using AppAction = Func< // Call
-       IDictionary<string, object>, // Environment
-       IDictionary<string, string[]>, // Headers
-       Stream, // Body
-       Task<Tuple< // Result
-           IDictionary<string, object>, // Properties
-           int, // Status
-           IDictionary<string, string[]>, // Headers
-           Func< // CopyTo
-               Stream, // Body
-               Task>>>>; // Done
-
-    using ResultTuple = Tuple< //Result
-        IDictionary<string, object>, // Properties
-        int, // Status
-        IDictionary<string, string[]>, // Headers
-        Func< // CopyTo
-            Stream, // Body
-            Task>>; // Done
+    using AppFunc = Func<IDictionary<string, object>, Task>;
 
     public class Delta
     {
-        readonly AppAction _app;
+        readonly AppFunc _app;
         readonly string _arg1;
         readonly string _arg2;
 
-        public Delta(AppAction app, string arg1, string arg2)
+        public Delta(AppFunc app, string arg1, string arg2)
         {
             _app = app;
             _arg1 = arg1;
             _arg2 = arg2;
         }
 
-        public Task<ResultTuple> Invoke(
-            IDictionary<string, object> env,
-            IDictionary<string, string[]> headers,
-            Stream input)
+        public Task Invoke(IDictionary<string, object> env)
         {
-            var thisMiddlewareHandlesThisRequest = false;
-
-            // may inspect call information here
-
-            // optionally call information may be modified
-
-            // middleware may decide to handle request instead 
-            // of passing along
-
-            if (thisMiddlewareHandlesThisRequest)
+            var helper = new OwinHelper(env);
+            if (helper.RequestPath.StartsWith(_arg1, StringComparison.OrdinalIgnoreCase))
             {
-                // to handle the request, return a task of result 
-                return Execute(env, headers, input);
+                helper.ResponseHeaders["Content-Type"] = new[] { "text/plain" };
+                using (var writer = new StreamWriter(helper.OutputStream))
+                {
+                    writer.Write(_arg2);
+                }
+                return TaskHelpers.Completed();
             }
 
             // to pass along the request, call the next app
-            return _app(env, headers, input).Then(result =>
-            {
-                // may inspect result information here
-
-                // optionally result information may be modified, or
-                // a different result may be returned
-
-                return result;
-            });
-        }
-
-        public Task<ResultTuple> Execute(
-            IDictionary<string, object> env,
-            IDictionary<string, string[]> headers,
-            Stream input)
-        {
-            return TaskHelpers.FromResult(new ResultTuple(
-                new Dictionary<string, object>(),
-                200,
-                new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
-                    {
-                        {"Content-Type", new[] {"text/plain"}}
-                    },
-                output =>
-                {
-                    using (var writer = new StreamWriter(output))
-                    {
-                        writer.Write("Welcome to the machine");
-                    }
-                    return TaskHelpers.Completed();
-                }));
-
+            return _app(env);
         }
     }
 }

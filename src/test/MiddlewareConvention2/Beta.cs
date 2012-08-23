@@ -2,84 +2,32 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Utils;
 
 namespace MiddlewareConvention2
 {
-    using AppAction = Func< // Call
-       IDictionary<string, object>, // Environment
-       IDictionary<string, string[]>, // Headers
-       Stream, // Body
-       Task<Tuple< // Result
-           IDictionary<string, object>, // Properties
-           int, // Status
-           IDictionary<string, string[]>, // Headers
-           Func< // CopyTo
-               Stream, // Body
-               Task>>>>; // Done
-
-    using ResultTuple = Tuple< //Result
-        IDictionary<string, object>, // Properties
-        int, // Status
-        IDictionary<string, string[]>, // Headers
-        Func< // CopyTo
-            Stream, // Body
-            Task>>; // Done
+    using AppFunc = Func<IDictionary<string, object>, Task>;
 
     public class Beta
     {
-        public static Func<AppAction, AppAction> Middleware(string arg1, string arg2)
+        public static Func<AppFunc, AppFunc> Middleware(string arg1, string arg2)
         {
-            return app => (env, headers, input) =>
+            return app => env =>
             {
-                var thisMiddlewareHandlesThisRequest = false;
-
-                // may inspect call information here
-
-                // optionally call information may be modified
-
-                // middleware may decide to handle request instead 
-                // of passing along
-
-                if (thisMiddlewareHandlesThisRequest)
+                var helper = new OwinHelper(env);
+                if (helper.RequestPath.StartsWith(arg1, StringComparison.OrdinalIgnoreCase))
                 {
-                    // to handle the request, return a task of result 
-                    return Execute(env, headers, input);
+                    helper.ResponseHeaders["Content-Type"] = new[] { "text/plain" };
+                    using (var writer = new StreamWriter(helper.OutputStream))
+                    {
+                        writer.Write(arg2);
+                    }
+                    return TaskHelpers.Completed();
                 }
 
                 // to pass along the request, call the next app
-                return app(env, headers, input).Then(result =>
-                {
-                    // may inspect result information here
-
-                    // optionally result information may be modified, or
-                    // a different result may be returned
-
-                    return result;
-                });
+                return app(env);
             };
-        }
-
-        static Task<ResultTuple> Execute(
-            IDictionary<string, object> env,
-            IDictionary<string, string[]> headers,
-            Stream input)
-        {
-            return TaskHelpers.FromResult(new ResultTuple(
-                new Dictionary<string, object>(),
-                200,
-                new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
-                    {
-                        {"Content-Type", new[] {"text/plain"}}
-                    },
-                output =>
-                {
-                    using (var writer = new StreamWriter(output))
-                    {
-                        writer.Write("Welcome to the machine");
-                    }
-                    return TaskHelpers.Completed();
-                }));
-
         }
     }
 }
