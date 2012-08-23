@@ -3,6 +3,10 @@ using System.Threading.Tasks;
 
 namespace Owin.Builder
 {
+    /// <summary>
+    /// Simple object used by AppBuilder as seed OWIN callable if the
+    /// builder.Properties["builder.DefaultApp"] is not set
+    /// </summary>
     class NotFound
     {
         static readonly Task Completed;

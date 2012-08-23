@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Owin.Builder
 {
-    using ResultTuple = Tuple< //Result
-        IDictionary<string, object>, // Properties
-        int, // Status
-        IDictionary<string, string[]>, // Headers
-        Func< // CopyTo
-            Stream, // Body
-            Task>>; // Done
-
+    /// <summary>
+    /// A standard implementation of IAppBuilder 
+    /// </summary>
     public class AppBuilder : IAppBuilder
     {
         public AppBuilder()
@@ -260,10 +254,6 @@ namespace Owin.Builder
                     return Tuple.Create(parameters[0].ParameterType, middlewareDelegate, args);
                 }
             }
-            //if (middlewareDelegate == null)
-            //{
-            //    return new Func<object, object>(_ => middlewareObject);
-            //}
 
             return Tuple.Create(GetParameterType(middlewareDelegate), middlewareDelegate, args);
         }

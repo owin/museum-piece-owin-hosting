@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Utils
@@ -16,8 +17,8 @@ namespace Utils
         {
             Env = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders",new Dictionary<string,string[]>()},
-                {"owin.ResponseHeaders",new Dictionary<string,string[]>()},
+                {"owin.RequestHeaders",new Dictionary<string,string[]>(StringComparer.OrdinalIgnoreCase)},
+                {"owin.ResponseHeaders",new Dictionary<string,string[]>(StringComparer.OrdinalIgnoreCase)},
             };
         }
 
