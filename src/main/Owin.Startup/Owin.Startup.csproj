@@ -41,6 +41,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StartupExtensions.Type.cs" />
+    <Compile Include="StartupExtensions.Func.cs" />
     <Compile Include="StartupExtensions.cs" />
     <Compile Include="IAppBuilder.cs" />
     <Compile Include="Loader\IStartupLoader.cs" />

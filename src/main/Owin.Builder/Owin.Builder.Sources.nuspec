@@ -15,7 +15,6 @@
     <tags>OWIN</tags>
     <dependencies>
       <dependency id="Owin.Startup" version="$version$"/>
-      <dependency id="TaskHelpers.Sources" version="0.1"/>
     </dependencies>
   </metadata>
   <files>

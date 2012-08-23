@@ -50,6 +50,10 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MiddlewareConvention1\MiddlewareConvention1.csproj">
+      <Project>{0AB5F10C-F0AD-47AD-AF23-AE80CDB7A19C}</Project>
+      <Name>MiddlewareConvention1</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MiddlewareConvention2\MiddlewareConvention2.csproj">
       <Project>{7F67B407-628C-403D-9235-EEE6AF64D32A}</Project>
       <Name>MiddlewareConvention2</Name>

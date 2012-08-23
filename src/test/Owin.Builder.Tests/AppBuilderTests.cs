@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
-using Owin.Builder.Tests.Middlewares;
 using Shouldly;
+using Utils;
 using Xunit;
 
 namespace Owin.Builder.Tests
 {
+    using AppFunc = Func<IDictionary<string, object>, Task>;
 
     public class AppBuilderTests
     {
@@ -167,34 +168,6 @@ namespace Owin.Builder.Tests
             }
         }
 
-        [Fact]
-        public Task ChainingMiddlewareShouldConvertAsNeeded()
-        {
-            AppDelegate theDefault = _ => TaskHelpers.FromResult(new ResultParameters { Properties = new Dictionary<string, object>() });
-
-            var builder = new AppBuilder();
-            builder.Properties["builder.DefaultApp"] = theDefault;
-            builder.Use(new AlphaAppDelegate(), "1", "a");
-            builder.Use(new AlphaAppAction(), "2", "b");
-            builder.Use(typeof(BetaAppDelegate), "3", "c");
-            builder.Use(typeof(BetaAppDelegate), "", "");
-            builder.Use(typeof(BetaAppAction), "4", "d");
-            builder.UseType<BetaAppDelegate>("5", "e");
-            builder.UseType<BetaAppAction>("6", "f");
-            builder.Use(new GammaAppDelegate(), "7", "g");
-            builder.Use(new GammaAppAction(), "8", "h");
-
-            var app = builder.Build<AppDelegate>();
-            var call = new CallParameters { Environment = new Dictionary<string, object>() };
-            return app(call)
-                .Then(result =>
-                {
-                    call.Environment["arg1"].ShouldBe("12345678");
-                    call.Environment["arg2"].ShouldBe("hgfedcba");
-                    result.Properties["arg2"].ShouldBe("hgfedcba");
-                });
-        }
-
         public delegate string AppOne(string call);
         public delegate string AppTwo(string call);
 
@@ -214,9 +187,10 @@ namespace Owin.Builder.Tests
         public Task TheDefaultDefaultShouldBe404()
         {
             var builder = new AppBuilder();
-            var app = builder.Build<AppDelegate>();
+            var app = builder.Build();
 
-            return app(new CallParameters()).Then(result => result.Status.ShouldBe(404));
+            var helper = new OwinHelper();
+            return app(helper.Env).Then(() => helper.ResponseStatusCode.ShouldBe(404));
         }
 
         public class DifferentType
@@ -228,8 +202,8 @@ namespace Owin.Builder.Tests
         public void ConverterCombinationWillBeInvokedIfNeeded()
         {
             var builder = new AppBuilder();
-            Func<AppDelegate, DifferentType> convert1 = _ => new DifferentType();
-            Func<DifferentType, AppDelegate> convert2 = _ => call => { throw new NotImplementedException(); };
+            Func<AppFunc, DifferentType> convert1 = _ => new DifferentType();
+            Func<DifferentType, AppFunc> convert2 = _ => call => { throw new NotImplementedException(); };
             builder.AddSignatureConversion(convert1);
             builder.AddSignatureConversion(convert2);
 

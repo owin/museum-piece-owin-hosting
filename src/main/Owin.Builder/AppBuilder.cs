@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Owin.Builder.Utils;
 
 namespace Owin.Builder
 {
-    using ResultTuple = Tuple< //Result
-        IDictionary<string, object>, // Properties
-        int, // Status
-        IDictionary<string, string[]>, // Headers
-        Func< // CopyTo
-            Stream, // Body
-            Task>>; // Done
-
+    /// <summary>
+    /// A standard implementation of IAppBuilder 
+    /// </summary>
     public class AppBuilder : IAppBuilder
     {
         public AppBuilder()
@@ -79,7 +72,7 @@ namespace Owin.Builder
             object app;
             if (!_properties.TryGetValue("builder.DefaultApp", out app))
             {
-                app = NotFound;
+                app = new Func<IDictionary<string, object>, Task>(new NotFound().Invoke);
             }
 
             foreach (var middleware in _middleware.Reverse())
@@ -96,17 +89,6 @@ namespace Owin.Builder
 
             return Convert(signature, app);
         }
-
-        readonly Func<
-            IDictionary<string, object>,
-            IDictionary<string, string[]>,
-            Stream,
-            Task<ResultTuple>> NotFound = (_, __, ___) =>
-                TaskHelpers.FromResult(new ResultTuple(
-                    new Dictionary<string, object>(),
-                    404,
-                    new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase),
-                    output => TaskHelpers.Completed()));
 
         object Convert(Type signature, object app)
         {
@@ -177,13 +159,6 @@ namespace Owin.Builder
                 {
                     return conversion.Value.DynamicInvoke(app);
                 }
-            }
-            var owinConversion = Conversions.EmitConversion(app.GetType(), signature);
-            if (owinConversion != null)
-            {
-                var key = Tuple.Create(signature, app.GetType());
-                _conversions[key] = owinConversion;
-                return owinConversion(app);
             }
             return null;
         }
@@ -279,10 +254,6 @@ namespace Owin.Builder
                     return Tuple.Create(parameters[0].ParameterType, middlewareDelegate, args);
                 }
             }
-            //if (middlewareDelegate == null)
-            //{
-            //    return new Func<object, object>(_ => middlewareObject);
-            //}
 
             return Tuple.Create(GetParameterType(middlewareDelegate), middlewareDelegate, args);
         }

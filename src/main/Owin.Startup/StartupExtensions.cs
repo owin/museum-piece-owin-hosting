@@ -1,27 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Owin
 {
-    public static class StartupExtensions
+    using AppFunc = Func<IDictionary<string, object>, Task>;
+
+    public static partial class StartupExtensions
     {
-        public static IAppBuilder UseType<TMiddleware>(this IAppBuilder builder, params object[] args)
-        {
-            return builder.Use(typeof(TMiddleware), args);
-        }
-
-        public static IAppBuilder UseFunc<TApp>(this IAppBuilder builder, Func<TApp, TApp> middleware)
-        {
-            return builder.Use(middleware);
-        }
-
         public static void Run(this IAppBuilder builder, object app)
         {
             builder.Use(new Func<object, object>(ignored => app));
         }
 
+        public static AppFunc Build(this IAppBuilder builder)
+        {
+            return builder.Build<AppFunc>();
+        }
+
         public static TApp Build<TApp>(this IAppBuilder builder)
         {
             return (TApp)builder.Build(typeof(TApp));
+        }
+
+        public static AppFunc BuildNew(
+           this IAppBuilder builder,
+           Action<IAppBuilder> configuration)
+        {
+            return builder.BuildNew<AppFunc>(configuration);
         }
 
         public static TApp BuildNew<TApp>(

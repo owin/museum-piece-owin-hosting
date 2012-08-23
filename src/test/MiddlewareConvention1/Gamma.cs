@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using MiddlewareConvention1;
-using Owin;
+using Utils;
 
 namespace Owin
 {
@@ -18,67 +18,36 @@ namespace Owin
 
 namespace MiddlewareConvention1
 {
+    using AppFunc = Func<IDictionary<string, object>, Task>;
+
     public class Gamma
     {
-        readonly AppDelegate _app;
+        readonly AppFunc _app;
         readonly string _arg1;
         readonly string _arg2;
 
-        public Gamma(AppDelegate app, string arg1, string arg2)
+        public Gamma(AppFunc app, string arg1, string arg2)
         {
             _app = app;
             _arg1 = arg1;
             _arg2 = arg2;
         }
 
-        public Task<ResultParameters> Invoke(CallParameters call)
+        public Task Invoke(IDictionary<string, object> env)
         {
-            var thisMiddlewareHandlesThisRequest = false;
-
-            // may inspect call information here
-
-            // optionally call information may be modified
-
-            // middleware may decide to handle request instead 
-            // of passing along
-
-            if (thisMiddlewareHandlesThisRequest)
+            var helper = new OwinHelper(env);
+            if (helper.RequestPath.StartsWith(_arg1, StringComparison.OrdinalIgnoreCase))
             {
-                // to handle the request, return a task of result 
-                return Execute(call);
+                helper.ResponseHeaders["Content-Type"] = new[] { "text/plain" };
+                using (var writer = new StreamWriter(helper.OutputStream))
+                {
+                    writer.Write(_arg2);
+                }
+                return TaskHelpers.Completed();
             }
 
             // to pass along the request, call the next app
-            return _app(call).Then(result =>
-            {
-                // may inspect result information here
-
-                // optionally result information may be modified, or
-                // a different result may be returned
-
-                return result;
-            });
-        }
-
-        public Task<ResultParameters> Execute(CallParameters call)
-        {
-            return TaskHelpers.FromResult(new ResultParameters
-            {
-                Status = 200,
-                Headers = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
-                {
-                    {"Content-Type", new[] {"text/plain"}}
-                },
-                Body = output =>
-                {
-                    using (var writer = new StreamWriter(output))
-                    {
-                        writer.Write("Welcome to the machine");
-                    }
-                    return TaskHelpers.Completed();
-                },
-                Properties = new Dictionary<string, object>(),
-            });
+            return _app(env);
         }
     }
 }
