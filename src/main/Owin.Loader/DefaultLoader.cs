@@ -40,7 +40,24 @@ namespace Owin.Loader
             var methodName = typeAndMethod.Item2 ?? "Configuration";
             var methodInfo = type.GetMethod(methodName);
 
-            return MakeDelegate(type, methodInfo);
+            var startup = MakeDelegate(type, methodInfo);
+
+            if (startup == null)
+            {
+                return null;
+            }
+
+            return
+                builder =>
+                {
+                    object value;
+                    if (!builder.Properties.TryGetValue("host.AppName", out value) ||
+                        String.IsNullOrWhiteSpace(Convert.ToString(value)))
+                    {
+                        builder.Properties["host.AppName"] = type.FullName;
+                    }
+                    startup(builder);
+                };
         }
 
         public static Tuple<Type, string> GetTypeAndMethodNameForConfigurationString(string configuration)
