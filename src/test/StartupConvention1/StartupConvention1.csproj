@@ -21,6 +21,10 @@
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
     <UpgradeBackupLocation />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -57,9 +61,13 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\main\Owin.Startup\Owin.Startup.csproj">
+    <ProjectReference Include="..\..\main\Owin.Extensions\Owin.Extensions.csproj">
+      <Project>{eb90cb5c-13d4-4e8a-ab69-839a99e9066a}</Project>
+      <Name>Owin.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\main\Owin.Startup\Owin.csproj">
       <Project>{480FD49E-9C69-4FCE-B93A-3E65AFBF82D9}</Project>
-      <Name>Owin.Startup</Name>
+      <Name>Owin</Name>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
     <ProjectReference Include="..\MiddlewareConvention1\MiddlewareConvention1.csproj">

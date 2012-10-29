@@ -84,7 +84,5 @@ namespace Owin
         /// <returns>The new instance of the IAppBuilder implementation</returns>
         [SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "New", Justification = "By design")]
         IAppBuilder New();
-
-        IAppBuilder AddSignatureConversion(Delegate conversion);
     }
 }

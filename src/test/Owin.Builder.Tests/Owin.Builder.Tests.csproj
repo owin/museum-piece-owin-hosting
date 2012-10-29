@@ -57,9 +57,13 @@
       <Project>{2DCFACC8-AFD4-4FBA-8A89-9ACDC5CF4964}</Project>
       <Name>Owin.Builder</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\main\Owin.Startup\Owin.Startup.csproj">
+    <ProjectReference Include="..\..\main\Owin.Extensions\Owin.Extensions.csproj">
+      <Project>{eb90cb5c-13d4-4e8a-ab69-839a99e9066a}</Project>
+      <Name>Owin.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\main\Owin.Startup\Owin.csproj">
       <Project>{480FD49E-9C69-4FCE-B93A-3E65AFBF82D9}</Project>
-      <Name>Owin.Startup</Name>
+      <Name>Owin</Name>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.csproj">

@@ -2,11 +2,11 @@
 
 namespace Owin.Loader
 {
-    public class NullLoader : IStartupLoader
+    public class NullLoader
     {
-        static readonly IStartupLoader Singleton = new NullLoader();
+        static readonly NullLoader _singleton = new NullLoader();
 
-        public static IStartupLoader Instance { get { return Singleton; } }
+        public static Func<string, Action<IAppBuilder>> Instance { get { return _singleton.Load; } }
 
         public Action<IAppBuilder> Load(string startup)
         {

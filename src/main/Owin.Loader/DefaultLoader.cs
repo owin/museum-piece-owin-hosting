@@ -6,16 +6,16 @@ using System.Reflection;
 
 namespace Owin.Loader
 {
-    public class DefaultLoader : IStartupLoader
+    public class DefaultLoader 
     {
-        readonly IStartupLoader _next;
+        readonly Func<string, Action<IAppBuilder>> _next;
 
         public DefaultLoader()
         {
             _next = NullLoader.Instance;
         }
 
-        public DefaultLoader(IStartupLoader next)
+        public DefaultLoader(Func<string, Action<IAppBuilder>> next)
         {
             _next = next ?? NullLoader.Instance;
         }

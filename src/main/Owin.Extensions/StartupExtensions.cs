@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
@@ -66,6 +66,22 @@ namespace Owin
             var nested = builder.New();
             configuration(nested);
             return nested.Build<TApp>();
+        }
+
+        public static void AddSignatureConversion(
+            this IAppBuilder builder,
+            Delegate conversion)
+        {
+            object value;
+            if (builder.Properties.TryGetValue("builder.AddSignatureConversion", out value) &&
+                value is Action<Delegate>)
+            {
+                ((Action<Delegate>)value).Invoke(conversion);
+            }
+            else
+            {
+                throw new InvalidOperationException("IAppBuilder does not contain builder.AddSignatureConversion method");
+            }
         }
     }
 }
