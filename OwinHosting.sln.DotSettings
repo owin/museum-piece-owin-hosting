@@ -1,4 +1,22 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/GeneratedFilesAndFolders/=0AB5F10C_002DF0AD_002D47AD_002DAF23_002DAE80CDB7A19C_002Fd_003AApp_005FPackages/@EntryIndexedValue">0AB5F10C-F0AD-47AD-AF23-AE80CDB7A19C/d:App_Packages</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/GeneratedFilesAndFolders/=0AF835A6_002D8181_002D46DB_002DA17E_002DC765FA07A5A0_002Fd_003AApp_005FPackages/@EntryIndexedValue">0AF835A6-8181-46DB-A17E-C765FA07A5A0/d:App_Packages</s:String>
-	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/GeneratedFilesAndFolders/=7F67B407_002D628C_002D403D_002D9235_002DEEE6AF64D32A_002Fd_003AApp_005FPackages/@EntryIndexedValue">7F67B407-628C-403D-9235-EEE6AF64D32A/d:App_Packages</s:String></wpf:ResourceDictionary>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/GeneratedFilesAndFolders/=7F67B407_002D628C_002D403D_002D9235_002DEEE6AF64D32A_002Fd_003AApp_005FPackages/@EntryIndexedValue">7F67B407-628C-403D-9235-EEE6AF64D32A/d:App_Packages</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeCleanup/Profiles/=Owin_002DHosting/@EntryIndexedValue">&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;Profile name="Owin-Hosting"&gt;&lt;CSUpdateFileHeader&gt;True&lt;/CSUpdateFileHeader&gt;&lt;CSMakeFieldReadonly&gt;True&lt;/CSMakeFieldReadonly&gt;&lt;CSOptimizeUsings&gt;&lt;OptimizeUsings&gt;True&lt;/OptimizeUsings&gt;&lt;EmbraceInRegion&gt;False&lt;/EmbraceInRegion&gt;&lt;RegionName&gt;&lt;/RegionName&gt;&lt;/CSOptimizeUsings&gt;&lt;/Profile&gt;</s:String>
+	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">Licensed under one or more contributor license agreements.  &#xD;
+See the NOTICE.txt file distributed with this work for &#xD;
+additional information regarding copyright ownership.  The &#xD;
+copyright owners license this file to you under the Apache &#xD;
+License, Version 2.0 (the "License"); you may not use this &#xD;
+file except in compliance with the License.  You may obtain &#xD;
+a copy of the License at&#xD;
+&#xD;
+  http://www.apache.org/licenses/LICENSE-2.0&#xD;
+&#xD;
+Unless required by applicable law or agreed to in writing,&#xD;
+software distributed under the License is distributed on an&#xD;
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY&#xD;
+KIND, either express or implied.  See the License for the&#xD;
+specific language governing permissions and limitations&#xD;
+under the License.&#xD;
+</s:String></wpf:ResourceDictionary>

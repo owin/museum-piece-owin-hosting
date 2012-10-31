@@ -7,18 +7,16 @@
     <owners>$authors$</owners>
     <licenseUrl>https://github.com/owin-contrib/owin-hosting/blob/master/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/owin-contrib/owin-hosting/</projectUrl>
-    <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>OWIN common extensions</description>
-    <!--<releaseNotes>Summary of changes made in this release of the package.</releaseNotes>-->
-    <!--<copyright>Copyright 2012</copyright>-->
+    <description>OWIN common extensions sources</description>
     <tags>OWIN</tags>
     <dependencies>
-      <dependency id="Owin" version="$version$"/>
+      <dependency id="Owin" version="1.0"/>
     </dependencies>
   </metadata>
   <files>
     <file src="**\*.cs" target="content\App_Packages\$id$.$version$" />
+    <file src="*.txt" />
   </files>
 </package>
 
