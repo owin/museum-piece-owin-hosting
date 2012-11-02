@@ -37,15 +37,15 @@ namespace Owin.Loader
             _next = next ?? NullLoader.Instance;
         }
 
-        public Action<IAppBuilder> Load(string startup)
+        public Action<IAppBuilder> Load(string startupName)
         {
-            if (string.IsNullOrWhiteSpace(startup))
+            if (string.IsNullOrWhiteSpace(startupName))
             {
-                startup = GetDefaultConfigurationString(
+                startupName = GetDefaultConfigurationString(
                     assembly => new[] { "Startup", assembly.GetName().Name + ".Startup" });
             }
 
-            var typeAndMethod = GetTypeAndMethodNameForConfigurationString(startup);
+            var typeAndMethod = GetTypeAndMethodNameForConfigurationString(startupName);
 
             if (typeAndMethod == null)
             {

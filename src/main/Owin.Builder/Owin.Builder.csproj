@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>
@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppBuilder.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="NotFound.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
