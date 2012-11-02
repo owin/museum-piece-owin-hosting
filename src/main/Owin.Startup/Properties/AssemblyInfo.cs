@@ -1,10 +1,10 @@
-// Licensed under one or more contributor license agreements.  
-// See the NOTICE.txt file distributed with this work for 
-// additional information regarding copyright ownership.  The 
-// copyright owners license this file to you under the Apache 
-// License, Version 2.0 (the "License"); you may not use this 
-// file except in compliance with the License.  You may obtain 
-// a copy of the License at
+// Licensed to Monkey Square, Inc. under one or more contributor 
+// license agreements.  See the NOTICE file distributed with 
+// this work or additional information regarding copyright 
+// ownership.  Monkey Square, Inc. licenses this file to you 
+// under the Apache License, Version 2.0 (the "License"); you 
+// may not use this file except in compliance with the License.
+// You may obtain a copy of the License at 
 // 
 //   http://www.apache.org/licenses/LICENSE-2.0
 // 
@@ -22,8 +22,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Owin.Startup")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Owin")]
+[assembly: AssemblyDescription("OWIN IAppBuilder startup interface")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCulture("")]
 
@@ -35,16 +35,6 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("149c31a5-6619-4d1b-af47-d4d8a27fe99d")]
 
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("0.6.1")]
-[assembly: AssemblyVersion("0.6.1")]
-[assembly: AssemblyFileVersion("0.6.1")]
+[assembly: AssemblyVersion(@"1.0")]
+[assembly: AssemblyFileVersion(@"1.0")]
 [assembly: CLSCompliant(true)]

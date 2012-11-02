@@ -3,13 +3,13 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/GeneratedFilesAndFolders/=0AF835A6_002D8181_002D46DB_002DA17E_002DC765FA07A5A0_002Fd_003AApp_005FPackages/@EntryIndexedValue">0AF835A6-8181-46DB-A17E-C765FA07A5A0/d:App_Packages</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/GeneratedFilesAndFolders/=7F67B407_002D628C_002D403D_002D9235_002DEEE6AF64D32A_002Fd_003AApp_005FPackages/@EntryIndexedValue">7F67B407-628C-403D-9235-EEE6AF64D32A/d:App_Packages</s:String>
 	<s:String x:Key="/Default/CodeStyle/CodeCleanup/Profiles/=Owin_002DHosting/@EntryIndexedValue">&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;Profile name="Owin-Hosting"&gt;&lt;CSUpdateFileHeader&gt;True&lt;/CSUpdateFileHeader&gt;&lt;CSMakeFieldReadonly&gt;True&lt;/CSMakeFieldReadonly&gt;&lt;CSOptimizeUsings&gt;&lt;OptimizeUsings&gt;True&lt;/OptimizeUsings&gt;&lt;EmbraceInRegion&gt;False&lt;/EmbraceInRegion&gt;&lt;RegionName&gt;&lt;/RegionName&gt;&lt;/CSOptimizeUsings&gt;&lt;/Profile&gt;</s:String>
-	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">Licensed under one or more contributor license agreements.  &#xD;
-See the NOTICE.txt file distributed with this work for &#xD;
-additional information regarding copyright ownership.  The &#xD;
-copyright owners license this file to you under the Apache &#xD;
-License, Version 2.0 (the "License"); you may not use this &#xD;
-file except in compliance with the License.  You may obtain &#xD;
-a copy of the License at&#xD;
+	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">Licensed to Monkey Square, Inc. under one or more contributor &#xD;
+license agreements.  See the NOTICE file distributed with &#xD;
+this work or additional information regarding copyright &#xD;
+ownership.  Monkey Square, Inc. licenses this file to you &#xD;
+under the Apache License, Version 2.0 (the "License"); you &#xD;
+may not use this file except in compliance with the License.&#xD;
+You may obtain a copy of the License at &#xD;
 &#xD;
   http://www.apache.org/licenses/LICENSE-2.0&#xD;
 &#xD;

@@ -1,2 +1,3 @@
-OWIN startup components
+OWIN interop components
+Apache License, Version 2.0, Monkey Square, Inc.
 Copyright 2012 Louis DeJardin
