@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -30,3 +31,4 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("0.4")]
 [assembly: AssemblyVersion("0.4")]
 [assembly: AssemblyFileVersion("0.4")]
+[assembly: CLSCompliant(false)]

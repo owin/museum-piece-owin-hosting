@@ -5,7 +5,8 @@ using System.Linq;
 using System.Reflection;
 
 namespace Owin.Loader
-{   public class DefaultLoader : IStartupLoader
+{
+    public class DefaultLoader : IStartupLoader
     {
         readonly IStartupLoader _next;
 
@@ -19,15 +20,15 @@ namespace Owin.Loader
             _next = next ?? NullLoader.Instance;
         }
 
-        public Action<IAppBuilder> Load(string startupName)
-        {            
-            if (string.IsNullOrWhiteSpace(startupName))
+        public Action<IAppBuilder> Load(string startup)
+        {
+            if (string.IsNullOrWhiteSpace(startup))
             {
-                startupName = GetDefaultConfigurationString(
+                startup = GetDefaultConfigurationString(
                     assembly => new[] { "Startup", assembly.GetName().Name + ".Startup" });
             }
 
-            var typeAndMethod = GetTypeAndMethodNameForConfigurationString(startupName);
+            var typeAndMethod = GetTypeAndMethodNameForConfigurationString(startup);
 
             if (typeAndMethod == null)
             {
@@ -42,9 +43,9 @@ namespace Owin.Loader
             return MakeDelegate(type, methodInfo);
         }
 
-        public static Tuple<Type, string> GetTypeAndMethodNameForConfigurationString(string configurationString)
+        public static Tuple<Type, string> GetTypeAndMethodNameForConfigurationString(string configuration)
         {
-            foreach (var hit in HuntForAssemblies(configurationString))
+            foreach (var hit in HuntForAssemblies(configuration))
             {
                 var longestPossibleName = hit.Item1; // method or type name
                 var assembly = hit.Item2;
@@ -79,7 +80,6 @@ namespace Owin.Loader
             {
                 var reflectionOnlyAssembly = Assembly.ReflectionOnlyLoadFrom(file);
 
-                var assemblyName = reflectionOnlyAssembly.GetName().Name;
                 var assemblyFullName = reflectionOnlyAssembly.FullName;
 
                 foreach (var possibleType in defaultTypeNames(reflectionOnlyAssembly))

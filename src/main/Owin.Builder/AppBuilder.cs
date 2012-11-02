@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Owin.Builder
 {
@@ -11,6 +12,10 @@ namespace Owin.Builder
     /// </summary>
     public class AppBuilder : IAppBuilder
     {
+        private readonly IList<Tuple<Type, Delegate, object[]>> _middleware;
+        private readonly IDictionary<Tuple<Type, Type>, Delegate> _conversions;
+        private readonly IDictionary<string, object> _properties;
+
         public AppBuilder()
         {
             _properties = new Dictionary<string, object>();
@@ -18,6 +23,7 @@ namespace Owin.Builder
             _middleware = new List<Tuple<Type, Delegate, object[]>>();
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public AppBuilder(
             IDictionary<Tuple<Type, Type>, Delegate> conversions,
             IDictionary<string, object> properties)
@@ -26,10 +32,6 @@ namespace Owin.Builder
             _conversions = conversions;
             _middleware = new List<Tuple<Type, Delegate, object[]>>();
         }
-
-        readonly IList<Tuple<Type, Delegate, object[]>> _middleware;
-        readonly IDictionary<Tuple<Type, Type>, Delegate> _conversions;
-        readonly IDictionary<string, object> _properties;
 
         public IDictionary<string, object> Properties { get { return _properties; } }
 
@@ -51,6 +53,11 @@ namespace Owin.Builder
 
         public IAppBuilder AddSignatureConversion(Delegate conversion)
         {
+            if (conversion == null)
+            {
+                throw new ArgumentNullException("conversion");
+            }
+
             var parameterType = GetParameterType(conversion);
             if (parameterType == null)
             {
@@ -61,13 +68,13 @@ namespace Owin.Builder
             return this;
         }
 
-        Type GetParameterType(Delegate function)
+        private static Type GetParameterType(Delegate function)
         {
             var parameters = function.Method.GetParameters();
             return parameters.Length == 1 ? parameters[0].ParameterType : null;
         }
 
-        object BuildInternal(Type signature)
+        private object BuildInternal(Type signature)
         {
             object app;
             if (!_properties.TryGetValue("builder.DefaultApp", out app))
@@ -90,7 +97,7 @@ namespace Owin.Builder
             return Convert(signature, app);
         }
 
-        object Convert(Type signature, object app)
+        private object Convert(Type signature, object app)
         {
             if (app == null)
             {
@@ -108,10 +115,10 @@ namespace Owin.Builder
             {
                 return multiHop;
             }
-            throw new ApplicationException("No conversion available");
+            throw new ArgumentException("No conversion available", "signature");
         }
 
-        object ConvertMultiHop(Type signature, object app)
+        private object ConvertMultiHop(Type signature, object app)
         {
             foreach (var conversion in _conversions)
             {
@@ -136,7 +143,7 @@ namespace Owin.Builder
             return null;
         }
 
-        object ConvertOneHop(Type signature, object app)
+        private object ConvertOneHop(Type signature, object app)
         {
             if (signature.IsInstanceOfType(app))
             {
@@ -163,7 +170,7 @@ namespace Owin.Builder
             return null;
         }
 
-        Delegate ToMemberDelegate(Type signature, object app)
+        private static Delegate ToMemberDelegate(Type signature, object app)
         {
             var signatureMethod = signature.GetMethod("Invoke");
             var signatureParameters = signatureMethod.GetParameters();
@@ -195,8 +202,8 @@ namespace Owin.Builder
             return null;
         }
 
-
-        Tuple<Type, Delegate, object[]> ToMiddlewareFactory(object middlewareObject, object[] args)
+        [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "False positive")]
+        private static Tuple<Type, Delegate, object[]> ToMiddlewareFactory(object middlewareObject, object[] args)
         {
             var middlewareDelegate = middlewareObject as Delegate;
             if (middlewareDelegate == null)
@@ -258,7 +265,7 @@ namespace Owin.Builder
             return Tuple.Create(GetParameterType(middlewareDelegate), middlewareDelegate, args);
         }
 
-        static bool TestArgForParameter(Type parameterType, object arg)
+        private static bool TestArgForParameter(Type parameterType, object arg)
         {
             return (arg == null && !parameterType.IsValueType) ||
                 parameterType.IsInstanceOfType(arg);

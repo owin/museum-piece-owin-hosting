@@ -11,3 +11,4 @@ nugetkey
 packages
 target
 StyleCop.Cache
+TestResults/*

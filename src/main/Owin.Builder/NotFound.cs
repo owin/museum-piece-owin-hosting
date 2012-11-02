@@ -9,13 +9,13 @@ namespace Owin.Builder
     /// </summary>
     class NotFound
     {
-        static readonly Task Completed;
+        static readonly Task Completed = CreateCompletedTask();
 
-        static NotFound()
+        private static Task CreateCompletedTask()
         {
             var tcs = new TaskCompletionSource<object>();
             tcs.SetResult(null);
-            Completed = tcs.Task;
+            return tcs.Task;
         }
 
         public Task Invoke(IDictionary<string, object> env)
