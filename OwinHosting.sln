@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{8A784BD4
 	ProjectSection(SolutionItems) = preProject
 		build.cmd = build.cmd
 		build.sh = build.sh
+		src\Common.targets = src\Common.targets
 		Sakefile.shade = Sakefile.shade
 	EndProjectSection
 EndProject

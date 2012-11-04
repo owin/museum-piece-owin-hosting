@@ -1,6 +1,6 @@
 
 var PROJECT='OWIN startup components'
-var VERSION='0.6.2'
+var VERSION='0.6.3'
 var FULL_VERSION='${VERSION}'
 var AUTHORS='${PROJECT} contributors'
 

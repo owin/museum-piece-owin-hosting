@@ -12,3 +12,4 @@ packages
 target
 StyleCop.Cache
 TestResults/*
+*.snk
