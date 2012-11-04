@@ -17,12 +17,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Owin
 {
     using AppFunc = Func<IDictionary<string, object>, Task>;
-    using System.Diagnostics.CodeAnalysis;
 
     public static partial class StartupExtensions
     {

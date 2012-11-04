@@ -48,7 +48,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Owin.snk" />
     <None Include="Owin.nuspec" />
   </ItemGroup>
   <Import Project="$(ProjectDir)..\..\Common.targets" />
