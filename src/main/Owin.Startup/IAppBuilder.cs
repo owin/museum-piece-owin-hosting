@@ -52,9 +52,6 @@ namespace Owin
         /// invoked with the "next app" in the chain as the first parameter. The resulting object
         /// must have a public Invoke method. If the object has constructors which take more than
         /// the single "next app" argument, then additional values may be provided in the args array.
-        /// 
-        /// If the middleware given to Use is an instance of any other class that, and it has a public
-        /// Invoke method, then the public Invoke method will be used as if it were a Delegate.
         /// </param>
         /// <param name="args">
         /// Any additional args passed to Use will be passed as additional values, following the "next app"
@@ -75,7 +72,7 @@ namespace Owin
         /// </summary>
         /// <param name="returnType">
         /// The Type argument indicates which calling convention should be returned, and
-        /// is typically typeof(<typeparamref name="Func<IDictionary<string,object>>"/>) for the OWIN
+        /// is typically typeof(<typeparamref name="Func<IDictionary<string,object>, Task>"/>) for the OWIN
         /// calling convention.
         /// </param>
         /// <returns>
