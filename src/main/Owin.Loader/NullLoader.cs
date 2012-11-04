@@ -21,9 +21,10 @@ namespace Owin.Loader
 {
     public class NullLoader
     {
-        static readonly NullLoader _singleton = new NullLoader();
+        static readonly NullLoader Singleton = new NullLoader();
 
-        public static Func<string, Action<IAppBuilder>> Instance { get { return _singleton.Load; } }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification="By design")]
+        public static Func<string, Action<IAppBuilder>> Instance { get { return Singleton.Load; } }
 
         public Action<IAppBuilder> Load(string startup)
         {

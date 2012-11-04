@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultLoader.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="NullLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

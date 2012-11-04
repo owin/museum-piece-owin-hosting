@@ -17,13 +17,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 
 namespace Owin.Loader
 {
-    public class DefaultLoader 
+    public class DefaultLoader
     {
         readonly Func<string, Action<IAppBuilder>> _next;
 
@@ -32,12 +33,18 @@ namespace Owin.Loader
             _next = NullLoader.Instance;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public DefaultLoader(Func<string, Action<IAppBuilder>> next)
         {
             _next = next ?? NullLoader.Instance;
         }
 
         public Action<IAppBuilder> Load(string startupName)
+        {
+            return LoadImplementation(startupName) ?? _next(startupName);
+        }
+
+        private static Action<IAppBuilder> LoadImplementation(string startupName)
         {
             if (string.IsNullOrWhiteSpace(startupName))
             {
@@ -69,7 +76,7 @@ namespace Owin.Loader
                 {
                     object value;
                     if (!builder.Properties.TryGetValue("host.AppName", out value) ||
-                        String.IsNullOrWhiteSpace(Convert.ToString(value)))
+                        String.IsNullOrWhiteSpace(Convert.ToString(value, CultureInfo.InvariantCulture)))
                     {
                         builder.Properties["host.AppName"] = type.FullName;
                     }
@@ -77,7 +84,7 @@ namespace Owin.Loader
                 };
         }
 
-        public static Tuple<Type, string> GetTypeAndMethodNameForConfigurationString(string configuration)
+        private static Tuple<Type, string> GetTypeAndMethodNameForConfigurationString(string configuration)
         {
             foreach (var hit in HuntForAssemblies(configuration))
             {
@@ -128,7 +135,7 @@ namespace Owin.Loader
 
         static IEnumerable<Tuple<string, Assembly>> HuntForAssemblies(string configurationString)
         {
-            if (configurationString==null)
+            if (configurationString == null)
             {
                 yield break;
             }
