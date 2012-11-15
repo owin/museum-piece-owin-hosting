@@ -85,10 +85,16 @@ namespace Owin
             return nested.Build<TApp>();
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "False positive")]
         public static void AddSignatureConversion(
             this IAppBuilder builder,
             Delegate conversion)
         {
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
+
             object value;
             if (builder.Properties.TryGetValue("builder.AddSignatureConversion", out value) &&
                 value is Action<Delegate>)
@@ -97,7 +103,7 @@ namespace Owin
             }
             else
             {
-                throw new InvalidOperationException("IAppBuilder does not contain builder.AddSignatureConversion method");
+                throw new MissingMethodException(builder.GetType().FullName, "AddSignatureConversion");
             }
         }
     }
