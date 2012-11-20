@@ -26,14 +26,6 @@ namespace StartupConvention2
 {
     using AppFunc = Func<IDictionary<string, object>, Task>;
 
-    using ResultTuple = Tuple< //Result
-        IDictionary<string, object>, // Properties
-        int, // Status
-        IDictionary<string, string[]>, // Headers
-        Func< // CopyTo
-            Stream, // Body
-            Task>>; // Done
-
     public class Startup
     {
         public AppFunc Configuration(IDictionary<string, object> properties)

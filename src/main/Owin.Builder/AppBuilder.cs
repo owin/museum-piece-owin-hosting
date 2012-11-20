@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -199,7 +200,7 @@ namespace Owin.Builder
             var methods = app.GetType().GetMethods();
             foreach (var method in methods)
             {
-                if (method.Name != "Invoke" && method.Name != "App")
+                if (method.Name != "Invoke")
                 {
                     continue;
                 }
@@ -282,6 +283,8 @@ namespace Owin.Builder
                     return Tuple.Create(parameters[0].ParameterType, middlewareDelegate, args);
                 }
             }
+
+            Contract.Assert(middlewareDelegate != null);
 
             return Tuple.Create(GetParameterType(middlewareDelegate), middlewareDelegate, args);
         }
