@@ -24,9 +24,9 @@ namespace Owin.Builder
     /// Simple object used by AppBuilder as seed OWIN callable if the
     /// builder.Properties["builder.DefaultApp"] is not set
     /// </summary>
-    class NotFound
+    internal class NotFound
     {
-        static readonly Task Completed = CreateCompletedTask();
+        private static readonly Task Completed = CreateCompletedTask();
 
         private static Task CreateCompletedTask()
         {

@@ -52,7 +52,10 @@ namespace Owin.Builder
             _middleware = new List<Tuple<Type, Delegate, object[]>>();
         }
 
-        public IDictionary<string, object> Properties { get { return _properties; } }
+        public IDictionary<string, object> Properties
+        {
+            get { return _properties; }
+        }
 
         public IAppBuilder Use(object middleware, params object[] args)
         {

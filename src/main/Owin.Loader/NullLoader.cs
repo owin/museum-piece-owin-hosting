@@ -16,15 +16,19 @@
 // under the License.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Owin.Loader
 {
     public class NullLoader
     {
-        static readonly NullLoader Singleton = new NullLoader();
+        private static readonly NullLoader Singleton = new NullLoader();
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification="By design")]
-        public static Func<string, Action<IAppBuilder>> Instance { get { return Singleton.Load; } }
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
+        public static Func<string, Action<IAppBuilder>> Instance
+        {
+            get { return Singleton.Load; }
+        }
 
         public Action<IAppBuilder> Load(string startup)
         {

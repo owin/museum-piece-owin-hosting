@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -26,14 +27,14 @@ namespace Owin.Loader
 {
     public class DefaultLoader
     {
-        readonly Func<string, Action<IAppBuilder>> _next;
+        private readonly Func<string, Action<IAppBuilder>> _next;
 
         public DefaultLoader()
         {
             _next = NullLoader.Instance;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public DefaultLoader(Func<string, Action<IAppBuilder>> next)
         {
             _next = next ?? NullLoader.Instance;
@@ -96,8 +97,11 @@ namespace Owin.Loader
                 foreach (var typeName in DotByDot(longestPossibleName).Take(2))
                 {
                     var type = assembly.GetType(typeName, false);
-                    if (type == null) // must have been a method name (or doesn't exist), next!
+                    if (type == null)
+                    {
+                        // must have been a method name (or doesn't exist), next!
                         continue;
+                    }
 
                     var methodName = typeName == longestPossibleName
                         ? null
@@ -109,10 +113,10 @@ namespace Owin.Loader
             return null;
         }
 
-        static string GetDefaultConfigurationString(Func<Assembly, string[]> defaultTypeNames)
+        private static string GetDefaultConfigurationString(Func<Assembly, string[]> defaultTypeNames)
         {
             var info = AppDomain.CurrentDomain.SetupInformation;
-            var assembliesPath = Path.Combine(info.ApplicationBase, info.PrivateBinPath ?? "");
+            var assembliesPath = Path.Combine(info.ApplicationBase, info.PrivateBinPath ?? string.Empty);
 
             var files = Directory.GetFiles(assembliesPath, "*.dll")
                 .Concat(Directory.GetFiles(assembliesPath, "*.exe"));
@@ -127,13 +131,15 @@ namespace Owin.Loader
                 {
                     var startupType = reflectionOnlyAssembly.GetType(possibleType, false);
                     if (startupType != null)
+                    {
                         return possibleType + ", " + assemblyFullName;
+                    }
                 }
             }
             return null;
         }
 
-        static IEnumerable<Tuple<string, Assembly>> HuntForAssemblies(string configurationString)
+        private static IEnumerable<Tuple<string, Assembly>> HuntForAssemblies(string configurationString)
         {
             if (configurationString == null)
             {
@@ -141,17 +147,20 @@ namespace Owin.Loader
             }
 
             var commaIndex = configurationString.IndexOf(',');
-            if (commaIndex >= 0) // assembly is given
+            if (commaIndex >= 0)
             {
-                // break the type and assembly apart
+                // assembly is given, break the type and assembly apart
                 var methodOrTypeName = DotByDot(configurationString.Substring(0, commaIndex)).FirstOrDefault();
                 var assemblyName = configurationString.Substring(commaIndex + 1).Trim();
                 var assembly = TryAssemblyLoad(assemblyName);
                 if (assembly != null)
+                {
                     yield return Tuple.Create(methodOrTypeName, assembly);
+                }
             }
-            else // assembly is inferred from type name
+            else
             {
+                // assembly is inferred from type name
                 var methodOrTypeName = DotByDot(configurationString).FirstOrDefault();
 
                 // go through each segment except the first (assuming the last segment is a type name at a minimum))
@@ -159,12 +168,14 @@ namespace Owin.Loader
                 {
                     var assembly = TryAssemblyLoad(assemblyName);
                     if (assembly != null)
+                    {
                         yield return Tuple.Create(methodOrTypeName, assembly);
+                    }
                 }
             }
         }
 
-        static Assembly TryAssemblyLoad(string assemblyName)
+        private static Assembly TryAssemblyLoad(string assemblyName)
         {
             try
             {
@@ -179,7 +190,9 @@ namespace Owin.Loader
         public static IEnumerable<string> DotByDot(string text)
         {
             if (text == null)
+            {
                 yield break;
+            }
 
             text = text.Trim('.');
             for (var length = text.Length;
@@ -190,7 +203,7 @@ namespace Owin.Loader
             }
         }
 
-        static Action<IAppBuilder> MakeDelegate(Type type, MethodInfo methodInfo)
+        private static Action<IAppBuilder> MakeDelegate(Type type, MethodInfo methodInfo)
         {
             if (methodInfo == null)
             {
@@ -218,14 +231,18 @@ namespace Owin.Loader
             return null;
         }
 
-        static bool Matches(MethodInfo methodInfo, Type returnType, params Type[] parameterTypes)
+        private static bool Matches(MethodInfo methodInfo, Type returnType, params Type[] parameterTypes)
         {
             if (returnType != null && methodInfo.ReturnType != returnType)
+            {
                 return false;
+            }
 
             var parameters = methodInfo.GetParameters();
             if (parameters.Length != parameterTypes.Length)
+            {
                 return false;
+            }
 
             return parameters.Zip(parameterTypes, (pi, t) => pi.ParameterType == t).All(b => b);
         }
