@@ -257,6 +257,7 @@ namespace Owin.Builder
                     return Tuple.Create(parameters[0].ParameterType, middlewareDelegate, args);
                 }
             }
+
             if (middlewareDelegate == null && middlewareObject is Type)
             {
                 var middlewareType = middlewareObject as Type;
@@ -282,9 +283,17 @@ namespace Owin.Builder
                     middlewareDelegate = Expression.Lambda(callConstructor, parameterExpressions).Compile();
                     return Tuple.Create(parameters[0].ParameterType, middlewareDelegate, args);
                 }
+
+                if (middlewareDelegate == null)
+                {
+                    throw new MissingMethodException(middlewareType.FullName, "ctor(" + (args.Length + 1) + ")");
+                }
             }
 
-            Contract.Assert(middlewareDelegate != null);
+            if (middlewareDelegate == null)
+            {
+                throw new NotSupportedException((middlewareObject ?? string.Empty).ToString());
+            }
 
             return Tuple.Create(GetParameterType(middlewareDelegate), middlewareDelegate, args);
         }

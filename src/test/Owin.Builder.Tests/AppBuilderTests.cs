@@ -161,6 +161,35 @@ namespace Owin.Builder.Tests
             theApp(42).ShouldBe("Hello[42] there, world!");
         }
 
+        [Fact]
+        public void TypeofClassConstructorsWithWrongParameterCountShouldThrow()
+        {
+            Func<int, string> theDefault = call => "Hello[" + call + "]";
+
+            var builder = new AppBuilder();
+            builder.Properties["builder.DefaultApp"] = theDefault;
+
+            Should.Throw<MissingMethodException>(() =>
+            {
+                var theApp = builder.BuildNew<Func<int, string>>(
+                x => x.Use(typeof(StringPlusValue2), "arg 1", "extra arg"));
+            });
+        }
+
+        [Fact]
+        public void OtherObjectShouldThrow()
+        {
+            Func<int, string> theDefault = call => "Hello[" + call + "]";
+
+            var builder = new AppBuilder();
+            builder.Properties["builder.DefaultApp"] = theDefault;
+
+            Should.Throw<NotSupportedException>(() =>
+            {
+                var theApp = builder.BuildNew<Func<int, string>>(
+                x => x.Use(new object()));
+            });
+        }
 
         class StringPlusValue2
         {
