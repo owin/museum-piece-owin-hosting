@@ -43,6 +43,10 @@ namespace Owin
             {
                 throw new ArgumentNullException("builder");
             }
+            if (type == null)
+            {
+                throw new ArgumentNullException("type");
+            }
 
             return builder.Use(type, args);
         }

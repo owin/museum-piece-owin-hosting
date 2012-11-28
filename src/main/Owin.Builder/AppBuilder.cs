@@ -21,6 +21,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Owin.Builder
@@ -81,18 +82,18 @@ namespace Owin.Builder
                 throw new ArgumentNullException("conversion");
             }
 
-            var parameterType = GetParameterType(conversion);
+            Type parameterType = GetParameterType(conversion);
             if (parameterType == null)
             {
                 throw new ArgumentException("Conversion delegate must take one parameter", "conversion");
             }
-            var key = Tuple.Create(conversion.Method.ReturnType, parameterType);
+            Tuple<Type, Type> key = Tuple.Create(conversion.Method.ReturnType, parameterType);
             _conversions[key] = conversion;
         }
 
         private static Type GetParameterType(Delegate function)
         {
-            var parameters = function.Method.GetParameters();
+            ParameterInfo[] parameters = function.Method.GetParameters();
             return parameters.Length == 1 ? parameters[0].ParameterType : null;
         }
 
@@ -104,14 +105,14 @@ namespace Owin.Builder
                 app = new Func<IDictionary<string, object>, Task>(new NotFound().Invoke);
             }
 
-            foreach (var middleware in _middleware.Reverse())
+            foreach (Tuple<Type, Delegate, object[]> middleware in _middleware.Reverse())
             {
-                var neededSignature = middleware.Item1;
-                var middlewareDelegate = middleware.Item2;
-                var middlewareArgs = middleware.Item3;
+                Type neededSignature = middleware.Item1;
+                Delegate middlewareDelegate = middleware.Item2;
+                object[] middlewareArgs = middleware.Item3;
 
                 app = Convert(neededSignature, app);
-                var invokeParameters = new[] { app }.Concat(middlewareArgs).ToArray();
+                object[] invokeParameters = new[] { app }.Concat(middlewareArgs).ToArray();
                 app = middlewareDelegate.DynamicInvoke(invokeParameters);
                 app = Convert(neededSignature, app);
             }
@@ -126,13 +127,13 @@ namespace Owin.Builder
                 return null;
             }
 
-            var oneHop = ConvertOneHop(signature, app);
+            object oneHop = ConvertOneHop(signature, app);
             if (oneHop != null)
             {
                 return oneHop;
             }
 
-            var multiHop = ConvertMultiHop(signature, app);
+            object multiHop = ConvertMultiHop(signature, app);
             if (multiHop != null)
             {
                 return multiHop;
@@ -142,19 +143,19 @@ namespace Owin.Builder
 
         private object ConvertMultiHop(Type signature, object app)
         {
-            foreach (var conversion in _conversions)
+            foreach (KeyValuePair<Tuple<Type, Type>, Delegate> conversion in _conversions)
             {
-                var preConversion = ConvertOneHop(conversion.Key.Item2, app);
+                object preConversion = ConvertOneHop(conversion.Key.Item2, app);
                 if (preConversion == null)
                 {
                     continue;
                 }
-                var intermediate = conversion.Value.DynamicInvoke(preConversion);
+                object intermediate = conversion.Value.DynamicInvoke(preConversion);
                 if (intermediate == null)
                 {
                     continue;
                 }
-                var postConversion = ConvertOneHop(signature, intermediate);
+                object postConversion = ConvertOneHop(signature, intermediate);
                 if (postConversion == null)
                 {
                     continue;
@@ -173,16 +174,16 @@ namespace Owin.Builder
             }
             if (typeof(Delegate).IsAssignableFrom(signature))
             {
-                var memberDelegate = ToMemberDelegate(signature, app);
+                Delegate memberDelegate = ToMemberDelegate(signature, app);
                 if (memberDelegate != null)
                 {
                     return memberDelegate;
                 }
             }
-            foreach (var conversion in _conversions)
+            foreach (KeyValuePair<Tuple<Type, Type>, Delegate> conversion in _conversions)
             {
-                var returnType = conversion.Key.Item1;
-                var parameterType = conversion.Key.Item2;
+                Type returnType = conversion.Key.Item1;
+                Type parameterType = conversion.Key.Item2;
                 if (parameterType.IsInstanceOfType(app) &&
                     signature.IsAssignableFrom(returnType))
                 {
@@ -194,17 +195,17 @@ namespace Owin.Builder
 
         private static Delegate ToMemberDelegate(Type signature, object app)
         {
-            var signatureMethod = signature.GetMethod("Invoke");
-            var signatureParameters = signatureMethod.GetParameters();
+            MethodInfo signatureMethod = signature.GetMethod("Invoke");
+            ParameterInfo[] signatureParameters = signatureMethod.GetParameters();
 
-            var methods = app.GetType().GetMethods();
-            foreach (var method in methods)
+            MethodInfo[] methods = app.GetType().GetMethods();
+            foreach (MethodInfo method in methods)
             {
                 if (method.Name != "Invoke")
                 {
                     continue;
                 }
-                var methodParameters = method.GetParameters();
+                ParameterInfo[] methodParameters = method.GetParameters();
                 if (methodParameters.Length != signatureParameters.Length)
                 {
                     continue;
@@ -227,18 +228,18 @@ namespace Owin.Builder
         [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "False positive")]
         private static Tuple<Type, Delegate, object[]> ToMiddlewareFactory(object middlewareObject, object[] args)
         {
-            var middlewareDelegate = middlewareObject as Delegate;
+            Delegate middlewareDelegate = middlewareObject as Delegate;
             if (middlewareDelegate == null)
             {
-                var methods = middlewareObject.GetType().GetMethods();
-                foreach (var method in methods)
+                MethodInfo[] methods = middlewareObject.GetType().GetMethods();
+                foreach (MethodInfo method in methods)
                 {
                     if (method.Name != "Invoke" && method.Name != "Middleware")
                     {
                         continue;
                     }
-                    var parameters = method.GetParameters();
-                    var parameterTypes = parameters.Select(p => p.ParameterType).ToArray();
+                    ParameterInfo[] parameters = method.GetParameters();
+                    Type[] parameterTypes = parameters.Select(p => p.ParameterType).ToArray();
 
                     if (parameterTypes.Length != args.Length + 1)
                     {
@@ -251,8 +252,8 @@ namespace Owin.Builder
                     {
                         continue;
                     }
-                    var genericFuncTypes = parameterTypes.Concat(new[] { method.ReturnType });
-                    var funcType = Expression.GetFuncType(genericFuncTypes.ToArray());
+                    IEnumerable<Type> genericFuncTypes = parameterTypes.Concat(new[] { method.ReturnType });
+                    Type funcType = Expression.GetFuncType(genericFuncTypes.ToArray());
                     middlewareDelegate = Delegate.CreateDelegate(funcType, middlewareObject, method);
                     return Tuple.Create(parameters[0].ParameterType, middlewareDelegate, args);
                 }
@@ -260,12 +261,12 @@ namespace Owin.Builder
 
             if (middlewareDelegate == null && middlewareObject is Type)
             {
-                var middlewareType = middlewareObject as Type;
-                var constructors = middlewareType.GetConstructors();
-                foreach (var constructor in constructors)
+                Type middlewareType = middlewareObject as Type;
+                ConstructorInfo[] constructors = middlewareType.GetConstructors();
+                foreach (ConstructorInfo constructor in constructors)
                 {
-                    var parameters = constructor.GetParameters();
-                    var parameterTypes = parameters.Select(p => p.ParameterType).ToArray();
+                    ParameterInfo[] parameters = constructor.GetParameters();
+                    Type[] parameterTypes = parameters.Select(p => p.ParameterType).ToArray();
                     if (parameterTypes.Length != args.Length + 1)
                     {
                         continue;
@@ -278,8 +279,8 @@ namespace Owin.Builder
                         continue;
                     }
 
-                    var parameterExpressions = parameters.Select(p => Expression.Parameter(p.ParameterType, p.Name)).ToArray();
-                    var callConstructor = Expression.New(constructor, parameterExpressions);
+                    ParameterExpression[] parameterExpressions = parameters.Select(p => Expression.Parameter(p.ParameterType, p.Name)).ToArray();
+                    NewExpression callConstructor = Expression.New(constructor, parameterExpressions);
                     middlewareDelegate = Expression.Lambda(callConstructor, parameterExpressions).Compile();
                     return Tuple.Create(parameters[0].ParameterType, middlewareDelegate, args);
                 }

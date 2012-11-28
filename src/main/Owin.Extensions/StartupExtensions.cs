@@ -80,7 +80,7 @@ namespace Owin
                 throw new ArgumentNullException("configuration");
             }
 
-            var nested = builder.New();
+            IAppBuilder nested = builder.New();
             configuration(nested);
             return nested.Build<TApp>();
         }
