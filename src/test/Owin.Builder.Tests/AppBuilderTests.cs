@@ -255,6 +255,13 @@ namespace Owin.Builder.Tests
 
             var diff = builder.Build<DifferentType>();
         }
+
+        [Fact]
+        public void NoConversionAvailableThrowsArgumentException()
+        {
+            var builder = new AppBuilder();
+            Assert.Throws<ArgumentException>(() => builder.Build<DifferentType>());
+        }
     }
 }
 

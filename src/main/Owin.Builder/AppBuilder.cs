@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -138,7 +139,9 @@ namespace Owin.Builder
             {
                 return multiHop;
             }
-            throw new ArgumentException("No conversion available", "signature");
+            throw new ArgumentException(
+                string.Format(CultureInfo.CurrentCulture, "No conversion available between {0} and {1}", app.GetType(), signature), 
+                "signature");
         }
 
         private object ConvertMultiHop(Type signature, object app)
