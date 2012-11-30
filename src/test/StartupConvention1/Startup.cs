@@ -32,13 +32,13 @@ namespace StartupConvention1
         {
             builder.UseAlpha("a", "b");
 
-            builder.UseFunc(app => Alpha.Middleware(app, "a", "b"));
+            builder.UseFunc(app => Alpha.Invoke(app, "a", "b"));
 
-            builder.UseFunc(Alpha.Middleware, "a", "b");
+            builder.UseFunc(Alpha.Invoke, "a", "b");
 
-            builder.Use(Beta.Middleware("a", "b"));
+            builder.Use(Beta.Invoke("a", "b"));
 
-            builder.UseFunc(Beta.Middleware, "a", "b");
+            builder.UseFunc(Beta.Invoke, "a", "b");
 
             builder.UseGamma("a", "b");
 

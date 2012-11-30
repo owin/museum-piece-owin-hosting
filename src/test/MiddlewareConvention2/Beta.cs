@@ -27,7 +27,7 @@ namespace MiddlewareConvention2
 
     public class Beta
     {
-        public static Func<AppFunc, AppFunc> Middleware(string arg1, string arg2)
+        public static Func<AppFunc, AppFunc> Invoke(string arg1, string arg2)
         {
             return app => env =>
             {

@@ -28,7 +28,7 @@ namespace Owin
     {
         public static IAppBuilder UseAlpha(this IAppBuilder builder, string arg1, string arg2)
         {
-            return builder.UseFunc(Alpha.Middleware, arg1, arg2);
+            return builder.UseFunc(Alpha.Invoke, arg1, arg2);
         }
     }
 }
@@ -39,7 +39,7 @@ namespace MiddlewareConvention1
 
     public class Alpha
     {
-        public static AppFunc Middleware(AppFunc app, string arg1, string arg2)
+        public static AppFunc Invoke(AppFunc app, string arg1, string arg2)
         {
             return env =>
             {

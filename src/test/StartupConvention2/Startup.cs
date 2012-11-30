@@ -32,9 +32,9 @@ namespace StartupConvention2
         {
             AppFunc app = Main;
 
-            app = Alpha.Middleware(app, "One", "Two");
+            app = Alpha.Invoke(app, "One", "Two");
 
-            app = Beta.Middleware("Three", "Four").Invoke(app);
+            app = Beta.Invoke("Three", "Four").Invoke(app);
 
             app = new Gamma(app, "Five", "Six").Invoke;
 

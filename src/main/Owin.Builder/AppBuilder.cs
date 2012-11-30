@@ -237,7 +237,7 @@ namespace Owin.Builder
                 MethodInfo[] methods = middlewareObject.GetType().GetMethods();
                 foreach (MethodInfo method in methods)
                 {
-                    if (method.Name != "Invoke" && method.Name != "Middleware")
+                    if (method.Name != "Invoke")
                     {
                         continue;
                     }
