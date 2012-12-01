@@ -123,17 +123,24 @@ namespace Owin.Loader
 
             foreach (var file in files)
             {
-                var reflectionOnlyAssembly = Assembly.ReflectionOnlyLoadFrom(file);
-
-                var assemblyFullName = reflectionOnlyAssembly.FullName;
-
-                foreach (var possibleType in defaultTypeNames(reflectionOnlyAssembly))
+                try
                 {
-                    var startupType = reflectionOnlyAssembly.GetType(possibleType, false);
-                    if (startupType != null)
+                    var reflectionOnlyAssembly = Assembly.ReflectionOnlyLoadFrom(file);
+
+                    var assemblyFullName = reflectionOnlyAssembly.FullName;
+
+                    foreach (var possibleType in defaultTypeNames(reflectionOnlyAssembly))
                     {
-                        return possibleType + ", " + assemblyFullName;
+                        var startupType = reflectionOnlyAssembly.GetType(possibleType, false);
+                        if (startupType != null)
+                        {
+                            return possibleType + ", " + assemblyFullName;
+                        }
                     }
+                }
+                catch (BadImageFormatException)
+                {
+                    // Not a managed dll/exe
                 }
             }
             return null;
