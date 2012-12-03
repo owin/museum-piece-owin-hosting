@@ -118,6 +118,11 @@ namespace Owin.Loader
             var info = AppDomain.CurrentDomain.SetupInformation;
             var assembliesPath = Path.Combine(info.ApplicationBase, info.PrivateBinPath ?? string.Empty);
 
+            if (!Directory.Exists(assembliesPath))
+            {
+                return null;
+            }
+
             var files = Directory.GetFiles(assembliesPath, "*.dll")
                 .Concat(Directory.GetFiles(assembliesPath, "*.exe"));
 
