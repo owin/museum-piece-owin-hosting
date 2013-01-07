@@ -34,6 +34,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
     <Reference Include="Shouldly">
       <HintPath>..\..\..\packages\Shouldly.1.1.1.1\lib\35\Shouldly.dll</HintPath>
     </Reference>
@@ -45,8 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppBuilderTests.cs" />
-    <Compile Include="App_Packages\TaskHelpers.Sources.0.1\TaskHelpers.cs" />
-    <Compile Include="App_Packages\TaskHelpers.Sources.0.1\TaskHelpersExtensions.cs" />
+    <Compile Include="App_Packages\TaskHelpers.Sources.0.2\TaskHelpers.cs" />
+    <Compile Include="App_Packages\TaskHelpers.Sources.0.2\TaskHelpersExtensions.cs" />
     <Compile Include="ConventionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -61,11 +65,6 @@
     <ProjectReference Include="..\..\main\Owin.Extensions\Owin.Extensions.csproj">
       <Project>{eb90cb5c-13d4-4e8a-ab69-839a99e9066a}</Project>
       <Name>Owin.Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\main\Owin.Startup\Owin.csproj">
-      <Project>{480FD49E-9C69-4FCE-B93A-3E65AFBF82D9}</Project>
-      <Name>Owin</Name>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
     <ProjectReference Include="..\StartupConvention1\StartupConvention1.csproj">
       <Project>{e8b6b07d-e8aa-4c5c-ab5c-bb1e10723c88}</Project>

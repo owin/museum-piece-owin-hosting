@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
@@ -65,11 +69,6 @@
       <Project>{eb90cb5c-13d4-4e8a-ab69-839a99e9066a}</Project>
       <Name>Owin.Extensions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\main\Owin.Startup\Owin.csproj">
-      <Project>{480FD49E-9C69-4FCE-B93A-3E65AFBF82D9}</Project>
-      <Name>Owin</Name>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </ProjectReference>
     <ProjectReference Include="..\MiddlewareConvention1\MiddlewareConvention1.csproj">
       <Project>{0AB5F10C-F0AD-47AD-AF23-AE80CDB7A19C}</Project>
       <Name>MiddlewareConvention1</Name>
@@ -78,6 +77,9 @@
       <Project>{7F67B407-628C-403D-9235-EEE6AF64D32A}</Project>
       <Name>MiddlewareConvention2</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
