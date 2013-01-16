@@ -9,7 +9,7 @@ var TARGET_DIR='${Path.Combine(BASE_DIR, "target")}'
 var BUILD_DIR='${Path.Combine(TARGET_DIR, "build")}'
 var TEST_DIR='${Path.Combine(TARGET_DIR, "test")}'
 
-var NUGET_DEPLOY='http://www.myget.org/F/gate/'
+var NUGET_DEPLOY='http://www.myget.org/F/owin/'
 
 var BUILD_PROJECTS='${Files.Include("src/main/**/*.csproj")}'
 

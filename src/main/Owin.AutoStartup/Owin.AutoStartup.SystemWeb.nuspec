@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <authors>$authors$</authors>
+    <owners>$authors$</owners>
+    <licenseUrl>https://github.com/owin-contrib/owin-hosting/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/owin-contrib/owin-hosting/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>OWIN common builder sources</description>
+    <tags>OWIN</tags>
+    <dependencies>
+      <dependency id="Owin.AutoStartup" version="$version$"/>
+      <dependency id="Microsoft.Owin.Host.SystemWeb" version="1.0.0-rc1"/>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="web.config.transform" target="content" />
+  </files>
+</package>
+

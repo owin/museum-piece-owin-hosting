@@ -1,0 +1,20 @@
+﻿<configuration>
+  <appSettings>
+    <add key="owin:Configuration" value="$rootnamespace$.Startup.AutoConfiguration, $assemblyname$" />
+  </appSettings>  
+  
+  <system.web>
+    <httpHandlers>
+      <add verb="*" path="*" 
+           type="Microsoft.Owin.Host.SystemWeb.OwinHttpHandler, Microsoft.Owin.Host.SystemWeb" />
+    </httpHandlers>
+  </system.web>
+  
+  <system.webServer>
+    <validation validateIntegratedModeConfiguration="false" />
+    <handlers>
+      <add name="Owin" verb="*" path="*" 
+           type="Microsoft.Owin.Host.SystemWeb.OwinHttpHandler, Microsoft.Owin.Host.SystemWeb" />
+    </handlers>
+  </system.webServer>
+</configuration>
