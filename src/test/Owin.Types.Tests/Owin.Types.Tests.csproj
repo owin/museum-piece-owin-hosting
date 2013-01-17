@@ -43,7 +43,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RequestTests.cs" />
+    <Compile Include="OwinEnvironmentTests.cs" />
+    <Compile Include="OwinResponseTests.cs" />
+    <Compile Include="OwinRequestTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

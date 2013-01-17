@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
 namespace Owin.Types
 {
-    public struct Request
+    public struct OwinRequest
     {
         private readonly IDictionary<string, object> _environment;
 
-        public Request(IDictionary<string, object> environment)
-            : this()
+        public OwinRequest(IDictionary<string, object> environment)
         {
             _environment = environment;
         }
@@ -27,10 +24,22 @@ namespace Owin.Types
             return _environment.TryGetValue(key, out value) ? (T)value : default(T);
         }
 
-        public Request Set(string key, object value)
+        public OwinRequest Set(string key, object value)
         {
             _environment[key] = value;
             return this;
+        }
+
+        public string OwinVersion
+        {
+            get { return Get<string>(OwinConstants.OwinVersion); }
+            set { Set(OwinConstants.OwinVersion, value); }
+        }
+
+        public CancellationToken CallCancelled
+        {
+            get { return Get<CancellationToken>(OwinConstants.CallCancelled); }
+            set { Set(OwinConstants.CallCancelled, value); }
         }
 
         public string Scheme
@@ -79,24 +88,6 @@ namespace Owin.Types
         {
             get { return Get<Stream>(OwinConstants.RequestBody); }
             set { Set(OwinConstants.RequestBody, value); }
-        }
-
-        public string OwinVersion
-        {
-            get { return Get<string>(OwinConstants.OwinVersion); }
-            set { Set(OwinConstants.OwinVersion, value); }
-        }
-
-        public CancellationToken CallCancelled
-        {
-            get { return Get<CancellationToken>(OwinConstants.CallCancelled); }
-            set { Set(OwinConstants.CallCancelled, value); }
-        }
-
-        public static Request Create()
-        {
-            var environment = new ConcurrentDictionary<string, object>(StringComparer.Ordinal);
-            return new Request(environment);
         }
     }
 }

@@ -7,15 +7,8 @@ using Xunit;
 
 namespace Owin.Types.Tests
 {
-    public class RequestTests
+    public class OwinRequestTests
     {
-        [Fact]
-        public void ItCanCreateEnvironmentForTestConvenience()
-        {
-            var req = Request.Create();
-            req.Environment.ShouldNotBe(null);
-        }
-
         [Fact]
         public void ItStronglyTypesOwinKeys()
         {
@@ -23,6 +16,7 @@ namespace Owin.Types.Tests
                 {
                     {"alpha", new []{"beta", "gamma"}}
                 };
+
             var body = new MemoryStream(new byte[] { 65, 66, 67, 68 });
             var cts = new CancellationTokenSource();
             var env = new Dictionary<string, object>(StringComparer.Ordinal)
@@ -39,7 +33,7 @@ namespace Owin.Types.Tests
                     {"owin.CallCancelled", cts.Token},
                 };
 
-            var req = new Request(env);
+            var req = new OwinRequest(env);
             req.Scheme.ShouldBe("http");
             req.Method.ShouldBe("ONE");
             req.PathBase.ShouldBe("/two");
@@ -63,7 +57,7 @@ namespace Owin.Types.Tests
             var cts = new CancellationTokenSource();
 
             var env = new Dictionary<string, object>(StringComparer.Ordinal);
-            var req = new Request(env)
+            var req = new OwinRequest(env)
                 {
                     Scheme = "http",
                     Method = "ONE",

@@ -4,12 +4,11 @@ using System.Threading;
 
 namespace Owin.Types
 {
-    public struct Response
+    public struct OwinResponse
     {
         private readonly IDictionary<string, object> _environment;
 
-        public Response(IDictionary<string, object> environment)
-            : this()
+        public OwinResponse(IDictionary<string, object> environment)
         {
             _environment = environment;
         }
@@ -25,10 +24,22 @@ namespace Owin.Types
             return _environment.TryGetValue(key, out value) ? (T)value : default(T);
         }
 
-        public Response Set(string key, object value)
+        public OwinResponse Set(string key, object value)
         {
             _environment[key] = value;
             return this;
+        }
+
+        public string OwinVersion
+        {
+            get { return Get<string>(OwinConstants.OwinVersion); }
+            set { Set(OwinConstants.OwinVersion, value); }
+        }
+
+        public CancellationToken CallCancelled
+        {
+            get { return Get<CancellationToken>(OwinConstants.CallCancelled); }
+            set { Set(OwinConstants.CallCancelled, value); }
         }
 
         public int StatusCode
@@ -60,18 +71,5 @@ namespace Owin.Types
             get { return Get<Stream>(OwinConstants.ResponseBody); }
             set { Set(OwinConstants.ResponseBody, value); }
         }
-
-        public string OwinVersion
-        {
-            get { return Get<string>(OwinConstants.OwinVersion); }
-            set { Set(OwinConstants.OwinVersion, value); }
-        }
-
-        public CancellationToken CallCancelled
-        {
-            get { return Get<CancellationToken>(OwinConstants.CallCancelled); }
-            set { Set(OwinConstants.CallCancelled, value); }
-        }
-
     }
 }
