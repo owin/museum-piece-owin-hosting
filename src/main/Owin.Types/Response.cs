@@ -31,7 +31,7 @@ namespace Owin.Types
             return this;
         }
 
-        public int Path
+        public int StatusCode
         {
             get { return Get<int>(OwinConstants.ResponseStatusCode); }
             set { Set(OwinConstants.ResponseStatusCode, value); }

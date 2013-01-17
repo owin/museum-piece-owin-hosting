@@ -42,9 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Owin.Types.nuspec" />
-    <None Include="Owin.Types.Sources.nuspec">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="Owin.Types.Sources.nuspec" />
   </ItemGroup>
   <Import Project="$(ProjectDir)..\..\Common.targets" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

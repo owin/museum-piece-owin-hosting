@@ -54,9 +54,7 @@
     <None Include="Owin.AutoStartup.SystemWeb.nuspec">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Owin.AutoStartup.Sources.nuspec">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="Owin.AutoStartup.Sources.nuspec" />
     <None Include="packages.config" />
     <None Include="web.config.transform">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
