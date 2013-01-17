@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using Owin.Types;
 
 namespace Owin
 {
@@ -105,6 +106,43 @@ namespace Owin
             {
                 throw new MissingMethodException(builder.GetType().FullName, "AddSignatureConversion");
             }
+        }
+
+        public static IAppBuilder UseOwin(
+            this IAppBuilder builder,
+            Action<Request> processor)
+        {
+            return builder.UseFunc(next => env =>
+            {
+                processor(new Request(env));
+                return next(env);
+            });
+        }
+
+        public static IAppBuilder UseOwin(
+            this IAppBuilder builder,
+            Func<Request, Task> processor)
+        {
+            return builder.UseFunc(next => env =>
+                {
+                    processor(new Request(env));
+                    return next(env);
+                });
+        }
+
+        public static IAppBuilder UseOwin(
+            this IAppBuilder builder,
+            Func<Request, Response, Task> processor)
+        {
+            return builder.UseFunc(next => env => processor(new Request(env), new Response(env)));
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
+        public static IAppBuilder UseOwin(
+            this IAppBuilder builder,
+            Func<Request, Response, Func<Task>, Task> processor)
+        {
+            return builder.UseFunc(next => env => processor(new Request(env), new Response(env), () => next(env)));
         }
     }
 }

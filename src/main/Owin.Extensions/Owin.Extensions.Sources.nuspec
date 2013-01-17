@@ -12,6 +12,7 @@
     <tags>OWIN</tags>
     <dependencies>
       <dependency id="Owin" version="1.0"/>
+      <dependency id="Owin.Types.Sources" version="$version$"/>
     </dependencies>
   </metadata>
   <files>

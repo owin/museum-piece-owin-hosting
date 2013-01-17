@@ -1,6 +1,6 @@
 
 var PROJECT='OWIN startup components'
-var VERSION='0.6.5'
+var VERSION='0.7'
 var FULL_VERSION='${VERSION}-alpha'
 var AUTHORS='${PROJECT} contributors'
 
@@ -59,6 +59,7 @@ use-standard-goals features='nuget,xunit'
           .Replace("public static partial class", "internal static partial class")
           .Replace("public static class", "internal static class")
           .Replace("public class", "internal class")
+          .Replace("public struct", "internal struct")
           .Replace("public enum", "internal enum")
           .Replace("public delegate", "internal delegate")
           .Replace("public interface", "internal interface")

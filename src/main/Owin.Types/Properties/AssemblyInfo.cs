@@ -1,10 +1,11 @@
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Owin.AutoStartup")]
+[assembly: AssemblyTitle("Owin.Types")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCulture("")]
@@ -15,7 +16,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("84a6388d-059a-454c-b2c8-4a06bff00d23")]
+[assembly: Guid("dd53aa0b-5d4b-4efd-9d44-094ed213c992")]
 
 // Version information for an assembly consists of the following four values:
 //

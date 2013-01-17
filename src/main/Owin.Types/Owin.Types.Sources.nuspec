@@ -8,14 +8,13 @@
     <licenseUrl>https://github.com/owin-contrib/owin-hosting/blob/master/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/owin-contrib/owin-hosting/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>OWIN common extensions</description>
+    <description>OWIN types</description>
     <tags>OWIN</tags>
     <dependencies>
-      <dependency id="Owin" version="1.0"/>
-      <dependency id="Owin.Types" version="$version$"/>
     </dependencies>
   </metadata>
   <files>
-    <file src="Owin.Extensions.dll" target="lib\net40" />
+    <file src="*.cs" target="content\App_Packages\$id$.$version$" />
   </files>
 </package>
+
