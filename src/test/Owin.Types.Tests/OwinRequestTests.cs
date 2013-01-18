@@ -10,6 +10,13 @@ namespace Owin.Types.Tests
     public class OwinRequestTests
     {
         [Fact]
+        public void ItCanCreateEnvironmentForTestConvenience()
+        {
+            var req = OwinRequest.Create();
+            req.Dictionary.ShouldNotBe(null);
+        }
+
+        [Fact]
         public void ItStronglyTypesOwinKeys()
         {
             var headers = new Dictionary<string, string[]>(StringComparer.InvariantCultureIgnoreCase)

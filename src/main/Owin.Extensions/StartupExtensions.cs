@@ -111,9 +111,17 @@ namespace Owin
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public static IAppBuilder UseOwin(
             this IAppBuilder builder,
-            Func<OwinEnvironment, Func<Task>, Task> process)
+            Func<OwinRequest, OwinResponse, Func<Task>, Task> process)
         {
-            return builder.UseFunc(next => env => process(new OwinEnvironment(env), () => next(env)));
+            return builder.UseFunc(next => env => process(new OwinRequest(env), new OwinResponse(env), () => next(env)));
         }
+
+        //[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
+        //public static IAppBuilder UseOwin(
+        //    this IAppBuilder builder,
+        //    Func<OwinRequest, OwinResponse, Task> process)
+        //{
+        //    return builder.UseFunc(_ => env => process(new OwinRequest(env), new OwinResponse(env)));
+        //}
     }
 }

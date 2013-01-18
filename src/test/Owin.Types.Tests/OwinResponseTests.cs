@@ -8,14 +8,7 @@ using Xunit;
 namespace Owin.Types.Tests
 {
     public class OwinResponseTests
-    {
-        [Fact]
-        public void ItCanCreateEnvironmentForTestConvenience()
-        {
-            var req = OwinRequest.Create();
-            req.Environment.ShouldNotBe(null);
-        }
-
+    {        
         [Fact]
         public void ItStronglyTypesOwinKeys()
         {

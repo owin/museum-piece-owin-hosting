@@ -35,15 +35,32 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OwinResponse.Spec-SendFile.cs" />
+    <Compile Include="OwinRequest.Spec-WebSocket.cs" />
+    <Compile Include="OwinRequest.Spec-Opaque.cs" />
+    <Compile Include="OwinResponse.Spec-Owin.cs" />
+    <Compile Include="OwinRequest.Spec-Owin.cs" />
+    <Compile Include="OwinRequest.Spec-CommonKeys.cs" />
     <Compile Include="OwinConstants.cs" />
-    <Compile Include="OwinEnvironment.cs" />
     <Compile Include="OwinRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OwinResponse.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Generated.cs</LastGenOutput>
+    </None>
     <None Include="Owin.Types.nuspec" />
     <None Include="Owin.Types.Sources.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(ProjectDir)..\..\Common.targets" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
