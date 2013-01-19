@@ -5,9 +5,9 @@ namespace Owin.Types
 {
     public partial struct OwinOpaqueParameters
     {
-        public static OwinWebSocketParameters Create()
+        public static OwinOpaqueParameters Create()
         {
-            return new OwinWebSocketParameters(new ConcurrentDictionary<string, object>(StringComparer.Ordinal));
+            return new OwinOpaqueParameters(new ConcurrentDictionary<string, object>(StringComparer.Ordinal));
         }
     }
 }

@@ -29,5 +29,11 @@ namespace Owin.Types
             }
             UpgradeDelegate.Invoke(parameters.Dictionary, opaque => callback(new OwinOpaque(opaque)));
         }
+
+        public void Upgrade(
+            Func<OwinOpaque, Task> callback)
+        {
+            Upgrade(OwinOpaqueParameters.Create(), callback);
+        }
     }
 }
