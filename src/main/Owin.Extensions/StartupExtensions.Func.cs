@@ -16,14 +16,11 @@
 // under the License.
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
+using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>;
 
 namespace Owin
 {
-    using AppFunc = Func<IDictionary<string, object>, Task>;
-
     public static partial class StartupExtensions
     {
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]

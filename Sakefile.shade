@@ -48,11 +48,14 @@ use-standard-goals features='nuget,xunit'
     var projectName='${Path.GetFileName(projectDir)}'
     
     copy sourceDir='${projectDir}' include='**/*.cs' exclude='**/App_Packages/**/*' outputDir='${BUILD_DIR}\${projectName}' overwrite='${true}'
-    copy sourceDir='.' include='LICENSE.txt' outputDir='${BUILD_DIR}\${projectName}'
-    copy sourceDir='.' include='NOTICE.txt' outputDir='${BUILD_DIR}\${projectName}'
+    copy sourceDir='.' include='LICENSE.txt' outputDir='${BUILD_DIR}\${projectName}' overwrite='${true}'
+    copy sourceDir='.' include='NOTICE.txt' outputDir='${BUILD_DIR}\${projectName}' overwrite='${true}'
 
     for each='var deleteFile in Files.Include(BUILD_DIR + "/" + projectName + "/**/AssemblyInfo.cs")' -File.Delete(deleteFile);
 
+    var files='${new Dictionary<string,IList<FileGrammar.Hunk>>()}'
+
+    use import='FileGrammar'
     update-file each='var updateFile in Files.Include(BUILD_DIR + "/" + projectName + "/**/*.cs")'
       @{
         updateText = updateText
@@ -65,4 +68,31 @@ use-standard-goals features='nuget,xunit'
           .Replace("public delegate", "internal delegate")
           .Replace("public interface", "internal interface")
           .Replace(" /// ", " // ");
+
+        var hunks = new FileGrammar().Hunks(new Position(new SourceContext(updateText, 0, updateFile)));
+        files.Add(updateFile, hunks.Value);
       }
+
+    var groups="${files.GroupBy(kv => Path.GetDirectoryName(kv.Key) + '\\' + Path.GetFileName(kv.Key).Split((char)'.').First())}"
+    for each="var group in groups"
+      test if='group.Count() == 1'
+        log info='Skipping single file group ${group.Key}'
+      else
+        log info='Output group ${group.Key} has ${group.Count()} parts'
+        var allHunks='${group.SelectMany(kv=>kv.Value)}'
+        var allNamespaces='${allHunks.Where(x=>x.Type=="using").Select(x=>x.Namespace).Distinct().OrderBy(x=>(x.Contains("=")?"1":"0")+ x)}'
+        var allCode='${allHunks.Where(x=>x.Type=="namespace")}'
+        content var='newCode'
+          for each='var ns in allNamespaces' line|using !{ns};
+          line|
+          line|namespace !{allCode.First().Namespace.Trim()}
+          line|{
+          for each='var code in allCode' 
+            line|#region !{Path.GetFileNameWithoutExtension(code.Position.SourceContext.FileName)}
+            |!{code.Code}
+            line|#endregion
+            line|
+          line|}
+        for each='var kv in group' -File.Delete(kv.Key);
+        -File.WriteAllText(group.Key + ".cs", newCode);
+

@@ -2,10 +2,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+using SendFileAsyncDelegate = System.Func<string, long, long?, System.Threading.CancellationToken, System.Threading.Tasks.Task>;
+
 namespace Owin.Types
 {
-    using SendFileAsyncDelegate = Func<string, long, long?, CancellationToken, Task>;
-
     public partial struct OwinResponse
     {
         public bool CanSendFile

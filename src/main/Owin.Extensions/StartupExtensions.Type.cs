@@ -16,14 +16,10 @@
 // under the License.
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
 
 namespace Owin
 {
-    using AppFunc = Func<IDictionary<string, object>, Task>;
-
     public static partial class StartupExtensions
     {
         [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "By design")]

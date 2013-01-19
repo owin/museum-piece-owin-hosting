@@ -1,0 +1,78 @@
+use namespace='Spark.Parser'
+use assembly='Spark'
+functions
+  @{
+        public class FileGrammar : Spark.Parser.Code.CodeGrammar
+        {
+            public FileGrammar()
+            {
+                var ws = Ch((char)' ', (char)'\t', (char)'\r', (char)'\n');
+
+                var usingHunk = Build(
+                    "using",
+                    Ch("using")
+                        .And(Rep1(ws))
+                        .And(Str(Rep1(ChNot(';'))))
+                        .And(Ch(';')),
+                    hit => new Hunk { Namespace = hit.Left.Down });
+
+                var whitespaceHunk = Build("whitespace",
+                    Rep1(ws),
+                    hit => new Hunk());
+
+                var namespaceHunk = Build(
+                    "namespace",
+                    Ch("namespace")
+                        .And(Rep1(ws))
+                        .And(Str(Rep1(ChNot('{'))))
+                        .And(Ch('{'))
+                        .And(Str(LimitedExpression(Ch("}"))))
+                        .And(Ch('}')),
+                    hit => new Hunk { Namespace = hit.Left.Left.Left.Down, Code = hit.Left.Down });
+
+                var hunk = usingHunk.Or(namespaceHunk);
+
+                var garbageHunk = Build(
+                    "garbage",
+                    Rep1(Ch(ch => true).Unless(hunk)),
+                    hit => new Hunk());
+
+                var hunks = Rep(hunk.Or(garbageHunk));
+                Hunks = hunks;
+            }
+
+            public ParseAction<IList<Hunk>> Hunks { get; set; }
+
+            public class Hunk
+            {
+                public Position Position { get; set; }
+                public string Type { get; set; }
+                public string Text { get; set; }
+                public string Namespace { get; set; }
+                public string Code { get; set; }
+            }
+
+            ParseAction<string> Str<T>(ParseAction<T> parser)
+            {
+                return pos =>
+                {
+                    var result = parser(pos);
+                    return result == null ? null : new ParseResult<string>(result.Rest, pos.Peek(result.Rest.Offset - pos.Offset));
+                };
+            }
+            ParseAction<Hunk> Build<T>(string type, ParseAction<T> parser, Func<T, Hunk> builder)
+            {
+                return pos =>
+                    {
+                        var result = parser(pos);
+                        if (result == null) return null;
+
+                        var hunk = builder(result.Value);
+                        hunk.Position = pos;
+                        hunk.Type = type;
+                        hunk.Text = pos.Peek(result.Rest.Offset - pos.Offset);
+                        return new ParseResult<Hunk>(result.Rest, hunk);
+                    };
+            }
+        }  
+  }

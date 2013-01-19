@@ -77,13 +77,19 @@ namespace Owin.Types
 
         public static class Opaque
         {
-            // 3.1 Startup
+            // 3.1. Startup
 
             public const string Version = "opaque.Version";
 
-            // 3.2 Per Request
+            // 3.2. Per Request
 
             public const string Upgrade = "opaque.Upgrade";
+
+            // 5. Consumption
+
+            public const string Stream = "opaque.Stream";
+            //public const string Version = "opaque.Version"; // redundant, declared above
+            public const string CallCancelled = "opaque.CallCancelled";
         }
 
         #endregion

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using SendAsyncDelegate = System.Func<System.ArraySegment<byte>, int, bool, System.Threading.CancellationToken, System.Threading.Tasks.Task>;
+using ReceiveAsyncDelegate = System.Func<System.ArraySegment<byte>, System.Threading.CancellationToken, System.Threading.Tasks.Task<System.Tuple<int, bool, int>>>;
+using CloseAsyncDelegate = System.Func<int, string, System.Threading.CancellationToken, System.Threading.Tasks.Task>;
 
 namespace Owin.Types
 {
-    using SendAsyncDelegate = Func<string, long, long?, CancellationToken, Task>;
-    using ReceiveAsyncDelegate = Func<string, long, long?, CancellationToken, Task>;
-    using CloseAsyncDelegate = Func<string, long, long?, CancellationToken, Task>;
-
     public partial struct OwinWebSocket
     {
         public SendAsyncDelegate SendAsyncDelegate
@@ -28,15 +27,15 @@ namespace Owin.Types
             set { Set(OwinConstants.WebSocket.CloseAsync, value); }
         }
 
-        public CloseAsyncDelegate Version
+        public string Version
         {
-            get { return Get<CloseAsyncDelegate>(OwinConstants.WebSocket.Version); }
+            get { return Get<string>(OwinConstants.WebSocket.Version); }
             set { Set(OwinConstants.WebSocket.Version, value); }
         }
 
-        public CloseAsyncDelegate CallCancelled
+        public CancellationToken CallCancelled
         {
-            get { return Get<CloseAsyncDelegate>(OwinConstants.WebSocket.CallCancelled); }
+            get { return Get<CancellationToken>(OwinConstants.WebSocket.CallCancelled); }
             set { Set(OwinConstants.WebSocket.CallCancelled, value); }
         }
 

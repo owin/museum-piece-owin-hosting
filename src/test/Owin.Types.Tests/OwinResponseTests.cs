@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using Shouldly;
 using Xunit;
@@ -8,7 +9,7 @@ using Xunit;
 namespace Owin.Types.Tests
 {
     public class OwinResponseTests
-    {        
+    {
         [Fact]
         public void ItStronglyTypesOwinKeys()
         {

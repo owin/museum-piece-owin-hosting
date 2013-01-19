@@ -16,15 +16,13 @@
 // under the License.
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Owin.Types;
+using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>;
 
 namespace Owin
 {
-    using AppFunc = Func<IDictionary<string, object>, Task>;
-
     public static partial class StartupExtensions
     {
         public static void Run(this IAppBuilder builder, object app)

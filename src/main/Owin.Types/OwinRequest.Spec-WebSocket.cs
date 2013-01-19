@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using AcceptDelegate = System.Action<System.Collections.Generic.IDictionary<string, object>, System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>>;
 
 namespace Owin.Types
 {
-    using AcceptDelegate = Action<IDictionary<string, object>, Func<IDictionary<string, object>, Task>>;
-
     public partial struct OwinRequest
     {
         public bool CanAccept
@@ -19,10 +18,30 @@ namespace Owin.Types
         }
 
         public void Accept(
-            IDictionary<string, object> parameters,
+            OwinWebSocketParameters parameters,
             Func<OwinWebSocket, Task> callback)
         {
-            AcceptDelegate.Invoke(parameters, webSocket => callback(new OwinWebSocket(webSocket)));
+            var accept = AcceptDelegate;
+            if (accept == null)
+            {
+                throw new NotSupportedException(OwinConstants.WebSocket.Accept);
+            }
+            accept.Invoke(
+                parameters.Dictionary,
+                webSocket => callback(new OwinWebSocket(webSocket)));
+        }
+
+        public void Accept(
+            string subProtocol,
+            Func<OwinWebSocket, Task> callback)
+        {
+            Accept(OwinWebSocketParameters.Create(subProtocol), callback);
+        }
+
+        public void Accept(
+            Func<OwinWebSocket, Task> callback)
+        {
+            Accept(OwinWebSocketParameters.Create(), callback);
         }
     }
 }
