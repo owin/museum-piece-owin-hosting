@@ -43,6 +43,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OwinHeadersTests.cs" />
     <Compile Include="OwinResponseSendFileTests.cs" />
     <Compile Include="OwinResponseTests.cs" />
     <Compile Include="OwinRequestTests.cs" />

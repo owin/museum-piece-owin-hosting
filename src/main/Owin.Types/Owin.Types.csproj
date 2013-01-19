@@ -35,6 +35,10 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OwinRequest.Generated.cs" />
+    <Compile Include="OwinResponse.Generated.cs" />
+    <Compile Include="OwinWebSocket.Generated.cs" />
+    <Compile Include="OwinWebSocket.Spec-WebSocket.cs" />
     <Compile Include="Generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

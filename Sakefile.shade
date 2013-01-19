@@ -60,6 +60,7 @@ use-standard-goals features='nuget,xunit'
           .Replace("public static class", "internal static class")
           .Replace("public class", "internal class")
           .Replace("public struct", "internal struct")
+          .Replace("public partial struct", "internal partial struct")
           .Replace("public enum", "internal enum")
           .Replace("public delegate", "internal delegate")
           .Replace("public interface", "internal interface")

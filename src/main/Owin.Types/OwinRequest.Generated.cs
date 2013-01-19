@@ -1,23 +1,14 @@
-﻿<#@ template language="C#" hostspecific="true" #>
-<#@ import namespace="System.IO" #>
-<#@ import namespace="System.Collections.Generic" #>
-<# 
-    var typeNames = new [] {"OwinRequest", "OwinResponse", "OwinWebSocket"};
-    var hasHeaders = new List<string> {"OwinRequest", "OwinResponse"};
-    foreach(var typeName in typeNames) 
-    {
-#>
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Owin.Types
 {
-    public partial struct <#=typeName#>
+    public partial struct OwinRequest
     {
         private readonly IDictionary<string, object> _dictionary;
 
-        public <#=typeName#>(IDictionary<string, object> dictionary)
+        public OwinRequest(IDictionary<string, object> dictionary)
         {
             _dictionary = dictionary;
         }
@@ -33,16 +24,12 @@ namespace Owin.Types
             return _dictionary.TryGetValue(key, out value) ? (T)value : default(T);
         }
 
-        public <#=typeName#> Set(string key, object value)
+        public OwinRequest Set(string key, object value)
         {
             _dictionary[key] = value;
             return this;
         }
 
-<#
-    if (hasHeaders.Contains(typeName)) 
-    {
-#>
         public string GetHeader(string key)
         {
             string[] values = GetHeaderUnmodified(key);
@@ -63,41 +50,41 @@ namespace Owin.Types
 
         private static readonly Func<string, string[]> SplitHeader = header => header.Split(new[] { ',' });
 
-        public <#=typeName#> SetHeader(string key, string value)
+        public OwinRequest SetHeader(string key, string value)
         {
             Headers[key] = new[] { value };
             return this;
         }
 
-        public <#=typeName#> SetHeaderJoined(string key, params string[] values)
+        public OwinRequest SetHeaderJoined(string key, params string[] values)
         {
             Headers[key] = new[] { string.Join(",", values) };
             return this;
         }
 
-        public <#=typeName#> SetHeaderJoined(string key, IEnumerable<string> values)
+        public OwinRequest SetHeaderJoined(string key, IEnumerable<string> values)
         {
             return SetHeaderJoined(key, values.ToArray());
         }
 
-        public <#=typeName#> SetHeaderUnmodified(string key, params string[] values)
+        public OwinRequest SetHeaderUnmodified(string key, params string[] values)
         {
             Headers[key] = values;
             return this;
         }
 
-        public <#=typeName#> SetHeaderUnmodified(string key, IEnumerable<string> values)
+        public OwinRequest SetHeaderUnmodified(string key, IEnumerable<string> values)
         {
             Headers[key] = values.ToArray();
             return this;
         }
 
-        public <#=typeName#> AddHeader(string key, string value)
+        public OwinRequest AddHeader(string key, string value)
         {
             return AddHeaderUnmodified(key, value);
         }
 
-        public <#=typeName#> AddHeaderJoined(string key, params string[] values)
+        public OwinRequest AddHeaderJoined(string key, params string[] values)
         {
             var existing = GetHeaderUnmodified(key);
             return existing == null 
@@ -105,7 +92,7 @@ namespace Owin.Types
                 : SetHeaderJoined(key, existing.Concat(values));
         }
 
-        public <#=typeName#> AddHeaderJoined(string key, IEnumerable<string> values)
+        public OwinRequest AddHeaderJoined(string key, IEnumerable<string> values)
         {
             var existing = GetHeaderUnmodified(key);
             return existing == null
@@ -113,23 +100,12 @@ namespace Owin.Types
                 : SetHeaderJoined(key, existing.Concat(values));
         }
 
-        public <#=typeName#> AddHeaderUnmodified(string key, params string[] values)
+        public OwinRequest AddHeaderUnmodified(string key, params string[] values)
         {
             var existing = GetHeaderUnmodified(key);
             return existing == null
                 ? SetHeaderUnmodified(key, values) 
                 : SetHeaderUnmodified(key, existing.Concat(values));
         }
-<#
-    } 
-#>
     }
 }
-<# 
-      string templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
-      string outputFilePath = Path.Combine(templateDirectory, typeName + ".Generated.cs");
-      File.WriteAllText(outputFilePath, this.GenerationEnvironment.ToString()); 
-
-      this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
-    } 
-#>
