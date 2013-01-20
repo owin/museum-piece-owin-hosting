@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Owin.Types
 {
@@ -29,6 +29,7 @@ namespace Owin.Types
             _dictionary[key] = value;
             return this;
         }
+
 
         public string GetHeader(string key)
         {

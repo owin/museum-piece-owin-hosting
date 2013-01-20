@@ -7,10 +7,13 @@
     var hasHeaders = new List<string> {"OwinRequest", "OwinResponse"};
     foreach(var typeName in typeNames) 
     {
+        var typeHasHeaders = hasHeaders.Contains(typeName);
 #>
+<# if (typeHasHeaders) { #>
 using System;
-using System.Collections.Generic;
 using System.Linq;
+<# } // typeHasHeaders #>
+using System.Collections.Generic;
 
 namespace Owin.Types
 {
@@ -40,10 +43,8 @@ namespace Owin.Types
             return this;
         }
 
-<#
-    if (hasHeaders.Contains(typeName)) 
-    {
-#>
+<# if (typeHasHeaders) { #>
+
         public string GetHeader(string key)
         {
             string[] values = GetHeaderUnmodified(key);
@@ -121,9 +122,7 @@ namespace Owin.Types
                 ? SetHeaderUnmodified(key, values) 
                 : SetHeaderUnmodified(key, existing.Concat(values));
         }
-<#
-    } 
-#>
+<# } // typeHasHeaders #>
     }
 }
 <# 
