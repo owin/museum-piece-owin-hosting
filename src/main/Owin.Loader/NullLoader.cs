@@ -20,16 +20,27 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Owin.Loader
 {
+    /// <summary>
+    /// A default fallback loader that does nothing.
+    /// </summary>
     public class NullLoader
     {
         private static readonly NullLoader Singleton = new NullLoader();
 
+        /// <summary>
+        /// A singleton instance of the NullLoader type.
+        /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public static Func<string, Action<IAppBuilder>> Instance
         {
             get { return Singleton.Load; }
         }
 
+        /// <summary>
+        /// A placeholder method that always returns null.
+        /// </summary>
+        /// <param name="startup"></param>
+        /// <returns>null.</returns>
         public Action<IAppBuilder> Load(string startup)
         {
             return null;

@@ -14,5 +14,6 @@
   </metadata>
   <files>
     <file src="Owin.dll" target="lib\net40" />
+    <file src="Owin.xml" target="lib\net40" />
   </files>
 </package>

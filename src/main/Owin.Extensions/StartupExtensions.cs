@@ -23,8 +23,16 @@ using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, objec
 
 namespace Owin
 {
+    /// <summary>
+    /// Extension methods for IAppBuilder that provide syntax for commonly supported patterns.
+    /// </summary>
     public static partial class StartupExtensions
     {
+        /// <summary>
+        /// Attach the given application to the pipeline.  Nothing attached after this point will be executed.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="app"></param>
         public static void Run(this IAppBuilder builder, object app)
         {
             if (builder == null)
@@ -35,12 +43,25 @@ namespace Owin
             builder.Use(new Func<object, object>(ignored => app));
         }
 
+        /// <summary>
+        /// The Build is called at the point when all of the middleware should be chained
+        /// together. May be called to build pipeline branches.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns>The request processing entry point for this section of the pipeline.</returns>
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public static AppFunc Build(this IAppBuilder builder)
         {
             return builder.Build<AppFunc>();
         }
 
+        /// <summary>
+        /// The Build is called at the point when all of the middleware should be chained
+        /// together. May be called to build pipeline branches.
+        /// </summary>
+        /// <typeparam name="TApp">The application signature.</typeparam>
+        /// <param name="builder"></param>
+        /// <returns>The request processing entry point for this section of the pipeline.</returns>
         public static TApp Build<TApp>(this IAppBuilder builder)
         {
             if (builder == null)
@@ -51,6 +72,12 @@ namespace Owin
             return (TApp)builder.Build(typeof(TApp));
         }
 
+        /// <summary>
+        /// Creates a new IAppBuilder instance from the current one and then invokes the configuration callback.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="configuration">The callback for configuration.</param>
+        /// <returns>The request processing entry point for this section of the pipeline.</returns>
         [SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "By design")]
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public static AppFunc BuildNew(this IAppBuilder builder, Action<IAppBuilder> configuration)
@@ -67,6 +94,13 @@ namespace Owin
             return builder.BuildNew<AppFunc>(configuration);
         }
 
+        /// <summary>
+        /// Creates a new IAppBuilder instance from the current one and then invokes the configuration callback.
+        /// </summary>
+        /// <typeparam name="TApp">The application signature.</typeparam>
+        /// <param name="builder"></param>
+        /// <param name="configuration">The callback for configuration.</param>
+        /// <returns>The request processing entry point for this section of the pipeline.</returns>
         [SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "By design")]
         public static TApp BuildNew<TApp>(this IAppBuilder builder, Action<IAppBuilder> configuration)
         {
@@ -84,6 +118,11 @@ namespace Owin
             return nested.Build<TApp>();
         }
 
+        /// <summary>
+        /// Adds converters for adapting between disparate application signatures.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="conversion"></param>
         [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "False positive")]
         public static void AddSignatureConversion(
             this IAppBuilder builder,
@@ -106,6 +145,12 @@ namespace Owin
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="process"></param>
+        /// <returns></returns>
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public static IAppBuilder UseOwin(
             this IAppBuilder builder,

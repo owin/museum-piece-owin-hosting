@@ -25,21 +25,37 @@ using System.Reflection;
 
 namespace Owin.Loader
 {
+    /// <summary>
+    /// Locates the startup class based on the following convention:
+    /// AssemblyName.Startup, with a method named Configuration
+    /// </summary>
     public class DefaultLoader
     {
         private readonly Func<string, Action<IAppBuilder>> _next;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public DefaultLoader()
         {
             _next = NullLoader.Instance;
         }
 
+        /// <summary>
+        /// Allows for a fallback loader to be specified.
+        /// </summary>
+        /// <param name="next"></param>
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public DefaultLoader(Func<string, Action<IAppBuilder>> next)
         {
             _next = next ?? NullLoader.Instance;
         }
 
+        /// <summary>
+        /// Executes the loader, searching for the entry point by name.
+        /// </summary>
+        /// <param name="startupName">The name of the assembly and type entry point</param>
+        /// <returns></returns>
         public Action<IAppBuilder> Load(string startupName)
         {
             return LoadImplementation(startupName) ?? _next(startupName);
@@ -199,7 +215,7 @@ namespace Owin.Loader
             }
         }
 
-        public static IEnumerable<string> DotByDot(string text)
+        private static IEnumerable<string> DotByDot(string text)
         {
             if (text == null)
             {

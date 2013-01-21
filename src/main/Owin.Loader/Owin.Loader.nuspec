@@ -16,5 +16,6 @@
   </metadata>
   <files>
     <file src="Owin.Loader.dll" target="lib\net40" />
+    <file src="Owin.Loader.xml" target="lib\net40" />
   </files>
 </package>
