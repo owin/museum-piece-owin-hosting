@@ -131,5 +131,19 @@ namespace Owin.Types.Tests
             req.AddHeaderUnmodified("x-custom", "four,five", "six");
             req.Headers["x-custom"].ShouldBe(new[] { "one", "two,three", "four,five", "six" });
         }
+
+        //[Fact] //TODO: don't split quoted commas
+        public void QuotedCommaShouldNotBeSplit()
+        {
+            var req = OwinRequest.Create();
+            req.SetHeaderUnmodified("x-custom", "\"one,two\"");
+            req.GetHeaderSplit("x-custom").ShouldBe(new[] { "\"one,two\"" });
+            req.AddHeaderUnmodified("x-custom", "\"three,four\"");
+            req.GetHeaderUnmodified("x-custom").ShouldBe(new[] { "\"one,two\"", "\"three,four\"" });
+            req.GetHeaderSplit("x-custom").ShouldBe(new[] { "\"one,two\"", "\"three,four\"" });
+            req.AddHeaderJoined("x-custom", "\"five,six\"");
+            req.GetHeaderUnmodified("x-custom").ShouldBe(new[] { "\"one,two\",\"three,four\",\"five,six\"" });
+            req.GetHeaderSplit("x-custom").ShouldBe(new[] { "\"one,two\"", "\"three,four\"", "\"five,six\"" });
+        }
     }
 }
