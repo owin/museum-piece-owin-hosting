@@ -88,5 +88,54 @@ namespace Owin.Types.Tests
             env["owin.Version"].ShouldBe("1.0");
             env["owin.CallCancelled"].ShouldBe(cts.Token);
         }
+
+        private static OwinRequest Create(Action<OwinRequest> setup)
+        {
+            var request = OwinRequest.Create();
+            setup(request);
+            return request;
+        }
+
+        [Fact]
+        public void UriCombinedFromAppropriateFields()
+        {
+            Create(
+                req => req
+                           .Set(OwinConstants.RequestScheme, "https")
+                           .SetHeader("Host", "two:3")
+                           .Set(OwinConstants.RequestPathBase, "/four")
+                           .Set(OwinConstants.RequestPath, "/five")
+                           .Set(OwinConstants.RequestQueryString, "six=7")
+                ).Uri.ShouldBe(new Uri("https://two:3/four/five?six=7"));
+        }
+
+        [Fact]
+        public void MissingHostDefaultsLocalIpAddressAndPort()
+        {
+            Create(
+                req => req
+                           .Set(OwinConstants.RequestScheme, "https")
+                           .Set(OwinConstants.CommonKeys.LocalIpAddress, "eight")
+                           .Set(OwinConstants.CommonKeys.LocalPort, "9")
+                           .Set(OwinConstants.RequestPathBase, "/four")
+                           .Set(OwinConstants.RequestPath, "/five")
+                           .Set(OwinConstants.RequestQueryString, "six=7")
+                ).Uri.ShouldBe(new Uri("https://eight:9/four/five?six=7"));
+        }
+
+        [Fact]
+        public void HostMissingPortDoesNotDefaultToLocalPort()
+        {
+            Create(
+                req => req
+                           .Set(OwinConstants.RequestScheme, "https")
+                           .SetHeader("Host", "two")
+                           .Set(OwinConstants.CommonKeys.LocalIpAddress, "eight")
+                           .Set(OwinConstants.CommonKeys.LocalPort, "9")
+                           .Set(OwinConstants.RequestPathBase, "/four")
+                           .Set(OwinConstants.RequestPath, "/five")
+                           .Set(OwinConstants.RequestQueryString, "six=7")
+                ).Uri.ShouldBe(new Uri("https://two/four/five?six=7"));
+        }
     }
 }

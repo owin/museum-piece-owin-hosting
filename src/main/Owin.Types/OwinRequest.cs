@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using Owin.Types.Helpers;
 
 namespace Owin.Types
 {
@@ -30,6 +31,17 @@ namespace Owin.Types
             environment[OwinConstants.ResponseHeaders] =
                 new ConcurrentDictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
             return new OwinRequest(environment);
+        }
+
+        public string Host
+        {
+            get { return OwinHelpers.GetHost(this); }
+            set { SetHeader("Host", value); }
+        }
+
+        public Uri Uri
+        {
+            get { return OwinHelpers.GetUri(this); }
         }
     }
 }

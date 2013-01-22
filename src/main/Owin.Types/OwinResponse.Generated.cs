@@ -77,80 +77,77 @@ namespace Owin.Types
 
         public string GetHeader(string key)
         {
-            string[] values = GetHeaderUnmodified(key);
-            return values == null ? null : string.Join(",", values);
+            return Helpers.OwinHelpers.GetHeader(Headers, key);
         }
 
         public IEnumerable<string> GetHeaderSplit(string key)
         {
-            string[] values = GetHeaderUnmodified(key);
-            return values == null ? null : values.SelectMany(SplitHeader);
+            return Helpers.OwinHelpers.GetHeaderSplit(Headers, key);
         }
 
         public string[] GetHeaderUnmodified(string key)
         {
-            string[] values;
-            return Headers.TryGetValue(key, out values) ? values : null;
+            return Helpers.OwinHelpers.GetHeaderUnmodified(Headers, key);
         }
-
-        private static readonly Func<string, string[]> SplitHeader = header => header.Split(new[] { ',' });
 
         public OwinResponse SetHeader(string key, string value)
         {
-            Headers[key] = new[] { value };
+            Helpers.OwinHelpers.SetHeader(Headers, key, value);
             return this;
         }
 
         public OwinResponse SetHeaderJoined(string key, params string[] values)
         {
-            Headers[key] = new[] { string.Join(",", values) };
+            Helpers.OwinHelpers.SetHeaderJoined(Headers, key, values);
             return this;
         }
 
         public OwinResponse SetHeaderJoined(string key, IEnumerable<string> values)
         {
-            return SetHeaderJoined(key, values.ToArray());
+            Helpers.OwinHelpers.SetHeaderJoined(Headers, key, values);
+            return this;
         }
 
         public OwinResponse SetHeaderUnmodified(string key, params string[] values)
         {
-            Headers[key] = values;
+            Helpers.OwinHelpers.SetHeaderUnmodified(Headers, key, values);
             return this;
         }
 
         public OwinResponse SetHeaderUnmodified(string key, IEnumerable<string> values)
         {
-            Headers[key] = values.ToArray();
+            Helpers.OwinHelpers.SetHeaderUnmodified(Headers, key, values);
             return this;
         }
 
         public OwinResponse AddHeader(string key, string value)
         {
-            return AddHeaderUnmodified(key, value);
+            Helpers.OwinHelpers.AddHeader(Headers, key, value);
+            return this;
         }
 
         public OwinResponse AddHeaderJoined(string key, params string[] values)
         {
-            var existing = GetHeaderUnmodified(key);
-            return existing == null 
-                ? SetHeaderJoined(key, values) 
-                : SetHeaderJoined(key, existing.Concat(values));
+            Helpers.OwinHelpers.AddHeaderJoined(Headers, key, values);
+            return this;
         }
 
         public OwinResponse AddHeaderJoined(string key, IEnumerable<string> values)
         {
-            var existing = GetHeaderUnmodified(key);
-            return existing == null
-                ? SetHeaderJoined(key, values)
-                : SetHeaderJoined(key, existing.Concat(values));
+            Helpers.OwinHelpers.AddHeaderJoined(Headers, key, values);
+            return this;
         }
 
         public OwinResponse AddHeaderUnmodified(string key, params string[] values)
         {
-            var existing = GetHeaderUnmodified(key);
-            return existing == null
-                ? SetHeaderUnmodified(key, values) 
-                : SetHeaderUnmodified(key, existing.Concat(values));
+            Helpers.OwinHelpers.AddHeaderUnmodified(Headers, key, values);
+            return this;
+        }
+
+        public OwinResponse AddHeaderUnmodified(string key, IEnumerable<string> values)
+        {
+            Helpers.OwinHelpers.AddHeaderUnmodified(Headers, key, values);
+            return this;
         }
     }
 }
