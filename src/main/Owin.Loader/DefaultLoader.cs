@@ -91,6 +91,11 @@ namespace Owin.Loader
             return
                 builder =>
                 {
+                    if (builder == null)
+                    {
+                        throw new ArgumentNullException("builder");
+                    }
+
                     object value;
                     if (!builder.Properties.TryGetValue("host.AppName", out value) ||
                         String.IsNullOrWhiteSpace(Convert.ToString(value, CultureInfo.InvariantCulture)))
@@ -215,7 +220,7 @@ namespace Owin.Loader
             }
         }
 
-        private static IEnumerable<string> DotByDot(string text)
+        internal static IEnumerable<string> DotByDot(string text)
         {
             if (text == null)
             {

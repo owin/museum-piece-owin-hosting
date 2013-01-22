@@ -17,6 +17,7 @@
 
 using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
@@ -48,3 +49,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("0.7")]
 [assembly: AssemblyFileVersion("0.7")]
 [assembly: CLSCompliant(false)]
+#if DEBUG
+[assembly: InternalsVisibleTo("Owin.Loader.Tests")]
+#endif
