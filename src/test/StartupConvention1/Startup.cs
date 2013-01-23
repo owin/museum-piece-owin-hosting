@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MiddlewareConvention1;
 using MiddlewareConvention2;
+using MiddlewareConvention3;
 using Owin;
 
 namespace StartupConvention1
@@ -53,6 +54,9 @@ namespace StartupConvention1
             builder.UseType<Delta>("a", "b");
 
             builder.UseFunc<AppFunc>(app => new Delta(app, "a", "b").Invoke);
+
+            Theta theta = new Theta(new object());
+            builder.UseTheta(theta, "a", "b");
 
             builder.Run(this);
         }

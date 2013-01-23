@@ -21,6 +21,7 @@ using System.IO;
 using System.Threading.Tasks;
 using MiddlewareConvention1;
 using MiddlewareConvention2;
+using MiddlewareConvention3;
 
 namespace StartupConvention2
 {
@@ -39,6 +40,10 @@ namespace StartupConvention2
             app = new Gamma(app, "Five", "Six").Invoke;
 
             app = new Delta(app, "Seven", "Eight").Invoke;
+
+            Theta theta = new Theta(new object());
+            theta.Initialize(app, "Nine", "Ten");
+            app = theta.Invoke;
 
             return app;
         }

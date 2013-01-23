@@ -301,75 +301,135 @@ namespace Owin.Builder
         [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "False positive")]
         private static Tuple<Type, Delegate, object[]> ToMiddlewareFactory(object middlewareObject, object[] args)
         {
+            if (middlewareObject == null)
+            {
+                throw new ArgumentNullException("middlewareObject");
+            }
+
             Delegate middlewareDelegate = middlewareObject as Delegate;
-            if (middlewareDelegate == null)
+            if (middlewareDelegate != null)
             {
-                MethodInfo[] methods = middlewareObject.GetType().GetMethods();
-                foreach (MethodInfo method in methods)
-                {
-                    if (method.Name != "Invoke")
-                    {
-                        continue;
-                    }
-                    ParameterInfo[] parameters = method.GetParameters();
-                    Type[] parameterTypes = parameters.Select(p => p.ParameterType).ToArray();
-
-                    if (parameterTypes.Length != args.Length + 1)
-                    {
-                        continue;
-                    }
-                    if (!parameterTypes
-                        .Skip(1)
-                        .Zip(args, TestArgForParameter)
-                        .All(x => x))
-                    {
-                        continue;
-                    }
-                    IEnumerable<Type> genericFuncTypes = parameterTypes.Concat(new[] { method.ReturnType });
-                    Type funcType = Expression.GetFuncType(genericFuncTypes.ToArray());
-                    middlewareDelegate = Delegate.CreateDelegate(funcType, middlewareObject, method);
-                    return Tuple.Create(parameters[0].ParameterType, middlewareDelegate, args);
-                }
+                return Tuple.Create(GetParameterType(middlewareDelegate), middlewareDelegate, args);
             }
 
-            if (middlewareDelegate == null && middlewareObject is Type)
+            Tuple<Type, Delegate, object[]> factory = ToInstanceMiddlewareFactory(middlewareObject, args);
+            if (factory != null)
             {
-                Type middlewareType = middlewareObject as Type;
-                ConstructorInfo[] constructors = middlewareType.GetConstructors();
-                foreach (ConstructorInfo constructor in constructors)
-                {
-                    ParameterInfo[] parameters = constructor.GetParameters();
-                    Type[] parameterTypes = parameters.Select(p => p.ParameterType).ToArray();
-                    if (parameterTypes.Length != args.Length + 1)
-                    {
-                        continue;
-                    }
-                    if (!parameterTypes
-                        .Skip(1)
-                        .Zip(args, TestArgForParameter)
-                        .All(x => x))
-                    {
-                        continue;
-                    }
-
-                    ParameterExpression[] parameterExpressions = parameters.Select(p => Expression.Parameter(p.ParameterType, p.Name)).ToArray();
-                    NewExpression callConstructor = Expression.New(constructor, parameterExpressions);
-                    middlewareDelegate = Expression.Lambda(callConstructor, parameterExpressions).Compile();
-                    return Tuple.Create(parameters[0].ParameterType, middlewareDelegate, args);
-                }
-
-                if (middlewareDelegate == null)
-                {
-                    throw new MissingMethodException(middlewareType.FullName, "ctor(" + (args.Length + 1) + ")");
-                }
+                return factory;
             }
 
-            if (middlewareDelegate == null)
+            factory = ToGeneratorMiddlewareFactory(middlewareObject, args);
+            if (factory != null)
             {
-                throw new NotSupportedException((middlewareObject ?? string.Empty).ToString());
+                return factory;
             }
 
-            return Tuple.Create(GetParameterType(middlewareDelegate), middlewareDelegate, args);
+            if (middlewareObject is Type)
+            {
+                return ToConstructorMiddlewareFactory(middlewareObject, args, ref middlewareDelegate);
+            }
+
+            throw new NotSupportedException((middlewareObject ?? string.Empty).ToString());
+        }
+
+        // Instance pattern: public void Initialize(AppFunc next, string arg1, string arg2), public Task Invoke(IDictionary<...> env)
+        private static Tuple<Type, Delegate, object[]> ToInstanceMiddlewareFactory(object middlewareObject, object[] args)
+        {
+            MethodInfo[] methods = middlewareObject.GetType().GetMethods();
+            foreach (MethodInfo method in methods)
+            {
+                if (method.Name != "Initialize")
+                {
+                    continue;
+                }
+                ParameterInfo[] parameters = method.GetParameters();
+                Type[] parameterTypes = parameters.Select(p => p.ParameterType).ToArray();
+
+                if (parameterTypes.Length != args.Length + 1)
+                {
+                    continue;
+                }
+                if (!parameterTypes
+                    .Skip(1)
+                    .Zip(args, TestArgForParameter)
+                    .All(x => x))
+                {
+                    continue;
+                }
+
+                // DynamicInvoke can't handle a middleware with multiple args, just push the args in via closure.
+                Func<object, object> func = app =>
+                {
+                    object[] invokeParameters = new[] { app }.Concat(args).ToArray();
+                    method.Invoke(middlewareObject, invokeParameters);
+                    return middlewareObject;
+                };
+
+                return Tuple.Create<Type, Delegate, object[]>(parameters[0].ParameterType, func, new object[0]);
+            }
+            return null;
+        }
+
+        // Delegate nesting pattern: public AppFunc Invoke(AppFunc app, string arg1, string arg2)
+        private static Tuple<Type, Delegate, object[]> ToGeneratorMiddlewareFactory(object middlewareObject, object[] args)
+        {
+            MethodInfo[] methods = middlewareObject.GetType().GetMethods();
+            foreach (MethodInfo method in methods)
+            {
+                if (method.Name != "Invoke")
+                {
+                    continue;
+                }
+                ParameterInfo[] parameters = method.GetParameters();
+                Type[] parameterTypes = parameters.Select(p => p.ParameterType).ToArray();
+
+                if (parameterTypes.Length != args.Length + 1)
+                {
+                    continue;
+                }
+                if (!parameterTypes
+                    .Skip(1)
+                    .Zip(args, TestArgForParameter)
+                    .All(x => x))
+                {
+                    continue;
+                }
+                IEnumerable<Type> genericFuncTypes = parameterTypes.Concat(new[] { method.ReturnType });
+                Type funcType = Expression.GetFuncType(genericFuncTypes.ToArray());
+                Delegate middlewareDelegate = Delegate.CreateDelegate(funcType, middlewareObject, method);
+                return Tuple.Create(parameters[0].ParameterType, middlewareDelegate, args);
+            }
+            return null;
+        }
+
+        // Type Constructor pattern: public Delta(AppFunc app, string arg1, string arg2)
+        private static Tuple<Type, Delegate, object[]> ToConstructorMiddlewareFactory(object middlewareObject, object[] args, ref Delegate middlewareDelegate)
+        {
+            Type middlewareType = middlewareObject as Type;
+            ConstructorInfo[] constructors = middlewareType.GetConstructors();
+            foreach (ConstructorInfo constructor in constructors)
+            {
+                ParameterInfo[] parameters = constructor.GetParameters();
+                Type[] parameterTypes = parameters.Select(p => p.ParameterType).ToArray();
+                if (parameterTypes.Length != args.Length + 1)
+                {
+                    continue;
+                }
+                if (!parameterTypes
+                    .Skip(1)
+                    .Zip(args, TestArgForParameter)
+                    .All(x => x))
+                {
+                    continue;
+                }
+
+                ParameterExpression[] parameterExpressions = parameters.Select(p => Expression.Parameter(p.ParameterType, p.Name)).ToArray();
+                NewExpression callConstructor = Expression.New(constructor, parameterExpressions);
+                middlewareDelegate = Expression.Lambda(callConstructor, parameterExpressions).Compile();
+                return Tuple.Create(parameters[0].ParameterType, middlewareDelegate, args);
+            }
+
+            throw new MissingMethodException(middlewareType.FullName, "ctor(" + (args.Length + 1) + ")");
         }
 
         private static bool TestArgForParameter(Type parameterType, object arg)
