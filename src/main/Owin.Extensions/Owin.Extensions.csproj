@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StartupExtensions.OwinTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StartupExtensions.cs" />
     <Compile Include="StartupExtensions.Func.cs" />

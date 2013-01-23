@@ -144,27 +144,5 @@ namespace Owin
                 throw new MissingMethodException(builder.GetType().FullName, "AddSignatureConversion");
             }
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="process"></param>
-        /// <returns></returns>
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
-        public static IAppBuilder UseOwin(
-            this IAppBuilder builder,
-            Func<OwinRequest, OwinResponse, Func<Task>, Task> process)
-        {
-            return builder.UseFunc(next => env => process(new OwinRequest(env), new OwinResponse(env), () => next(env)));
-        }
-
-        //[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
-        //public static IAppBuilder UseOwin(
-        //    this IAppBuilder builder,
-        //    Func<OwinRequest, OwinResponse, Task> process)
-        //{
-        //    return builder.UseFunc(_ => env => process(new OwinRequest(env), new OwinResponse(env)));
-        //}
     }
 }
