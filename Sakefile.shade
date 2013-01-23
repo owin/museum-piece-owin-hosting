@@ -51,7 +51,11 @@ use-standard-goals features='nuget,xunit'
     copy sourceDir='.' include='LICENSE.txt' outputDir='${BUILD_DIR}\${projectName}' overwrite='${true}'
     copy sourceDir='.' include='NOTICE.txt' outputDir='${BUILD_DIR}\${projectName}' overwrite='${true}'
 
-    for each='var deleteFile in Files.Include(BUILD_DIR + "/" + projectName + "/**/AssemblyInfo.cs")' -File.Delete(deleteFile);
+    var deleteFiles='${new[]{
+      BUILD_DIR + "/" + projectName + "/**/AssemblyInfo.cs",
+      BUILD_DIR + "/" + projectName + "/**/Temporary*.cs"
+    }}'
+    for each='var deleteFile in Files.Include(deleteFiles)' -File.Delete(deleteFile);
 
     var files='${new Dictionary<string,IList<FileGrammar.Hunk>>()}'
 
