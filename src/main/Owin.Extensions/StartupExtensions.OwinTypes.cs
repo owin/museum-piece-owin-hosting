@@ -16,7 +16,9 @@
 // under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Threading.Tasks;
 using Owin.Types;
 
@@ -66,7 +68,32 @@ namespace Owin
                         }
                         return next(env);
                     }
-                    return task.ContinueWith(t => next(env), TaskContinuationOptions.OnlyOnRanToCompletion);
+
+                    var syncContext = SynchronizationContext.Current;
+                    return task.ContinueWith(t =>
+                        {
+                            if (t.IsFaulted || t.IsCanceled)
+                            {
+                                return t;
+                            }
+                            if (syncContext == null)
+                            {
+                                return next(env);
+                            }
+                            var tcs = new TaskCompletionSource<Task>();
+                            syncContext.Post(state =>
+                            {
+                                try
+                                {
+                                    ((TaskCompletionSource<Task>)state).TrySetResult(next(env));
+                                }
+                                catch (Exception ex)
+                                {
+                                    ((TaskCompletionSource<Task>)state).TrySetException(ex);
+                                }
+                            }, tcs);
+                            return tcs.Task.Unwrap();
+                        }, TaskContinuationOptions.ExecuteSynchronously).Unwrap();
                 });
         }
     }
