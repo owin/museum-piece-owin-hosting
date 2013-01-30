@@ -134,41 +134,55 @@ namespace Owin.Loader
             return null;
         }
 
+        // Scan the current directory and all private bin path subdirectories for the first managed assembly
+        // with the given default type name.
         private static string GetDefaultConfigurationString(Func<Assembly, string[]> defaultTypeNames)
         {
             var info = AppDomain.CurrentDomain.SetupInformation;
-            var assembliesPath = Path.Combine(info.ApplicationBase, info.PrivateBinPath ?? string.Empty);
 
-            if (!Directory.Exists(assembliesPath))
+            IEnumerable<string> searchPaths = new string[] { string.Empty };
+            if (!string.IsNullOrWhiteSpace(info.PrivateBinPath))
             {
-                return null;
+                // PrivateBinPath may be a semicolon separated list of subdirectories.
+                searchPaths = searchPaths.Concat(info.PrivateBinPath.Split(';'));
             }
 
-            var files = Directory.GetFiles(assembliesPath, "*.dll")
-                .Concat(Directory.GetFiles(assembliesPath, "*.exe"));
-
-            foreach (var file in files)
+            foreach (string searchPath in searchPaths)
             {
-                try
+                var assembliesPath = Path.Combine(info.ApplicationBase, searchPath);
+
+                if (!Directory.Exists(assembliesPath))
                 {
-                    var reflectionOnlyAssembly = Assembly.ReflectionOnlyLoadFrom(file);
+                    continue;
+                }
 
-                    var assemblyFullName = reflectionOnlyAssembly.FullName;
+                var files = Directory.GetFiles(assembliesPath, "*.dll")
+                    .Concat(Directory.GetFiles(assembliesPath, "*.exe"));
 
-                    foreach (var possibleType in defaultTypeNames(reflectionOnlyAssembly))
+                foreach (var file in files)
+                {
+                    try
                     {
-                        var startupType = reflectionOnlyAssembly.GetType(possibleType, false);
-                        if (startupType != null)
+                        var reflectionOnlyAssembly = Assembly.ReflectionOnlyLoadFrom(file);
+
+                        var assemblyFullName = reflectionOnlyAssembly.FullName;
+
+                        foreach (var possibleType in defaultTypeNames(reflectionOnlyAssembly))
                         {
-                            return possibleType + ", " + assemblyFullName;
+                            var startupType = reflectionOnlyAssembly.GetType(possibleType, false);
+                            if (startupType != null)
+                            {
+                                return possibleType + ", " + assemblyFullName;
+                            }
                         }
                     }
-                }
-                catch (BadImageFormatException)
-                {
-                    // Not a managed dll/exe
+                    catch (BadImageFormatException)
+                    {
+                        // Not a managed dll/exe
+                    }
                 }
             }
+
             return null;
         }
 
