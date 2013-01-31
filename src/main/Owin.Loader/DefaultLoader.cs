@@ -140,7 +140,12 @@ namespace Owin.Loader
         {
             var info = AppDomain.CurrentDomain.SetupInformation;
 
-            IEnumerable<string> searchPaths = new string[] { string.Empty };
+            IEnumerable<string> searchPaths = new string[0];
+            if (info.PrivateBinPathProbe == null || string.IsNullOrWhiteSpace(info.PrivateBinPath))
+            {
+                // Check the current directory
+                searchPaths = searchPaths.Concat(new string[] { string.Empty });
+            }
             if (!string.IsNullOrWhiteSpace(info.PrivateBinPath))
             {
                 // PrivateBinPath may be a semicolon separated list of subdirectories.
