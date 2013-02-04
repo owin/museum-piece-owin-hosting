@@ -32,6 +32,7 @@ namespace Owin.Loader
     public class DefaultLoader
     {
         private readonly Func<string, Action<IAppBuilder>> _next;
+        private readonly Func<Type, object> _activator;
 
         /// <summary>
         /// 
@@ -39,6 +40,7 @@ namespace Owin.Loader
         public DefaultLoader()
         {
             _next = NullLoader.Instance;
+            _activator = Activator.CreateInstance;
         }
 
         /// <summary>
@@ -49,6 +51,19 @@ namespace Owin.Loader
         public DefaultLoader(Func<string, Action<IAppBuilder>> next)
         {
             _next = next ?? NullLoader.Instance;
+            _activator = Activator.CreateInstance;
+        }
+
+        /// <summary>
+        /// Allows for a fallback loader and a Dependency Injection activator to be specified.
+        /// </summary>
+        /// <param name="next"></param>
+        /// <param name="activator"></param>
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
+        public DefaultLoader(Func<string, Action<IAppBuilder>> next, Func<Type, object> activator)
+        {
+            _next = next ?? NullLoader.Instance;
+            _activator = activator;
         }
 
         /// <summary>
@@ -61,7 +76,7 @@ namespace Owin.Loader
             return LoadImplementation(startupName) ?? _next(startupName);
         }
 
-        private static Action<IAppBuilder> LoadImplementation(string startupName)
+        private Action<IAppBuilder> LoadImplementation(string startupName)
         {
             if (string.IsNullOrWhiteSpace(startupName))
             {
@@ -255,7 +270,7 @@ namespace Owin.Loader
             }
         }
 
-        private static Action<IAppBuilder> MakeDelegate(Type type, MethodInfo methodInfo)
+        private Action<IAppBuilder> MakeDelegate(Type type, MethodInfo methodInfo)
         {
             if (methodInfo == null)
             {
@@ -264,19 +279,19 @@ namespace Owin.Loader
 
             if (Matches(methodInfo, typeof(void), typeof(IAppBuilder)))
             {
-                var instance = methodInfo.IsStatic ? null : Activator.CreateInstance(type);
+                var instance = methodInfo.IsStatic ? null : _activator(type);
                 return builder => methodInfo.Invoke(instance, new[] { builder });
             }
 
             if (Matches(methodInfo, null, typeof(IDictionary<string, object>)))
             {
-                var instance = methodInfo.IsStatic ? null : Activator.CreateInstance(type);
+                var instance = methodInfo.IsStatic ? null : _activator(type);
                 return builder => builder.Use(new Func<object, object>(_ => methodInfo.Invoke(instance, new object[] { builder.Properties })));
             }
 
             if (Matches(methodInfo, null))
             {
-                var instance = methodInfo.IsStatic ? null : Activator.CreateInstance(type);
+                var instance = methodInfo.IsStatic ? null : _activator(type);
                 return builder => builder.Use(new Func<object, object>(_ => methodInfo.Invoke(instance, new object[] { builder.Properties })));
             }
 
