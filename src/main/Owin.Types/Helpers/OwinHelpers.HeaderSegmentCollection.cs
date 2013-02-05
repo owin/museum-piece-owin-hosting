@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace Owin.Types.Helpers
 {
+    // Sources:[System.CodeDom.Compiler.GeneratedCode("App_Packages", "")]
     public struct HeaderSegmentCollection : IEnumerable<HeaderSegment>, IEquatable<HeaderSegmentCollection>
     {
         private readonly string[] _headers;

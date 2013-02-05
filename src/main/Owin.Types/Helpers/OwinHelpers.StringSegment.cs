@@ -2,6 +2,7 @@
 
 namespace Owin.Types.Helpers
 {
+    // Sources:[System.CodeDom.Compiler.GeneratedCode("App_Packages", "")]
     public struct StringSegment : IEquatable<StringSegment>
     {
         private readonly string _buffer;

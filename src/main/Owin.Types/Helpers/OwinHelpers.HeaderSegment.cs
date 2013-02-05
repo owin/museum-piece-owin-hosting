@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Owin.Types.Helpers
 {
+    // Sources:[System.CodeDom.Compiler.GeneratedCode("App_Packages", "")]
     public struct HeaderSegment : IEquatable<HeaderSegment>
     {
         private readonly StringSegment _formatting;
