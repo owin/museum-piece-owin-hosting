@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Owin.Types.Extensions;
-using Owin.Types.Helpers;
 using Shouldly;
 using Xunit;
 

@@ -54,6 +54,7 @@
     <Compile Include="OwinResponseTests.cs" />
     <Compile Include="OwinRequestTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringSegmentTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

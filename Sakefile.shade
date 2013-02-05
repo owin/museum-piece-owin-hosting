@@ -1,6 +1,6 @@
 
 var PROJECT='OWIN startup components'
-var VERSION='0.8'
+var VERSION='0.8.1'
 var FULL_VERSION='${VERSION}-alpha'
 var AUTHORS='${PROJECT} contributors'
 
@@ -71,6 +71,7 @@ use-standard-goals features='nuget,xunit'
           .Replace("public enum", "internal enum")
           .Replace("public delegate", "internal delegate")
           .Replace("public interface", "internal interface")
+          .Replace("// Sources:", "")
           .Replace(" /// ", " // ");
 
         var hunks = new FileGrammar().Hunks(new Position(new SourceContext(updateText, 0, updateFile)));

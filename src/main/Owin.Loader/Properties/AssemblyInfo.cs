@@ -36,9 +36,9 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("dff310ba-b3ec-434c-9c42-18f199b872b8")]
 
-[assembly: AssemblyVersion("0.7.1")]
-[assembly: AssemblyFileVersion("0.7.1")]
+[assembly: AssemblyVersion("0.8.1")]
+[assembly: AssemblyFileVersion("0.8.1")]
 [assembly: CLSCompliant(false)]
-#if DEBUG
-[assembly: InternalsVisibleTo("Owin.Loader.Tests")]
-#endif
+//#if DEBUG
+//[assembly: InternalsVisibleTo("Owin.Loader.Tests")]
+//#endif

@@ -36,8 +36,11 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\OwinRequestExtensions.cs" />
     <Compile Include="Extensions\OwinRequestExtensions.MethodOverride.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Helpers\OwinHelpers.cs" />
+    <Compile Include="Helpers\OwinHelpers.HeaderSegmentCollection.cs" />
+    <Compile Include="Helpers\OwinHelpers.HeaderSegment.cs" />
     <Compile Include="Helpers\OwinHelpers.MethodOverride.cs" />
     <Compile Include="Helpers\OwinHelpers.Uri.cs" />
     <Compile Include="Helpers\OwinHelpers.Header.cs" />
@@ -72,6 +75,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Generated.txt</LastGenOutput>
     </None>
+    <Compile Include="Helpers\OwinHelpers.StringSegment.cs" />
     <None Include="Owin.Types.nuspec" />
     <None Include="Owin.Types.Sources.nuspec" />
   </ItemGroup>

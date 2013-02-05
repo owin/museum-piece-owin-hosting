@@ -19,8 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
+using Owin.Types;
 using Shouldly;
-using Utils;
 using Xunit;
 
 namespace Owin.Builder.Tests
@@ -235,8 +235,9 @@ namespace Owin.Builder.Tests
             var builder = new AppBuilder();
             var app = builder.Build();
 
-            var helper = new OwinHelper();
-            return app(helper.Env).Then(() => helper.ResponseStatusCode.ShouldBe(404));
+            var request = OwinRequest.Create();
+            var response = new OwinResponse(request);
+            return app(request.Dictionary).Then(() => response.StatusCode.ShouldBe(404));
         }
 
         public class DifferentType

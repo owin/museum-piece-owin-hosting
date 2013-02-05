@@ -20,7 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace Owin.Types
-{
+{    
     public partial struct OwinWebSocket
     {
         public Task SendAsync(ArraySegment<byte> data, int messageType, bool endOfMessage, CancellationToken cancel)

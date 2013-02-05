@@ -19,6 +19,7 @@ using System;
 
 namespace Owin.Types
 {
+    // Sources:[System.CodeDom.Compiler.GeneratedCode("App_Packages", "")]
     public partial struct OwinWebSocketReceiveMessage
     {
         private readonly Tuple<int, bool, int> _tuple;

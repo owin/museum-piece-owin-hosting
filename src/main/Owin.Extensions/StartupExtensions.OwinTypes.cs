@@ -16,7 +16,6 @@
 // under the License.
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,8 +25,14 @@ namespace Owin
 {
     public static partial class StartupExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="process"></param>
+        /// <returns></returns>
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
-        public static IAppBuilder UseOwin(
+        public static IAppBuilder UseFilter(
             this IAppBuilder builder,
             Func<OwinRequest, OwinResponse, Func<Task>, Task> process)
         {
@@ -38,8 +43,14 @@ namespace Owin
                     () => next(env)));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="process"></param>
+        /// <returns></returns>
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
-        public static IAppBuilder UseOwin(
+        public static IAppBuilder UseFilter(
             this IAppBuilder builder,
             Action<OwinRequest> process)
         {
@@ -51,8 +62,15 @@ namespace Owin
                 });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="process"></param>
+        /// <returns></returns>
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Exception produces faulted task")]
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
-        public static IAppBuilder UseOwin(
+        public static IAppBuilder UseFilter(
             this IAppBuilder builder,
             Func<OwinRequest, Task> process)
         {
@@ -81,17 +99,17 @@ namespace Owin
                                 return next(env);
                             }
                             var tcs = new TaskCompletionSource<Task>();
-                            syncContext.Post(state =>
-                            {
-                                try
+                            syncContext.Post(_ =>
                                 {
-                                    ((TaskCompletionSource<Task>)state).TrySetResult(next(env));
-                                }
-                                catch (Exception ex)
-                                {
-                                    ((TaskCompletionSource<Task>)state).TrySetException(ex);
-                                }
-                            }, tcs);
+                                    try
+                                    {
+                                        tcs.TrySetResult(next(env));
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        tcs.TrySetException(ex);
+                                    }
+                                }, null);
                             return tcs.Task.Unwrap();
                         }, TaskContinuationOptions.ExecuteSynchronously).Unwrap();
                 });

@@ -51,7 +51,6 @@
     <Compile Include="AppBuilderTests.cs" />
     <Compile Include="App_Packages\TaskHelpers.Sources.0.2\TaskHelpers.cs" />
     <Compile Include="App_Packages\TaskHelpers.Sources.0.2\TaskHelpersExtensions.cs" />
-    <Compile Include="ConventionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -66,17 +65,9 @@
       <Project>{eb90cb5c-13d4-4e8a-ab69-839a99e9066a}</Project>
       <Name>Owin.Extensions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\StartupConvention1\StartupConvention1.csproj">
-      <Project>{e8b6b07d-e8aa-4c5c-ab5c-bb1e10723c88}</Project>
-      <Name>StartupConvention1</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StartupConvention2\StartupConvention2.csproj">
-      <Project>{23008f98-f199-40ee-a9e6-9269e67a70bd}</Project>
-      <Name>StartupConvention2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Utils\Utils.csproj">
-      <Project>{0BF71599-B6C3-4825-9169-B809971A7ED7}</Project>
-      <Name>Utils</Name>
+    <ProjectReference Include="..\..\main\Owin.Types\Owin.Types.csproj">
+      <Project>{06B11480-240F-4EFB-AA6C-8EB354ADCF83}</Project>
+      <Name>Owin.Types</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

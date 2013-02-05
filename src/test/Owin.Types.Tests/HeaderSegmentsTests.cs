@@ -12,7 +12,7 @@ namespace Owin.Types.Tests
         public void HeaderEnumerableReturnsOneItemForSingleValue()
         {
             var count = 0;
-            foreach (var segment in new HeaderSegments(new[] { "value" }))
+            foreach (var segment in new HeaderSegmentCollection(new[] { "value" }))
             {
                 ++count;
                 segment.Data.Value.ShouldBe("value");
@@ -24,7 +24,7 @@ namespace Owin.Types.Tests
         public void HeaderEnumerableReturnsLeadingWhitespace()
         {
             var count = 0;
-            foreach (var segment in new HeaderSegments(new[] { " \r\n \t value" }))
+            foreach (var segment in new HeaderSegmentCollection(new[] { " \r\n \t value" }))
             {
                 ++count;
                 segment.Formatting.Value.ShouldBe(" \r\n \t ");
@@ -36,7 +36,7 @@ namespace Owin.Types.Tests
         [Fact]
         public void CommasSplitUp()
         {
-            var segments = new HeaderSegments(new[] { " \r\n \t value, yep" }).ToArray();
+            var segments = new HeaderSegmentCollection(new[] { " \r\n \t value, yep" }).ToArray();
 
             segments.Count().ShouldBe(2);
             segments[0].Formatting.Value.ShouldBe(" \r\n \t ");
@@ -48,7 +48,7 @@ namespace Owin.Types.Tests
         [Fact]
         public void WhitespaceAddedToNextFormatting()
         {
-            var segments = new HeaderSegments(new[] { "value  ,  yep" }).ToArray();
+            var segments = new HeaderSegmentCollection(new[] { "value  ,  yep" }).ToArray();
 
             segments.Count().ShouldBe(2);
             segments[0].Formatting.Value.ShouldBe("");
@@ -60,7 +60,7 @@ namespace Owin.Types.Tests
         [Fact]
         public void TrailingWhitespaceCausesFormattingSegmentWithNoData()
         {
-            var segments = new HeaderSegments(new[] { "x " }).ToArray();
+            var segments = new HeaderSegmentCollection(new[] { "x " }).ToArray();
 
             segments.Count().ShouldBe(2);
             segments[0].Formatting.Value.ShouldBe("");
@@ -72,7 +72,7 @@ namespace Owin.Types.Tests
         [Fact]
         public void TailingWhitespaceHasThatEffectOn()
         {
-            var segments = new HeaderSegments(new[] { "   value  ,  yep   " }).ToArray();
+            var segments = new HeaderSegmentCollection(new[] { "   value  ,  yep   " }).ToArray();
 
             segments.Count().ShouldBe(3);
             segments[0].Formatting.Value.ShouldBe("   ");
@@ -86,7 +86,7 @@ namespace Owin.Types.Tests
         [Fact]
         public void QuotedCommasArePartOfValue()
         {
-            var segments = new HeaderSegments(new[] { "\"   value  ,  yep   \"" }).ToArray();
+            var segments = new HeaderSegmentCollection(new[] { "\"   value  ,  yep   \"" }).ToArray();
 
             segments.Count().ShouldBe(1);
             segments[0].Formatting.Value.ShouldBe("");
@@ -208,7 +208,7 @@ namespace Owin.Types.Tests
 
         private void AssertCorrectness(string[] headers, string[] expected)
         {
-            var segments = new HeaderSegments(headers);
+            var segments = new HeaderSegmentCollection(headers);
             var strings = segments.SelectMany(seg => new[] { seg.Formatting.Value, seg.Data.Value }).ToArray();
             strings.ShouldBe(expected);
         }

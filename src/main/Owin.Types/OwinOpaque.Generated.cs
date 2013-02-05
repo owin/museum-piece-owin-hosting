@@ -19,6 +19,7 @@ using System.Collections.Generic;
 
 namespace Owin.Types
 {
+    // Sources:[System.CodeDom.Compiler.GeneratedCode("App_Packages", "")]
     public partial struct OwinOpaque
     {
         private readonly IDictionary<string, object> _dictionary;
