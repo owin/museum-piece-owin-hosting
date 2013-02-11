@@ -3,20 +3,19 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/GeneratedFilesAndFolders/=0AF835A6_002D8181_002D46DB_002DA17E_002DC765FA07A5A0_002Fd_003AApp_005FPackages/@EntryIndexedValue">0AF835A6-8181-46DB-A17E-C765FA07A5A0/d:App_Packages</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/GeneratedFilesAndFolders/=7F67B407_002D628C_002D403D_002D9235_002DEEE6AF64D32A_002Fd_003AApp_005FPackages/@EntryIndexedValue">7F67B407-628C-403D-9235-EEE6AF64D32A/d:App_Packages</s:String>
 	<s:String x:Key="/Default/CodeStyle/CodeCleanup/Profiles/=Owin_002DHosting/@EntryIndexedValue">&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;Profile name="Owin-Hosting"&gt;&lt;CSUpdateFileHeader&gt;True&lt;/CSUpdateFileHeader&gt;&lt;CSMakeFieldReadonly&gt;True&lt;/CSMakeFieldReadonly&gt;&lt;CSOptimizeUsings&gt;&lt;OptimizeUsings&gt;True&lt;/OptimizeUsings&gt;&lt;EmbraceInRegion&gt;False&lt;/EmbraceInRegion&gt;&lt;RegionName&gt;&lt;/RegionName&gt;&lt;/CSOptimizeUsings&gt;&lt;/Profile&gt;</s:String>
-	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">Licensed to Monkey Square, Inc. under one or more contributor &#xD;
-license agreements.  See the NOTICE file distributed with &#xD;
-this work or additional information regarding copyright &#xD;
-ownership.  Monkey Square, Inc. licenses this file to you &#xD;
-under the Apache License, Version 2.0 (the "License"); you &#xD;
-may not use this file except in compliance with the License.&#xD;
-You may obtain a copy of the License at &#xD;
+	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">&lt;copyright file="$FILENAME$" company="Microsoft Open Technologies, Inc."&gt;&#xD;
+Copyright $CURRENT_YEAR$ Microsoft Open Technologies, Inc. All rights reserved.&#xD;
 &#xD;
-  http://www.apache.org/licenses/LICENSE-2.0&#xD;
+Licensed under the Apache License, Version 2.0 (the "License");&#xD;
+you may not use this file except in compliance with the License.&#xD;
+You may obtain a copy of the License at&#xD;
 &#xD;
-Unless required by applicable law or agreed to in writing,&#xD;
-software distributed under the License is distributed on an&#xD;
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY&#xD;
-KIND, either express or implied.  See the License for the&#xD;
-specific language governing permissions and limitations&#xD;
-under the License.&#xD;
+    http://www.apache.org/licenses/LICENSE-2.0&#xD;
+&#xD;
+Unless required by applicable law or agreed to in writing, software&#xD;
+distributed under the License is distributed on an "AS IS" BASIS,&#xD;
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.&#xD;
+See the License for the specific language governing permissions and&#xD;
+limitations under the License.&#xD;
+&lt;/copyright&gt;&#xD;
 </s:String></wpf:ResourceDictionary>
