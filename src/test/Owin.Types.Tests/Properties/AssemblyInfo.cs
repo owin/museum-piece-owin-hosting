@@ -1,4 +1,4 @@
-﻿// <copyright file="AssemblyInfo.cs" company="Microsoft Open Technologies, Inc.">
+// <copyright file="AssemblyInfo.cs" company="Microsoft Open Technologies, Inc.">
 // Copyright 2013 Microsoft Open Technologies, Inc. All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +38,7 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("be3fa57e-add2-49cd-8ab9-8bbd4aaa2b48")]
 
-[assembly: AssemblyVersion("0.8.2")]
-[assembly: AssemblyFileVersion("0.8.2")]
-[assembly: AssemblyInformationalVersion("0.8.2-alpha")]
+[assembly: AssemblyVersion("0.8.3")]
+[assembly: AssemblyFileVersion("0.8.3")]
+[assembly: AssemblyInformationalVersion("0.8.3-alpha")]
 [assembly: CLSCompliant(false)]

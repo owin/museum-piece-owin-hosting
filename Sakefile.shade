@@ -1,8 +1,8 @@
 
-var PROJECT='OWIN startup components'
-var VERSION='0.8.2'
+var PROJECT='OWIN Hosting Components'
+var VERSION='0.8.3'
 var FULL_VERSION='${VERSION}-alpha'
-var AUTHORS='${PROJECT} contributors'
+var AUTHORS='Microsoft Open Technologies, Inc.'
 
 var BASE_DIR='${Directory.GetCurrentDirectory()}'
 var TARGET_DIR='${Path.Combine(BASE_DIR, "target")}'
@@ -88,6 +88,7 @@ use-standard-goals features='nuget,xunit'
         var allNamespaces='${allHunks.Where(x=>x.Type=="using").Select(x=>x.Namespace).Distinct().OrderBy(x=>(x.Contains("=")?"1":"0")+ x)}'
         var allCode='${allHunks.Where(x=>x.Type=="namespace")}'
         content var='newCode'
+          copyright filename='${group.Key.Split((char)'\\',(char)'/').Last() + ".cs"}' company='${AUTHORS}'
           for each='var ns in allNamespaces' line|using !{ns};
           line|
           line|namespace !{allCode.First().Namespace.Trim()}
