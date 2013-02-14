@@ -84,5 +84,25 @@ namespace Owin.Types.Tests
             env["owin.Version"].ShouldBe("1.0");
             env["owin.CallCancelled"].ShouldBe(cts.Token);
         }
+
+        [Fact]
+        public void WritesWork()
+        {
+            var body = new MemoryStream(4);
+            var expectedBody = new byte[] { 65, 66, 67, 68 };
+            var cts = new CancellationTokenSource();
+            var env = new Dictionary<string, object>(StringComparer.Ordinal)
+                {
+                    {"owin.CallCancelled", cts.Token},
+                    {"owin.ResponseBody", body},
+                };
+
+            var res = new OwinResponse(env);
+            res.Write("AB");
+            res.WriteAsync("CD").Wait();
+
+            body.GetBuffer().ShouldBe(expectedBody);
+            res.CallCancelled.ShouldBe(cts.Token);
+        }
     }
 }
