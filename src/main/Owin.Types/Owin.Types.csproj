@@ -36,6 +36,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OwinResponse.Write.cs" />
     <Compile Include="Extensions\OwinRequestExtensions.cs" />
     <Compile Include="Extensions\OwinRequestExtensions.MethodOverride.cs" />
     <Compile Include="Helpers\OwinHelpers.cs" />
