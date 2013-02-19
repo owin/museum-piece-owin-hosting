@@ -24,7 +24,7 @@ namespace Owin.Types.Tests
     public class StartupExtensionsTests
     {
         [Fact]
-        public void AnonymousLambdaInUnambiguousForEachExtensionMethod()
+        public void AnonymousLambdaIsUnambiguousForEachExtensionMethod()
         {
             IAppBuilder app = new StubBuilder();
             app.UseFilter(request => { });
@@ -33,6 +33,41 @@ namespace Owin.Types.Tests
             app.UseHandler(async (request, response) => { await Task.Delay(0); });
             app.UseHandler(async (request, response, next) => { await next(); });
         }
+
+        [Fact]
+        public void MethodGroupIsUnambiguousForEachExtensionMethod()
+        {
+            IAppBuilder app = new StubBuilder();
+            app.UseFilter((StartupExtensions.OwinFilter)OnFilter1);
+            app.UseFilterAsync(OnFilter2);
+            app.UseHandler((StartupExtensions.OwinHandler)OnHandler1);
+            app.UseHandlerAsync(OnHandler2);
+            app.UseHandlerAsync(OnHandler3);
+        }
+
+        private void OnFilter1(OwinRequest request)
+        {
+        }
+
+        private async Task OnFilter2(OwinRequest request)
+        {
+            await Task.Delay(0);
+        }
+
+        private void OnHandler1(OwinRequest request, OwinResponse response)
+        {
+        }
+
+        private async Task OnHandler2(OwinRequest request, OwinResponse response)
+        {
+            await Task.Delay(0);
+        }
+
+        private async Task OnHandler3(OwinRequest request, OwinResponse response, Func<Task> next)
+        {
+            await next();
+        }
+
 
         public class StubBuilder : IAppBuilder
         {
