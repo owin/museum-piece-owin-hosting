@@ -104,5 +104,20 @@ namespace Owin.Types.Tests
             body.GetBuffer().ShouldBe(expectedBody);
             res.CallCancelled.ShouldBe(cts.Token);
         }
+
+        [Fact]
+        public void ContentTypeSetsOrRemovesAppropriateHeader()
+        {
+            var request = OwinRequest.Create();
+            var response = new OwinResponse(request);
+            response.Headers.ContainsKey("Content-Type").ShouldBe(false);
+            response.ContentType.ShouldBe(null);
+            response.ContentType = "text/plain";
+            response.Headers["Content-Type"].ShouldBe(new[] { "text/plain" });
+            response.ContentType.ShouldBe("text/plain");
+            response.ContentType = null;
+            response.Headers.ContainsKey("Content-Type").ShouldBe(false);
+            response.ContentType.ShouldBe(null);
+        }
     }
 }

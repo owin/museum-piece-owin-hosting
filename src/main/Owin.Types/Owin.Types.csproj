@@ -36,6 +36,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OwinResponse.Spec-Http.cs" />
     <Compile Include="OwinResponse.Write.cs" />
     <Compile Include="Extensions\OwinRequestExtensions.cs" />
     <Compile Include="Extensions\OwinRequestExtensions.MethodOverride.cs" />
