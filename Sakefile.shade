@@ -1,6 +1,6 @@
 
 var PROJECT='OWIN Hosting Components'
-var VERSION='0.8.4'
+var VERSION='0.8.5'
 var FULL_VERSION='${VERSION}-alpha'
 var AUTHORS='Microsoft Open Technologies, Inc.'
 
