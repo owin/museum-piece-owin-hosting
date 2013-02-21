@@ -39,7 +39,11 @@ namespace Owin.Types.Helpers
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
             return obj is HeaderSegmentCollection && Equals((HeaderSegmentCollection)obj);
         }
 
@@ -77,22 +81,6 @@ namespace Owin.Types.Helpers
 
         public struct Enumerator : IEnumerator<HeaderSegment>
         {
-            private enum Mode
-            {
-                Leading,
-                Value,
-                ValueQuoted,
-                Trailing,
-                Produce,
-            }
-            private enum Attr
-            {
-                Value,
-                Quote,
-                Delimiter,
-                Whitespace
-            }
-
             private readonly string[] _headers;
             private int _index;
 
@@ -125,13 +113,45 @@ namespace Owin.Types.Helpers
                 _mode = Mode.Leading;
             }
 
+            private enum Mode
+            {
+                Leading,
+                Value,
+                ValueQuoted,
+                Trailing,
+                Produce,
+            }
+
+            private enum Attr
+            {
+                Value,
+                Quote,
+                Delimiter,
+                Whitespace
+            }
+
+            public HeaderSegment Current
+            {
+                get
+                {
+                    return new HeaderSegment(
+                        new StringSegment(_header, _leadingStart, _leadingEnd - _leadingStart),
+                        new StringSegment(_header, _valueStart, _valueEnd - _valueStart));
+                }
+            }
+
+            object IEnumerator.Current
+            {
+                get { return Current; }
+            }
+
             public void Dispose()
             {
             }
 
             public bool MoveNext()
             {
-                for (; ; )
+                while (true)
                 {
                     if (_mode == Mode.Produce)
                     {
@@ -174,7 +194,7 @@ namespace Owin.Types.Helpers
                         _header = _headers[_index] ?? string.Empty;
                         _headerLength = _header.Length;
                     }
-                    for (; ; )
+                    while (true)
                     {
                         ++_offset;
                         var ch = _offset == _headerLength ? (char)0 : _header[_offset];
@@ -286,21 +306,6 @@ namespace Owin.Types.Helpers
                 _leadingEnd = 0;
                 _valueStart = 0;
                 _valueEnd = 0;
-            }
-
-            public HeaderSegment Current
-            {
-                get
-                {
-                    return new HeaderSegment(
-                        new StringSegment(_header, _leadingStart, _leadingEnd - _leadingStart),
-                        new StringSegment(_header, _valueStart, _valueEnd - _valueStart));
-                }
-            }
-
-            object IEnumerator.Current
-            {
-                get { return Current; }
             }
         }
     }

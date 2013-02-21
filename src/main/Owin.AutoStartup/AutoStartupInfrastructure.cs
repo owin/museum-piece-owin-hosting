@@ -25,13 +25,6 @@ namespace Owin.AutoStartup
 {
     public static class AutoStartupInfrastructure
     {
-        class AutoStartupData
-        {
-            public Type Type { get; set; }
-            public string MethodName { get; set; }
-        }
-
-
         public static void ExecuteConfigurationMethods(object startup, IAppBuilder app)
         {
             var configurations = startup.GetType().GetMethods()
@@ -67,7 +60,6 @@ namespace Owin.AutoStartup
                    methodInfo.ReturnType == typeof(void) &&
                    methodInfo.Name != "AutoConfiguration";
         }
-
 
         public static void ExecuteOwinAutoStartups(IServiceProvider serviceProvider, IAppBuilder app)
         {
@@ -252,6 +244,12 @@ namespace Owin.AutoStartup
         private static bool IsInjectable(ConstructorInfo constructor)
         {
             return constructor.IsPublic && constructor.GetParameters().Length != 0;
+        }
+
+        private class AutoStartupData
+        {
+            public Type Type { get; set; }
+            public string MethodName { get; set; }
         }
     }
 }

@@ -22,16 +22,6 @@ namespace Owin.Types
 {
     public partial struct OwinRequest
     {
-        public static OwinRequest Create()
-        {
-            var environment = new ConcurrentDictionary<string, object>(StringComparer.Ordinal);
-            environment[OwinConstants.RequestHeaders] =
-                new ConcurrentDictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
-            environment[OwinConstants.ResponseHeaders] =
-                new ConcurrentDictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
-            return new OwinRequest(environment);
-        }
-
         public string Host
         {
             get { return OwinHelpers.GetHost(this); }
@@ -41,6 +31,16 @@ namespace Owin.Types
         public Uri Uri
         {
             get { return OwinHelpers.GetUri(this); }
+        }
+
+        public static OwinRequest Create()
+        {
+            var environment = new ConcurrentDictionary<string, object>(StringComparer.Ordinal);
+            environment[OwinConstants.RequestHeaders] =
+                new ConcurrentDictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
+            environment[OwinConstants.ResponseHeaders] =
+                new ConcurrentDictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
+            return new OwinRequest(environment);
         }
     }
 }

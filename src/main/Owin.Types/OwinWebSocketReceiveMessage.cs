@@ -28,9 +28,20 @@ namespace Owin.Types
             _tuple = tuple;
         }
 
-        public int MessageType { get { return _tuple.Item1; } }
-        public bool EndOfMessage { get { return _tuple.Item2; } }
-        public int Count { get { return _tuple.Item3; } }
+        public int MessageType
+        {
+            get { return _tuple.Item1; }
+        }
+
+        public bool EndOfMessage
+        {
+            get { return _tuple.Item2; }
+        }
+
+        public int Count
+        {
+            get { return _tuple.Item3; }
+        }
 
         #region Value-type equality
         public bool Equals(OwinWebSocketReceiveMessage other)

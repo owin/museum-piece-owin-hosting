@@ -68,9 +68,10 @@ namespace Owin.Types.Tests
             await next();
         }
 
-
         public class StubBuilder : IAppBuilder
         {
+            public IDictionary<string, object> Properties { get; protected set; }
+
             public IAppBuilder Use(object middleware, params object[] args)
             {
                 return this;
@@ -85,8 +86,6 @@ namespace Owin.Types.Tests
             {
                 return new StubBuilder();
             }
-
-            public IDictionary<string, object> Properties { get; protected set; }
         }
     }
 }

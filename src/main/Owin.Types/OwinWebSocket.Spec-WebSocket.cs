@@ -14,13 +14,16 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading;
-using SendAsyncDelegate = System.Func<System.ArraySegment<byte>, int, bool, System.Threading.CancellationToken, System.Threading.Tasks.Task>;
-using ReceiveAsyncDelegate = System.Func<System.ArraySegment<byte>, System.Threading.CancellationToken, System.Threading.Tasks.Task<System.Tuple<int, bool, int>>>;
-using CloseAsyncDelegate = System.Func<int, string, System.Threading.CancellationToken, System.Threading.Tasks.Task>;
+using System.Threading.Tasks;
 
 namespace Owin.Types
 {
+    using CloseAsyncDelegate = Func<int, string, CancellationToken, Task>;
+    using ReceiveAsyncDelegate = Func<ArraySegment<byte>, CancellationToken, Task<Tuple<int, bool, int>>>;
+    using SendAsyncDelegate = Func<ArraySegment<byte>, int, bool, CancellationToken, Task>;
+
     public partial struct OwinWebSocket
     {
         public SendAsyncDelegate SendAsyncDelegate

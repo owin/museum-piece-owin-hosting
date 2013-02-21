@@ -30,19 +30,19 @@ namespace Owin.Types.Tests
         {
             var headers = new Dictionary<string, string[]>(StringComparer.InvariantCultureIgnoreCase)
                 {
-                    {"alpha", new []{"beta", "gamma"}}
+                    { "alpha", new[] { "beta", "gamma" } }
                 };
             var body = new MemoryStream(new byte[] { 65, 66, 67, 68 });
             var cts = new CancellationTokenSource();
             var env = new Dictionary<string, object>(StringComparer.Ordinal)
                 {
-                    {"owin.ResponseStatusCode", 1},
-                    {"owin.ResponseReasonPhrase", "two"},
-                    {"owin.ResponseProtocol", "three"},
-                    {"owin.ResponseHeaders", headers},
-                    {"owin.ResponseBody", body},
-                    {"owin.Version", "1.0"},
-                    {"owin.CallCancelled", cts.Token},
+                    { "owin.ResponseStatusCode", 1 },
+                    { "owin.ResponseReasonPhrase", "two" },
+                    { "owin.ResponseProtocol", "three" },
+                    { "owin.ResponseHeaders", headers },
+                    { "owin.ResponseBody", body },
+                    { "owin.Version", "1.0" },
+                    { "owin.CallCancelled", cts.Token },
                 };
 
             var res = new OwinResponse(env);
@@ -60,7 +60,7 @@ namespace Owin.Types.Tests
         {
             var headers = new Dictionary<string, string[]>(StringComparer.InvariantCultureIgnoreCase)
                 {
-                    {"alpha", new []{"beta", "gamma"}}
+                    { "alpha", new[] { "beta", "gamma" } }
                 };
             var body = new MemoryStream(new byte[] { 65, 66, 67, 68 });
             var cts = new CancellationTokenSource();
@@ -93,8 +93,8 @@ namespace Owin.Types.Tests
             var cts = new CancellationTokenSource();
             var env = new Dictionary<string, object>(StringComparer.Ordinal)
                 {
-                    {"owin.CallCancelled", cts.Token},
-                    {"owin.ResponseBody", body},
+                    { "owin.CallCancelled", cts.Token },
+                    { "owin.ResponseBody", body },
                 };
 
             var res = new OwinResponse(env);

@@ -148,7 +148,7 @@ namespace Owin.Types.Tests
             req.Headers["x-custom"].ShouldBe(new[] { "one", "two,three", "four,five", "six" });
         }
 
-        //[Fact] //TODO: don't split quoted commas
+        // [Fact] //TODO: don't split quoted commas
         public void QuotedCommaShouldNotBeSplit()
         {
             var req = OwinRequest.Create();

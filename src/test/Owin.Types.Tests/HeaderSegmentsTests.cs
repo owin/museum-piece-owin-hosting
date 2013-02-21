@@ -67,7 +67,7 @@ namespace Owin.Types.Tests
             var segments = new HeaderSegmentCollection(new[] { "value  ,  yep" }).ToArray();
 
             segments.Count().ShouldBe(2);
-            segments[0].Formatting.Value.ShouldBe("");
+            segments[0].Formatting.Value.ShouldBe(string.Empty);
             segments[0].Data.Value.ShouldBe("value");
             segments[1].Formatting.Value.ShouldBe("  ,  ");
             segments[1].Data.Value.ShouldBe("yep");
@@ -79,7 +79,7 @@ namespace Owin.Types.Tests
             var segments = new HeaderSegmentCollection(new[] { "x " }).ToArray();
 
             segments.Count().ShouldBe(2);
-            segments[0].Formatting.Value.ShouldBe("");
+            segments[0].Formatting.Value.ShouldBe(string.Empty);
             segments[0].Data.Value.ShouldBe("x");
             segments[1].Formatting.Value.ShouldBe(" ");
             segments[1].Data.Value.ShouldBe(null);
@@ -105,7 +105,7 @@ namespace Owin.Types.Tests
             var segments = new HeaderSegmentCollection(new[] { "\"   value  ,  yep   \"" }).ToArray();
 
             segments.Count().ShouldBe(1);
-            segments[0].Formatting.Value.ShouldBe("");
+            segments[0].Formatting.Value.ShouldBe(string.Empty);
             segments[0].Data.Value.ShouldBe("\"   value  ,  yep   \"");
         }
 

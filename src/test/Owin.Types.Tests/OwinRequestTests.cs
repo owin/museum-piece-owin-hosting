@@ -37,23 +37,23 @@ namespace Owin.Types.Tests
         {
             var headers = new Dictionary<string, string[]>(StringComparer.InvariantCultureIgnoreCase)
                 {
-                    {"alpha", new []{"beta", "gamma"}}
+                    { "alpha", new[] { "beta", "gamma" } }
                 };
 
             var body = new MemoryStream(new byte[] { 65, 66, 67, 68 });
             var cts = new CancellationTokenSource();
             var env = new Dictionary<string, object>(StringComparer.Ordinal)
                 {
-                    {"owin.RequestScheme", "http"},
-                    {"owin.RequestMethod", "ONE"},
-                    {"owin.RequestPathBase", "/two"},
-                    {"owin.RequestPath", "/three"},
-                    {"owin.RequestQueryString", "four=five"},
-                    {"owin.RequestProtocol", "HTTP/1.0"},
-                    {"owin.RequestHeaders", headers},
-                    {"owin.RequestBody", body},
-                    {"owin.Version", "1.0"},
-                    {"owin.CallCancelled", cts.Token},
+                    { "owin.RequestScheme", "http" },
+                    { "owin.RequestMethod", "ONE" },
+                    { "owin.RequestPathBase", "/two" },
+                    { "owin.RequestPath", "/three" },
+                    { "owin.RequestQueryString", "four=five" },
+                    { "owin.RequestProtocol", "HTTP/1.0" },
+                    { "owin.RequestHeaders", headers },
+                    { "owin.RequestBody", body },
+                    { "owin.Version", "1.0" },
+                    { "owin.CallCancelled", cts.Token },
                 };
 
             var req = new OwinRequest(env);
@@ -74,7 +74,7 @@ namespace Owin.Types.Tests
         {
             var headers = new Dictionary<string, string[]>(StringComparer.InvariantCultureIgnoreCase)
                 {
-                    {"alpha", new []{"beta", "gamma"}}
+                    { "alpha", new[] { "beta", "gamma" } }
                 };
             var body = new MemoryStream(new byte[] { 65, 66, 67, 68 });
             var cts = new CancellationTokenSource();
@@ -117,12 +117,12 @@ namespace Owin.Types.Tests
         {
             Create(
                 req => req
-                           .Set(OwinConstants.RequestScheme, "https")
-                           .SetHeader("Host", "two:3")
-                           .Set(OwinConstants.RequestPathBase, "/four")
-                           .Set(OwinConstants.RequestPath, "/five")
-                           .Set(OwinConstants.RequestQueryString, "six=7")
-                ).Uri.ShouldBe(new Uri("https://two:3/four/five?six=7"));
+                    .Set(OwinConstants.RequestScheme, "https")
+                    .SetHeader("Host", "two:3")
+                    .Set(OwinConstants.RequestPathBase, "/four")
+                    .Set(OwinConstants.RequestPath, "/five")
+                    .Set(OwinConstants.RequestQueryString, "six=7"))
+                .Uri.ShouldBe(new Uri("https://two:3/four/five?six=7"));
         }
 
         [Fact]
@@ -130,13 +130,13 @@ namespace Owin.Types.Tests
         {
             Create(
                 req => req
-                           .Set(OwinConstants.RequestScheme, "https")
-                           .Set(OwinConstants.CommonKeys.LocalIpAddress, "eight")
-                           .Set(OwinConstants.CommonKeys.LocalPort, "9")
-                           .Set(OwinConstants.RequestPathBase, "/four")
-                           .Set(OwinConstants.RequestPath, "/five")
-                           .Set(OwinConstants.RequestQueryString, "six=7")
-                ).Uri.ShouldBe(new Uri("https://eight:9/four/five?six=7"));
+                    .Set(OwinConstants.RequestScheme, "https")
+                    .Set(OwinConstants.CommonKeys.LocalIpAddress, "eight")
+                    .Set(OwinConstants.CommonKeys.LocalPort, "9")
+                    .Set(OwinConstants.RequestPathBase, "/four")
+                    .Set(OwinConstants.RequestPath, "/five")
+                    .Set(OwinConstants.RequestQueryString, "six=7"))
+                .Uri.ShouldBe(new Uri("https://eight:9/four/five?six=7"));
         }
 
         [Fact]
@@ -144,14 +144,14 @@ namespace Owin.Types.Tests
         {
             Create(
                 req => req
-                           .Set(OwinConstants.RequestScheme, "https")
-                           .SetHeader("Host", "two")
-                           .Set(OwinConstants.CommonKeys.LocalIpAddress, "eight")
-                           .Set(OwinConstants.CommonKeys.LocalPort, "9")
-                           .Set(OwinConstants.RequestPathBase, "/four")
-                           .Set(OwinConstants.RequestPath, "/five")
-                           .Set(OwinConstants.RequestQueryString, "six=7")
-                ).Uri.ShouldBe(new Uri("https://two/four/five?six=7"));
+                    .Set(OwinConstants.RequestScheme, "https")
+                    .SetHeader("Host", "two")
+                    .Set(OwinConstants.CommonKeys.LocalIpAddress, "eight")
+                    .Set(OwinConstants.CommonKeys.LocalPort, "9")
+                    .Set(OwinConstants.RequestPathBase, "/four")
+                    .Set(OwinConstants.RequestPath, "/five")
+                    .Set(OwinConstants.RequestQueryString, "six=7"))
+                .Uri.ShouldBe(new Uri("https://two/four/five?six=7"));
         }
     }
 }

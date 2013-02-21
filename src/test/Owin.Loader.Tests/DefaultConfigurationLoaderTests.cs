@@ -29,6 +29,9 @@ namespace Owin.Loader.Tests
 
     public class DefaultConfigurationLoaderTests
     {
+        private static int _helloCalls;
+        private static int _alphaCalls;
+
         [Fact]
         public void Strings_are_split_based_on_dots()
         {
@@ -58,7 +61,7 @@ namespace Owin.Loader.Tests
             AssertArrayEqual(new string[0], string6);
         }
 
-        void AssertArrayEqual(string[] expected, string[] actual)
+        private void AssertArrayEqual(string[] expected, string[] actual)
         {
             Assert.Equal(expected.Length, actual.Length);
             foreach (var index in Enumerable.Range(0, actual.Length))
@@ -66,8 +69,6 @@ namespace Owin.Loader.Tests
                 Assert.Equal(expected[index], actual[index]);
             }
         }
-
-        static int _helloCalls;
 
         public static void Hello(IAppBuilder builder)
         {
@@ -89,7 +90,7 @@ namespace Owin.Loader.Tests
         public void An_extra_segment_will_cause_the_match_to_fail()
         {
             var loader = new DefaultLoader();
-            var configuration = loader.Load("Gate.Tests.StartupTests.Loader.DefaultConfigurationLoaderTests.Hello.Bar");
+            var configuration = loader.Load("Owin.Loader.DefaultConfigurationLoaderTests+Hello.Bar");
 
             Assert.Null(configuration);
         }
@@ -98,11 +99,14 @@ namespace Owin.Loader.Tests
         public void Calling_a_class_with_multiple_configs_is_okay()
         {
             var loader = new DefaultLoader();
-            var foo = loader.Load("Owin.Loader.Tests.MultiConfigs.Foo");
-            var bar = loader.Load("Owin.Loader.Tests.MultiConfigs.Bar");
+            var foo = loader.Load("Owin.Loader.Tests.DefaultConfigurationLoaderTests+MultiConfigs.Foo");
+            var bar = loader.Load("Owin.Loader.Tests.DefaultConfigurationLoaderTests+MultiConfigs.Bar");
 
             MultiConfigs.FooCalls = 0;
             MultiConfigs.BarCalls = 0;
+
+            Assert.NotNull(foo);
+            Assert.NotNull(bar);
 
             foo(new AppBuilder());
 
@@ -119,7 +123,7 @@ namespace Owin.Loader.Tests
         public void Configuration_method_defaults_to_Configuration_if_only_type_name_is_provided()
         {
             var loader = new DefaultLoader();
-            var configuration = loader.Load("Owin.Loader.Tests.MultiConfigs");
+            var configuration = loader.Load("Owin.Loader.Tests.DefaultConfigurationLoaderTests+MultiConfigs");
 
             MultiConfigs.FooCalls = 0;
             MultiConfigs.BarCalls = 0;
@@ -148,8 +152,6 @@ namespace Owin.Loader.Tests
 
             Assert.Equal(1, DoesNotFollowConvention.ConfigurationCalls);
         }
-
-        static int _alphaCalls;
 
         public static AppFunc Alpha(IDictionary<string, object> properties)
         {
@@ -196,52 +198,27 @@ namespace Owin.Loader.Tests
             configuration(new AppBuilder());
             Assert.Equal(1, Startup.ConfigurationCalls);
         }
-    }
 
-    public class Startup
-    {
-        public static int ConfigurationCalls { get; set; }
-
-        public void Configuration(IAppBuilder builder)
+        public class MultiConfigs
         {
-            ConfigurationCalls++;
-        }
-    }
+            public static int FooCalls;
+            public static int BarCalls;
+            public static int ConfigurationCalls;
 
-    public class MultiConfigs
-    {
-        public static int FooCalls;
+            public static void Foo(IAppBuilder builder)
+            {
+                FooCalls += 1;
+            }
 
-        public static void Foo(IAppBuilder builder)
-        {
-            FooCalls += 1;
-        }
+            public static void Bar(IAppBuilder builder)
+            {
+                BarCalls += 1;
+            }
 
-        public static int BarCalls;
-
-        public static void Bar(IAppBuilder builder)
-        {
-            BarCalls += 1;
-        }
-
-        public static int ConfigurationCalls;
-
-        public static void Configuration(IAppBuilder builder)
-        {
-            ConfigurationCalls += 1;
-        }
-    }
-}
-
-namespace DifferentNamespace
-{
-    public class DoesNotFollowConvention
-    {
-        public static int ConfigurationCalls;
-
-        public static void Configuration(IAppBuilder builder)
-        {
-            ConfigurationCalls += 1;
+            public static void Configuration(IAppBuilder builder)
+            {
+                ConfigurationCalls += 1;
+            }
         }
     }
 }

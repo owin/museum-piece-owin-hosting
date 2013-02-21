@@ -29,7 +29,7 @@ namespace Owin.Types
 
         public Task<OwinWebSocketReceiveMessage> ReceiveAsync(ArraySegment<byte> buffer, CancellationToken cancel)
         {
-            //TODO: avoid ContinueWith when completed synchronously
+            // TODO: avoid ContinueWith when completed synchronously
             return ReceiveAsyncDelegate.Invoke(buffer, cancel)
                 .ContinueWith(tuple => new OwinWebSocketReceiveMessage(tuple.Result));
         }

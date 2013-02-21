@@ -24,6 +24,8 @@ namespace Owin
 {
     public static partial class StartupExtensions
     {
+        private static readonly Task CompletedTask = MakeCompletedTask();
+
         /// <summary>
         /// 
         /// </summary>
@@ -88,8 +90,6 @@ namespace Owin
                         }
                     });
         }
-
-        private static readonly Task CompletedTask = MakeCompletedTask();
 
         private static Task MakeCompletedTask()
         {

@@ -39,7 +39,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyInformationalVersion("0.8.5-alpha")]
 [assembly: CLSCompliant(true)]
 
-
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Scope = "member", Target = "Owin.Types.OwinRequest.#AcceptDelegate", Justification = "Per specification")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Scope = "member", Target = "Owin.Types.OwinRequest.#OnSendingHeaders", Justification = "Per specification")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Scope = "member", Target = "Owin.Types.OwinRequest.#UpgradeDelegate", Justification = "Per specification")]
@@ -61,7 +60,7 @@ using System.Runtime.InteropServices;
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Owin", Scope = "namespace", Target = "Owin.Types", Justification = "Technology name")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Owin", Scope = "type", Target = "Owin.Types.OwinConstants", Justification = "Technology name")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Owin", Scope = "type", Target = "Owin.Types.OwinOpaque", Justification = "Technology name")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Owin", Scope = "type", Target = "Owin.Types.OwinOpaqueParameters")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Owin", Scope = "type", Target = "Owin.Types.OwinOpaqueParameters", Justification = "Technology name")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Owin", Scope = "type", Target = "Owin.Types.OwinRequest", Justification = "Technology name")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Owin", Scope = "type", Target = "Owin.Types.OwinResponse", Justification = "Technology name")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Owin", Scope = "type", Target = "Owin.Types.OwinWebSocket", Justification = "Technology name")]

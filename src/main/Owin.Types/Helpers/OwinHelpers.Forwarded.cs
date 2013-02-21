@@ -96,6 +96,5 @@ namespace Owin.Types.Helpers
         {
             return ApplyForwardedHost(ApplyForwardedScheme(request));
         }
-
     }
 }

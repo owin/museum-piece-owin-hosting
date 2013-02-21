@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // </copyright>
+
 namespace Owin.Types
 {
     // Sources:[System.CodeDom.Compiler.GeneratedCode("App_Packages", "")]
@@ -105,7 +106,7 @@ namespace Owin.Types
             // 5. Consumption
 
             public const string Stream = "opaque.Stream";
-            //public const string Version = "opaque.Version"; // redundant, declared above
+            // public const string Version = "opaque.Version"; // redundant, declared above
             public const string CallCancelled = "opaque.CallCancelled";
         }
 

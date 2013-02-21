@@ -37,6 +37,3 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("0.8.5")]
 [assembly: AssemblyFileVersion("0.8.5")]
 [assembly: CLSCompliant(false)]
-//#if DEBUG
-//[assembly: InternalsVisibleTo("Owin.Loader.Tests")]
-//#endif

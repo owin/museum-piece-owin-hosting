@@ -28,6 +28,9 @@ namespace Owin.Builder.Tests
 
     public class AppBuilderTests
     {
+        public delegate string AppOne(string call);
+        public delegate string AppTwo(string call);
+
         [Fact]
         public void DelegateShouldBeCalledToAddMiddlewareAroundTheDefaultApp()
         {
@@ -95,21 +98,6 @@ namespace Owin.Builder.Tests
             theApp(42).ShouldBe("Hello[42] there, world!");
         }
 
-        class StringPlusValue
-        {
-            readonly string _value;
-
-            public StringPlusValue(string value)
-            {
-                _value = value;
-            }
-
-            public Func<int, string> Invoke(Func<int, string> app)
-            {
-                return call => app(call) + _value;
-            }
-        }
-
         [Fact]
         public void DelegateShouldQualifyAsAppWithRun()
         {
@@ -134,14 +122,6 @@ namespace Owin.Builder.Tests
             var theApp = builder.BuildNew<Func<int, string>>(x => x.Run(theSite));
 
             theApp(42).ShouldBe("Called[42]");
-        }
-
-        public class MySite
-        {
-            public string Invoke(int call)
-            {
-                return "Called[" + call + "]";
-            }
         }
 
         [Fact]
@@ -190,32 +170,6 @@ namespace Owin.Builder.Tests
             });
         }
 
-        class StringPlusValue2
-        {
-            readonly Func<int, string> _app;
-            readonly string _value;
-
-            public StringPlusValue2(Func<int, string> app)
-            {
-                _app = app;
-                _value = " PlusPlus";
-            }
-
-            public StringPlusValue2(Func<int, string> app, string value)
-            {
-                _app = app;
-                _value = value;
-            }
-
-            public string Invoke(int call)
-            {
-                return _app(call) + _value;
-            }
-        }
-
-        public delegate string AppOne(string call);
-        public delegate string AppTwo(string call);
-
         [Fact]
         public void DelegatesWithIdenticalParametersShouldConvertAutomatically()
         {
@@ -239,11 +193,6 @@ namespace Owin.Builder.Tests
             return app(request.Dictionary).Then(() => response.StatusCode.ShouldBe(404));
         }
 
-        public class DifferentType
-        {
-
-        }
-
         [Fact]
         public void ConverterCombinationWillBeInvokedIfNeeded()
         {
@@ -262,6 +211,55 @@ namespace Owin.Builder.Tests
             var builder = new AppBuilder();
             Assert.Throws<ArgumentException>(() => builder.Build<DifferentType>());
         }
+
+        private class StringPlusValue
+        {
+            private readonly string _value;
+
+            public StringPlusValue(string value)
+            {
+                _value = value;
+            }
+
+            public Func<int, string> Invoke(Func<int, string> app)
+            {
+                return call => app(call) + _value;
+            }
+        }
+
+        private class StringPlusValue2
+        {
+            private readonly Func<int, string> _app;
+            private readonly string _value;
+
+            public StringPlusValue2(Func<int, string> app)
+            {
+                _app = app;
+                _value = " PlusPlus";
+            }
+
+            public StringPlusValue2(Func<int, string> app, string value)
+            {
+                _app = app;
+                _value = value;
+            }
+
+            public string Invoke(int call)
+            {
+                return _app(call) + _value;
+            }
+        }
+
+        public class DifferentType
+        {
+        }
+
+        public class MySite
+        {
+            public string Invoke(int call)
+            {
+                return "Called[" + call + "]";
+            }
+        }
     }
 }
-

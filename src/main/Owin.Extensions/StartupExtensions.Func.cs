@@ -28,7 +28,7 @@ namespace Owin
         /// <summary>
         /// Specifies a middleware instance generator of the given type.
         /// </summary>
-        /// <typeparam name="TApp">The applicaiton signature.</typeparam>
+        /// <typeparam name="TApp">The application signature.</typeparam>
         /// <param name="builder"></param>
         /// <param name="middleware">A Func that generates a middleware instance given a reference to the next middleware.</param>
         /// <returns></returns>

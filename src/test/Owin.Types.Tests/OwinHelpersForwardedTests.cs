@@ -50,7 +50,7 @@ namespace Owin.Types.Tests
             Create(req => req.SetHeader("X-Forwarded-Ssl", "unknown").Set(OwinConstants.RequestScheme, "x"))
                 .GetForwardedScheme()
                 .ShouldBe("x");
-            Create(req => req.SetHeader("X-Forwarded-Ssl", "").Set(OwinConstants.RequestScheme, "x"))
+            Create(req => req.SetHeader("X-Forwarded-Ssl", string.Empty).Set(OwinConstants.RequestScheme, "x"))
                 .GetForwardedScheme()
                 .ShouldBe("x");
         }
@@ -67,7 +67,7 @@ namespace Owin.Types.Tests
             Create(req => req.SetHeader("X-Forwarded-Scheme", "unknown").Set(OwinConstants.RequestScheme, "x"))
                 .GetForwardedScheme()
                 .ShouldBe("unknown");
-            Create(req => req.SetHeader("X-Forwarded-Scheme", "").Set(OwinConstants.RequestScheme, "x"))
+            Create(req => req.SetHeader("X-Forwarded-Scheme", string.Empty).Set(OwinConstants.RequestScheme, "x"))
                 .GetForwardedScheme()
                 .ShouldBe("x");
         }
@@ -84,7 +84,7 @@ namespace Owin.Types.Tests
             Create(req => req.SetHeader("X-Forwarded-Proto", "unknown").Set(OwinConstants.RequestScheme, "x"))
                 .GetForwardedScheme()
                 .ShouldBe("unknown");
-            Create(req => req.SetHeader("X-Forwarded-Proto", "").Set(OwinConstants.RequestScheme, "x"))
+            Create(req => req.SetHeader("X-Forwarded-Proto", string.Empty).Set(OwinConstants.RequestScheme, "x"))
                 .GetForwardedScheme()
                 .ShouldBe("x");
             Create(req => req.SetHeader("X-Forwarded-Proto", "one,two").Set(OwinConstants.RequestScheme, "x"))

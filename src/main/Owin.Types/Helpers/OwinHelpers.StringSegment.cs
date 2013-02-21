@@ -75,7 +75,11 @@ namespace Owin.Types.Helpers
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
             return obj is StringSegment && Equals((StringSegment)obj);
         }
 
@@ -109,7 +113,11 @@ namespace Owin.Types.Helpers
                 throw new ArgumentNullException("text");
             }
             var textLength = text.Length;
-            if (!HasValue || _count < textLength) return false;
+            if (!HasValue || _count < textLength)
+            {
+                return false;
+            }
+
             return string.Compare(_buffer, _offset, text, 0, textLength, comparisonType) == 0;
         }
 
@@ -120,7 +128,11 @@ namespace Owin.Types.Helpers
                 throw new ArgumentNullException("text");
             }
             var textLength = text.Length;
-            if (!HasValue || _count < textLength) return false;
+            if (!HasValue || _count < textLength)
+            {
+                return false;
+            }
+
             return string.Compare(_buffer, _offset + _count - textLength, text, 0, textLength, comparisonType) == 0;
         }
 
@@ -131,7 +143,11 @@ namespace Owin.Types.Helpers
                 throw new ArgumentNullException("text");
             }
             var textLength = text.Length;
-            if (!HasValue || _count != textLength) return false;
+            if (!HasValue || _count != textLength)
+            {
+                return false;
+            }
+
             return string.Compare(_buffer, _offset, text, 0, textLength, comparisonType) == 0;
         }
 

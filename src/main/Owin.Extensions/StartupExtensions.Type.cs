@@ -26,7 +26,7 @@ namespace Owin
     {
         /// <summary>
         /// Adds an instance of the given middleware type to the pipeline using the constructor that takes
-        /// an application delegate as the first parameter and the given params args for any remaining parameters.
+        /// an application delegate as the first parameter and the given parameter arguments for any remaining parameters.
         /// </summary>
         /// <typeparam name="TMiddleware">The Type of the middleware to construct.</typeparam>
         /// <param name="builder"></param>
@@ -45,7 +45,7 @@ namespace Owin
 
         /// <summary>
         /// Adds an instance of the given middleware type to the pipeline using the constructor that takes
-        /// an application delegate as the first parameter and the given params args for any remaining parameters.
+        /// an application delegate as the first parameter and the given parameter arguments for any remaining parameters.
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="type">The Type of the middleware to construct.</param>
