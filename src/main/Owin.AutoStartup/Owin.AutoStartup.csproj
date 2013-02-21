@@ -39,7 +39,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Owin.AutoStartup.nuspec" />
+    <None Include="Owin.AutoStartup.nuspec.txt" />
     <None Include="Startup.cs.pp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -49,13 +49,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Owin.AutoStartup.HttpListener.nuspec">
+    <None Include="Owin.AutoStartup.HttpListener.nuspec.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Owin.AutoStartup.SystemWeb.nuspec">
+    <None Include="Owin.AutoStartup.SystemWeb.nuspec.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Owin.AutoStartup.Sources.nuspec" />
+    <None Include="Owin.AutoStartup.Sources.nuspec.txt" />
     <None Include="packages.config" />
     <None Include="web.config.transform">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

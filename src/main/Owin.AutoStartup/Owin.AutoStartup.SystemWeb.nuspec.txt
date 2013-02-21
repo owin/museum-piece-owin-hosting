@@ -12,7 +12,7 @@
     <tags>OWIN</tags>
     <dependencies>
       <dependency id="Owin.AutoStartup" version="$version$"/>
-      <dependency id="Microsoft.Owin.Host.SystemWeb" version="1.0.0-rc1"/>
+      <dependency id="Microsoft.Owin.Host.SystemWeb" version="1.0.0"/>
     </dependencies>
   </metadata>
   <files>
