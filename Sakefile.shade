@@ -17,7 +17,7 @@ var BUILD_PROJECTS='${Files.Include("src/main/**/*.csproj")}'
 use-standard-lifecycle
 
 -// include sets of standard work targets. features include 'nuget,xunit,nunit'
-use-standard-goals features='nuget,xunit'
+use-standard-goals features='nuget,xunit,stylecop'
 
 -// additional work targets are defined below
 
