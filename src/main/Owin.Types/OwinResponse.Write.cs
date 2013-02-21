@@ -52,7 +52,7 @@ namespace Owin.Types
 
         public Task WriteAsync(string text, CancellationToken cancel)
         {
-            return WriteAsync(text, Encoding.UTF8, CallCancelled);
+            return WriteAsync(text, Encoding.UTF8, cancel);
         }
 
         public Task WriteAsync(string text, Encoding encoding, CancellationToken cancel)

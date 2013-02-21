@@ -64,6 +64,7 @@ namespace Owin
         /// <param name="builder"></param>
         /// <param name="handler"></param>
         /// <returns></returns>
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Relayed to callback")]
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public static IAppBuilder UseHandler(
             this IAppBuilder builder,
@@ -136,7 +137,7 @@ namespace Owin
         /// 
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="process"></param>
+        /// <param name="filter"></param>
         /// <returns></returns>
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public static IAppBuilder UseFilter(
@@ -155,7 +156,7 @@ namespace Owin
         /// 
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="process"></param>
+        /// <param name="filter"></param>
         /// <returns></returns>
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Exception produces faulted task")]
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]

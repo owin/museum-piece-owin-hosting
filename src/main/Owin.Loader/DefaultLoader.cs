@@ -253,6 +253,11 @@ namespace Owin.Loader
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static IEnumerable<string> DotByDot(string text)
         {
             if (text == null)
