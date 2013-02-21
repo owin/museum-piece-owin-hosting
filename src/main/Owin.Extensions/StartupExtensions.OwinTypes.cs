@@ -30,7 +30,7 @@ namespace Owin
         /// <param name="request"></param>
         /// <param name="response"></param>
         public delegate void OwinHandler(OwinRequest request, OwinResponse response);
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -105,6 +105,20 @@ namespace Owin
         /// <param name="handler"></param>
         /// <returns></returns>
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
+        public static IAppBuilder UseHandlerAsync(
+            this IAppBuilder builder,
+            OwinHandlerAsync handler)
+        {
+            return UseHandler(builder, handler);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="handler"></param>
+        /// <returns></returns>
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public static IAppBuilder UseHandler(
             this IAppBuilder builder,
             OwinHandlerAsync handler)
@@ -113,6 +127,19 @@ namespace Owin
                 next => env => handler(
                     new OwinRequest(env),
                     new OwinResponse(env)));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="handler"></param>
+        /// <returns></returns>
+        public static IAppBuilder UseHandlerAsync(
+            this IAppBuilder builder,
+            OwinHandlerChained handler)
+        {
+            return UseHandler(builder, handler);
         }
 
         /// <summary>
@@ -150,6 +177,19 @@ namespace Owin
                     filter(new OwinRequest(env));
                     return next(env);
                 });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static IAppBuilder UseFilterAsync(
+            this IAppBuilder builder,
+            OwinFilterAsync filter)
+        {
+            return UseFilter(builder, filter);
         }
 
         /// <summary>

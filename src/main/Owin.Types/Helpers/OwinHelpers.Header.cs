@@ -61,7 +61,14 @@ namespace Owin.Types.Helpers
             {
                 throw new ArgumentNullException("headers");
             }
-            headers[key] = new[] { value };
+            if (value == null)
+            {
+                headers.Remove(key);
+            }
+            else
+            {
+                headers[key] = new[] { value };
+            }
         }
 
         public static void SetHeaderJoined(IDictionary<string, string[]> headers, string key, params string[] values)
