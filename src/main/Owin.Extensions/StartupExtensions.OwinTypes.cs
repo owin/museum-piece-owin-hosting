@@ -26,39 +26,12 @@ namespace Owin
     {
         private static readonly Task CompletedTask = MakeCompletedTask();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="response"></param>
-        public delegate void OwinHandler(OwinRequest request, OwinResponse response);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="response"></param>
-        public delegate Task OwinHandlerAsync(OwinRequest request, OwinResponse response);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="response"></param>
-        /// <param name="next"></param>
-        public delegate Task OwinHandlerChained(OwinRequest request, OwinResponse response, Func<Task> next);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        public delegate void OwinFilter(OwinRequest request);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        public delegate Task OwinFilterAsync(OwinRequest request);
+        private static Task MakeCompletedTask()
+        {
+            var tcs = new TaskCompletionSource<object>();
+            tcs.SetResult(null);
+            return tcs.Task;
+        }
 
         /// <summary>
         /// 
@@ -70,7 +43,7 @@ namespace Owin
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public static IAppBuilder UseHandler(
             this IAppBuilder builder,
-            OwinHandler handler)
+            Action<OwinRequest, OwinResponse> handler)
         {
             return builder.UseFunc(
                 next => env =>
@@ -91,13 +64,6 @@ namespace Owin
                     });
         }
 
-        private static Task MakeCompletedTask()
-        {
-            var tcs = new TaskCompletionSource<object>();
-            tcs.SetResult(null);
-            return tcs.Task;
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -107,7 +73,7 @@ namespace Owin
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public static IAppBuilder UseHandlerAsync(
             this IAppBuilder builder,
-            OwinHandlerAsync handler)
+            Func<OwinRequest, OwinResponse, Task> handler)
         {
             return UseHandler(builder, handler);
         }
@@ -121,7 +87,7 @@ namespace Owin
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public static IAppBuilder UseHandler(
             this IAppBuilder builder,
-            OwinHandlerAsync handler)
+            Func<OwinRequest, OwinResponse, Task> handler)
         {
             return builder.UseFunc(
                 next => env => handler(
@@ -137,7 +103,7 @@ namespace Owin
         /// <returns></returns>
         public static IAppBuilder UseHandlerAsync(
             this IAppBuilder builder,
-            OwinHandlerChained handler)
+            Func<OwinRequest, OwinResponse, Func<Task>, Task> handler)
         {
             return UseHandler(builder, handler);
         }
@@ -151,7 +117,7 @@ namespace Owin
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public static IAppBuilder UseHandler(
             this IAppBuilder builder,
-            OwinHandlerChained handler)
+            Func<OwinRequest, OwinResponse, Func<Task>, Task> handler)
         {
             return builder.UseFunc(
                 next => env => handler(
@@ -169,7 +135,7 @@ namespace Owin
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public static IAppBuilder UseFilter(
             this IAppBuilder builder,
-            OwinFilter filter)
+            Action<OwinRequest> filter)
         {
             return builder.UseFunc(
                 next => env =>
@@ -187,7 +153,7 @@ namespace Owin
         /// <returns></returns>
         public static IAppBuilder UseFilterAsync(
             this IAppBuilder builder,
-            OwinFilterAsync filter)
+            Func<OwinRequest, Task> filter)
         {
             return UseFilter(builder, filter);
         }
@@ -202,7 +168,7 @@ namespace Owin
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design")]
         public static IAppBuilder UseFilter(
             this IAppBuilder builder,
-            OwinFilterAsync filter)
+            Func<OwinRequest, Task> filter)
         {
             return builder.UseFunc(
                 next => env =>

@@ -38,9 +38,9 @@ namespace Owin.Types.Tests
         public void MethodGroupIsUnambiguousForEachExtensionMethod()
         {
             IAppBuilder app = new StubBuilder();
-            app.UseFilter((StartupExtensions.OwinFilter)OnFilter1);
+            app.UseFilter((Action<OwinRequest>)OnFilter1);
             app.UseFilterAsync(OnFilter2);
-            app.UseHandler((StartupExtensions.OwinHandler)OnHandler1);
+            app.UseHandler((Action<OwinRequest, OwinResponse>)OnHandler1);
             app.UseHandlerAsync(OnHandler2);
             app.UseHandlerAsync(OnHandler3);
         }
