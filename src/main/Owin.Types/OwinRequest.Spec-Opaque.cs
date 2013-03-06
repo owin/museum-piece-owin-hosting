@@ -15,11 +15,14 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using UpgradeDelegate = System.Action<System.Collections.Generic.IDictionary<string, object>, System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>>;
+using Owin.Types.Opaque;
 
 namespace Owin.Types
 {
+    using UpgradeDelegate = Action<IDictionary<string, object>, Func<IDictionary<string, object>, Task>>;
+
     public partial struct OwinRequest
     {
         public bool CanUpgrade
@@ -29,7 +32,7 @@ namespace Owin.Types
 
         public UpgradeDelegate UpgradeDelegate
         {
-            get { return Get<UpgradeDelegate>(OwinConstants.Opaque.Upgrade); }
+            get { return Get<UpgradeDelegate>(OwinConstants.OpaqueConstants.Upgrade); }
         }
 
         public void Upgrade(
@@ -39,7 +42,7 @@ namespace Owin.Types
             var upgrade = UpgradeDelegate;
             if (upgrade == null)
             {
-                throw new NotSupportedException(OwinConstants.Opaque.Upgrade);
+                throw new NotSupportedException(OwinConstants.OpaqueConstants.Upgrade);
             }
             UpgradeDelegate.Invoke(parameters.Dictionary, opaque => callback(new OwinOpaque(opaque)));
         }

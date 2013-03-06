@@ -3,7 +3,7 @@
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Collections.Generic" #>
 <# 
-    var typeNames = new [] {"OwinRequest", "OwinResponse", "OwinWebSocket", "OwinWebSocketParameters", "OwinOpaque", "OwinOpaqueParameters"};
+    var typeNames = new [] {"OwinRequest", "OwinResponse"};
     var hasHeaders = new List<string> {"OwinRequest", "OwinResponse"};
     foreach(var typeName in typeNames) 
     {

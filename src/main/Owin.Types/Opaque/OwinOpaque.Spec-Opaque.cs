@@ -17,26 +17,26 @@
 using System.IO;
 using System.Threading;
 
-namespace Owin.Types
+namespace Owin.Types.Opaque
 {
     public partial struct OwinOpaque
     {
         public string Version
         {
-            get { return Get<string>(OwinConstants.Opaque.Version); }
-            set { Set(OwinConstants.Opaque.Version, value); }
+            get { return Get<string>(OwinConstants.OpaqueConstants.Version); }
+            set { Set(OwinConstants.OpaqueConstants.Version, value); }
         }
 
         public CancellationToken CallCancelled
         {
-            get { return Get<CancellationToken>(OwinConstants.Opaque.CallCancelled); }
-            set { Set(OwinConstants.Opaque.CallCancelled, value); }
+            get { return Get<CancellationToken>(OwinConstants.OpaqueConstants.CallCancelled); }
+            set { Set(OwinConstants.OpaqueConstants.CallCancelled, value); }
         }
 
         public Stream Stream
         {
-            get { return Get<Stream>(OwinConstants.Opaque.Stream); }
-            set { Set(OwinConstants.Opaque.Stream, value); }
+            get { return Get<Stream>(OwinConstants.OpaqueConstants.Stream); }
+            set { Set(OwinConstants.OpaqueConstants.Stream, value); }
         }
     }
 }

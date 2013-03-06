@@ -18,7 +18,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Owin.Types
+namespace Owin.Types.WebSockets
 {    
     public partial struct OwinWebSocket
     {

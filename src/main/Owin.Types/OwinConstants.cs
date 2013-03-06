@@ -93,7 +93,7 @@ namespace Owin.Types
         #region Opaque v0.3.0
         // http://owin.org/extensions/owin-OpaqueStream-Extension-v0.3.0.htm
 
-        public static class Opaque
+        public static class OpaqueConstants
         {
             // 3.1. Startup
 

@@ -17,7 +17,7 @@
 
 using System.Collections.Generic;
 
-namespace Owin.Types
+namespace Owin.Types.WebSockets
 {
     // Sources:[System.CodeDom.Compiler.GeneratedCode("App_Packages", "")]
     public partial struct OwinWebSocketParameters

@@ -17,14 +17,14 @@
 
 using System.Collections.Generic;
 
-namespace Owin.Types
+namespace Owin.Types.Opaque
 {
     // Sources:[System.CodeDom.Compiler.GeneratedCode("App_Packages", "")]
-    public partial struct OwinOpaqueParameters
+    public partial struct OwinOpaque
     {
         private readonly IDictionary<string, object> _dictionary;
 
-        public OwinOpaqueParameters(IDictionary<string, object> dictionary)
+        public OwinOpaque(IDictionary<string, object> dictionary)
         {
             _dictionary = dictionary;
         }
@@ -35,14 +35,14 @@ namespace Owin.Types
         }
 
 #region Value-type equality
-        public bool Equals(OwinOpaqueParameters other)
+        public bool Equals(OwinOpaque other)
         {
             return Equals(_dictionary, other._dictionary);
         }
 
         public override bool Equals(object obj)
         {
-            return obj is OwinOpaqueParameters && Equals((OwinOpaqueParameters)obj);
+            return obj is OwinOpaque && Equals((OwinOpaque)obj);
         }
 
         public override int GetHashCode()
@@ -50,12 +50,12 @@ namespace Owin.Types
             return (_dictionary != null ? _dictionary.GetHashCode() : 0);
         }
 
-        public static bool operator ==(OwinOpaqueParameters left, OwinOpaqueParameters right)
+        public static bool operator ==(OwinOpaque left, OwinOpaque right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(OwinOpaqueParameters left, OwinOpaqueParameters right)
+        public static bool operator !=(OwinOpaque left, OwinOpaque right)
         {
             return !left.Equals(right);
         }
@@ -67,7 +67,7 @@ namespace Owin.Types
             return _dictionary.TryGetValue(key, out value) ? (T)value : default(T);
         }
 
-        public OwinOpaqueParameters Set(string key, object value)
+        public OwinOpaque Set(string key, object value)
         {
             _dictionary[key] = value;
             return this;

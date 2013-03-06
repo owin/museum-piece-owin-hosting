@@ -15,11 +15,14 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using AcceptDelegate = System.Action<System.Collections.Generic.IDictionary<string, object>, System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>>;
+using Owin.Types.WebSockets;
 
 namespace Owin.Types
 {
+    using AcceptDelegate = Action<IDictionary<string, object>, Func<IDictionary<string, object>, Task>>;
+
     public partial struct OwinRequest
     {
         public bool CanAccept

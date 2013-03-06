@@ -18,7 +18,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Owin.Types
+namespace Owin.Types.WebSockets
 {
     using CloseAsyncDelegate = Func<int, string, CancellationToken, Task>;
     using ReceiveAsyncDelegate = Func<ArraySegment<byte>, CancellationToken, Task<Tuple<int, bool, int>>>;

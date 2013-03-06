@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Concurrent;
 
-namespace Owin.Types
+namespace Owin.Types.Opaque
 {
     public partial struct OwinOpaqueParameters
     {

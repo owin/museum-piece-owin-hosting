@@ -1,4 +1,4 @@
-// <copyright file="OwinWebSocketParameters.Spec-WebSocket.cs" company="Microsoft Open Technologies, Inc.">
+// <copyright file="OwinWebSocketParameters.cs" company="Microsoft Open Technologies, Inc.">
 // Copyright 2013 Microsoft Open Technologies, Inc. All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,14 +13,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // </copyright>
-namespace Owin.Types
+
+using System;
+using System.Collections.Concurrent;
+
+namespace Owin.Types.WebSockets
 {
     public partial struct OwinWebSocketParameters
     {
-        public string SubProtocol
+        public static OwinWebSocketParameters Create()
         {
-            get { return Get<string>(OwinConstants.WebSocket.SubProtocol); }
-            set { Set(OwinConstants.WebSocket.SubProtocol, value); }
+            return new OwinWebSocketParameters(new ConcurrentDictionary<string, object>(StringComparer.Ordinal));
+        }
+
+        public static OwinWebSocketParameters Create(string subProtocol)
+        {
+            return new OwinWebSocketParameters(new ConcurrentDictionary<string, object>(StringComparer.Ordinal))
+            {
+                SubProtocol = subProtocol
+            };
         }
     }
 }
