@@ -15,7 +15,10 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Security.Principal;
+using Owin.Types.AppBuilder;
 
 namespace Owin.Types
 {
@@ -57,10 +60,22 @@ namespace Owin.Types
             set { Set(OwinConstants.CommonKeys.TraceOutput, value); }
         }
 
+        public IPrincipal User
+        {
+            get { return Get<IPrincipal>(OwinConstants.CommonKeys.User); }
+            set { Set(OwinConstants.CommonKeys.User, value); }
+        }
+
         public Action<Action<object>, object> OnSendingHeaders
         {
             get { return Get<Action<Action<object>, object>>(OwinConstants.CommonKeys.OnSendingHeaders); }
             set { Set(OwinConstants.CommonKeys.OnSendingHeaders, value); }
+        }
+
+        public Capabilities Capabilities
+        {
+            get { return new Capabilities(Get<IDictionary<string, object>>(OwinConstants.CommonKeys.Capabilities)); }
+            set { Set(OwinConstants.CommonKeys.Capabilities, value.Dictionary); }
         }
     }
 }

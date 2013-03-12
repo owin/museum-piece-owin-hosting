@@ -74,6 +74,7 @@ namespace Owin.Types
             public const string LocalIpAddress = "server.LocalIpAddress";
             public const string LocalPort = "server.LocalPort";
             public const string IsLocal = "server.IsLocal";
+            public const string User = "server.User";
             public const string TraceOutput = "host.TraceOutput";
             public const string Addresses = "host.Addresses";
             public const string AppName = "host.AppName";
