@@ -53,6 +53,16 @@ namespace Owin.Types
 
         #endregion
 
+        #region OWIN Keys for IAppBuilder.Properties
+
+        public static class Builder
+        {
+            public const string AddSignatureConversion = "builder.AddSignatureConversion";
+            public const string DefaultApp = "builder.DefaultApp";
+        }
+
+        #endregion
+
         #region OWIN Key Guidelines and Common Keys - 6. Common keys
         // http://owin.org/spec/CommonKeys.html
 
@@ -66,8 +76,14 @@ namespace Owin.Types
             public const string IsLocal = "server.IsLocal";
             public const string TraceOutput = "host.TraceOutput";
             public const string Addresses = "host.Addresses";
+            public const string AppName = "host.AppName";
             public const string Capabilities = "server.Capabilities";
             public const string OnSendingHeaders = "server.OnSendingHeaders";
+            public const string OnAppDisposing = "host.OnAppDisposing";
+            public const string Scheme = "scheme";
+            public const string Host = "host";
+            public const string Port = "port";
+            public const string Path = "path";
         }
 
         #endregion

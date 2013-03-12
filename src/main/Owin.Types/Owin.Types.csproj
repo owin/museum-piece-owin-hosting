@@ -37,6 +37,14 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppBuilder\Address.cs" />
+    <Compile Include="AppBuilder\AddressCollection.cs" />
+    <Compile Include="AppBuilder\AppProperties.cs" />
+    <Compile Include="AppBuilder\AppProperties.Generated.cs" />
+    <Compile Include="AppBuilder\AddressCollection.Generated.cs" />
+    <Compile Include="AppBuilder\Address.Generated.cs" />
+    <Compile Include="AppBuilder\Capabilities.cs" />
+    <Compile Include="AppBuilder\Capabilities.Generated.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="OwinResponse.Spec-Http.cs" />
     <Compile Include="OwinResponse.Write.cs" />
@@ -87,6 +95,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <CodeAnalysisDictionary Include="CustomDictionary.xml" />
     <Content Include="Generated.txt">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
