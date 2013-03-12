@@ -25,11 +25,15 @@ using System.Threading.Tasks;
 
 namespace Owin.Builder
 {
+    using AppFunc = Func<IDictionary<string, object>, Task>;
+
     /// <summary>
     /// A standard implementation of IAppBuilder 
     /// </summary>
     public class AppBuilder : IAppBuilder
     {
+        private static readonly AppFunc NotFound = new NotFound().Invoke;
+
         private readonly IList<Tuple<Type, Delegate, object[]>> _middleware;
         private readonly IDictionary<Tuple<Type, Type>, Delegate> _conversions;
         private readonly IDictionary<string, object> _properties;
@@ -44,6 +48,7 @@ namespace Owin.Builder
             _middleware = new List<Tuple<Type, Delegate, object[]>>();
 
             _properties["builder.AddSignatureConversion"] = new Action<Delegate>(AddSignatureConversion);
+            _properties["builder.DefaultApp"] = NotFound;
         }
 
         /// <summary>
@@ -171,7 +176,7 @@ namespace Owin.Builder
             object app;
             if (!_properties.TryGetValue("builder.DefaultApp", out app))
             {
-                app = new Func<IDictionary<string, object>, Task>(new NotFound().Invoke);
+                app = NotFound;
             }
 
             foreach (Tuple<Type, Delegate, object[]> middleware in _middleware.Reverse())
