@@ -74,7 +74,6 @@ namespace Owin.Types
             public const string LocalIpAddress = "server.LocalIpAddress";
             public const string LocalPort = "server.LocalPort";
             public const string IsLocal = "server.IsLocal";
-            public const string User = "server.User";
             public const string TraceOutput = "host.TraceOutput";
             public const string Addresses = "host.Addresses";
             public const string AppName = "host.AppName";
@@ -155,6 +154,26 @@ namespace Owin.Types
             public const string CallCancelled = "websocket.CallCancelled";
             public const string ClientCloseStatus = "websocket.ClientCloseStatus";
             public const string ClientCloseDescription = "websocket.ClientCloseDescription";
+        }
+
+        #endregion
+
+        #region Security v0.1.0
+        // http://owin.org/extensions/owin-Security-Extension-v0.1.0.htm
+
+        public static class Security
+        {
+            // 3.2. Per Request
+
+            public const string User = "server.User";
+
+            public const string GetIdentities = "security.GetIdentities";
+
+            // 3.3. Response
+
+            public const string Challenge = "security.Challenge";
+
+            public const string Grant = "security.Grant";
         }
 
         #endregion

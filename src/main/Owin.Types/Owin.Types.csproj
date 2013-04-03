@@ -45,7 +45,16 @@
     <Compile Include="AppBuilder\Address.Generated.cs" />
     <Compile Include="AppBuilder\Capabilities.cs" />
     <Compile Include="AppBuilder\Capabilities.Generated.cs" />
+    <Compile Include="Extensions\OwinRequestExtensions.Query.cs" />
+    <Compile Include="Extensions\OwinResponseExtensions.cs" />
+    <Compile Include="Extensions\OwinResponseExtensions.Cookies.cs" />
+    <Compile Include="Extensions\OwinRequestExtensions.Cookies.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Helpers\OwinHelpers.Query.cs" />
+    <Compile Include="Helpers\OwinHelpers.Cookies.cs" />
+    <Compile Include="Helpers\CookieOptions.cs" />
+    <Compile Include="OwinResponse.Spec-Security.cs" />
+    <Compile Include="OwinRequest.Spec-Security.cs" />
     <Compile Include="OwinResponse.Spec-Http.cs" />
     <Compile Include="OwinResponse.Write.cs" />
     <Compile Include="Extensions\OwinRequestExtensions.cs" />

@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using Owin.Types.Extensions;
 using Shouldly;
 using Xunit;
 
@@ -152,6 +153,46 @@ namespace Owin.Types.Tests
                     .Set(OwinConstants.RequestPath, "/five")
                     .Set(OwinConstants.RequestQueryString, "six=7"))
                 .Uri.ShouldBe(new Uri("https://two/four/five?six=7"));
+        }
+
+        [Fact]
+        public void CookiesCanBeParsed()
+        {
+            Create(
+                req => req.SetHeader("Cookie", "a=1;b=2"))
+                .GetCookies().ShouldBe(new Dictionary<string, string> { { "a", "1" }, { "b", "2" } });
+        }
+
+        [Fact]
+        public void CookieDelimitersCanBeFollowedWithSpace()
+        {
+            Create(
+                req => req.SetHeader("Cookie", "a=1; b=2"))
+                .GetCookies().ShouldBe(new Dictionary<string, string> { { "a", "1" }, { "b", "2" } });
+        }
+
+        [Fact]
+        public void OnlyTheFirstInstanceOfACookieIsSignificant()
+        {
+            Create(
+                req => req.SetHeader("Cookie", "a=1; b=2; a=3; c=4"))
+                .GetCookies().ShouldBe(new Dictionary<string, string> { { "a", "1" }, { "b", "2" }, { "c", "4" } });
+        }
+
+        [Fact]
+        public void QueryCanBeParsedToDictionary()
+        {
+            Create(
+                req => req.QueryString = "a=1&b=2")
+                .GetQuery().ShouldBe(new Dictionary<string, string[]> { { "a", new[] { "1" } }, { "b", new[] { "2" } } });
+        }
+
+        [Fact]
+        public void MultipleOccurencesWillBecomeArrayed()
+        {
+            Create(
+                req => req.QueryString = "a=1&b=2&a=3")
+                .GetQuery().ShouldBe(new Dictionary<string, string[]> { { "a", new[] { "1", "3" } }, { "b", new[] { "2" } } });
         }
     }
 }
