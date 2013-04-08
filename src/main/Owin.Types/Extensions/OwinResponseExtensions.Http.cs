@@ -1,4 +1,4 @@
-﻿// <copyright file="CookieValue.cs" company="Microsoft Open Technologies, Inc.">
+﻿// <copyright file="OwinRequestExtensions.Cookies.cs" company="Microsoft Open Technologies, Inc.">
 // Copyright 2013 Microsoft Open Technologies, Inc. All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,21 +14,17 @@
 // limitations under the License.
 // </copyright>
 
-using System;
+using System.Collections.Generic;
+using Owin.Types.Helpers;
 
-namespace Owin.Types.Helpers
+namespace Owin.Types.Extensions
 {
-    // Sources:[System.CodeDom.Compiler.GeneratedCode("App_Packages", "")]
-    public class CookieOptions
+    public static partial class OwinResponseExtensions
     {
-        public CookieOptions()
+        public static void Redirect(this OwinResponse response, string location)
         {
-            Path = "/";
+            response.StatusCode = 302;
+            response.SetHeader("Location", location);
         }
-        public string Domain { get; set; }
-        public string Path { get; set; }
-        public DateTime? Expires { get; set; }
-        public bool Secure { get; set; }
-        public bool HttpOnly { get; set; }
     }
 }

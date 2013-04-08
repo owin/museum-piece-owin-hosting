@@ -45,6 +45,8 @@
     <Compile Include="AppBuilder\Address.Generated.cs" />
     <Compile Include="AppBuilder\Capabilities.cs" />
     <Compile Include="AppBuilder\Capabilities.Generated.cs" />
+    <Compile Include="Extensions\OwinResponseExtensions.Security.cs" />
+    <Compile Include="Extensions\OwinResponseExtensions.Http.cs" />
     <Compile Include="Extensions\OwinRequestExtensions.Query.cs" />
     <Compile Include="Extensions\OwinResponseExtensions.cs" />
     <Compile Include="Extensions\OwinResponseExtensions.Cookies.cs" />
