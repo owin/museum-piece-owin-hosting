@@ -14,23 +14,36 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IdentityModel.Claims;
 using System.Security.Principal;
-using SendFileAsyncDelegate = System.Func<string, long, long?, System.Threading.CancellationToken, System.Threading.Tasks.Task>;
 
 namespace Owin.Types
 {
     public partial struct OwinResponse
     {
-        public IPrincipal Challenge
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures",
+            Justification = "Following Owin conventions.")]
+        public Tuple<IPrincipal, IDictionary<string, object>> SignIn
         {
-            get { return Get<IPrincipal>(OwinConstants.Security.Challenge); }
-            set { Set(OwinConstants.Security.Challenge, value); }
+            get { return Get<Tuple<IPrincipal, IDictionary<string, object>>>(OwinConstants.Security.SignIn); }
+            set { Set(OwinConstants.Security.SignIn, value); }
         }
 
-        public IPrincipal Grant
+        [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays",
+            Justification = "Using an array rather than a collection for this property for performance reasons.")]
+        public string[] SignOut
         {
-            get { return Get<IPrincipal>(OwinConstants.Security.Grant); }
-            set { Set(OwinConstants.Security.Grant, value); }
+            get { return Get<string[]>(OwinConstants.Security.SignOut); }
+            set { Set(OwinConstants.Security.SignOut, value); }
+        }
+
+        public Tuple<string[], Claim[]> Challenge
+        {
+            get { return Get<Tuple<string[], Claim[]>>(OwinConstants.Security.Challenge); }
+            set { Set(OwinConstants.Security.Challenge, value); }
         }
     }
 }

@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.IdentityModel" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppBuilder\Address.cs" />
