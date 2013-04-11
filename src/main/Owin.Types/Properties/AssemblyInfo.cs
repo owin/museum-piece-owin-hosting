@@ -34,9 +34,9 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("dd53aa0b-5d4b-4efd-9d44-094ed213c992")]
 
-[assembly: AssemblyVersion("0.9.3")]
-[assembly: AssemblyFileVersion("0.9.3")]
-[assembly: AssemblyInformationalVersion("0.9.3")]
+[assembly: AssemblyVersion("0.9.4")]
+[assembly: AssemblyFileVersion("0.9.4")]
+[assembly: AssemblyInformationalVersion("0.9.4")]
 [assembly: CLSCompliant(true)]
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Owin.Types", Justification = "By design")]
