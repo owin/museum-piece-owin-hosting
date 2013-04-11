@@ -15,15 +15,21 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using GetIdentitiesDelegate = System.Func<string[], System.Action<System.Security.Principal.IIdentity, object>, object, System.Threading.Tasks.Task>;
+using AuthenticateCallbackDelegate = System.Action<System.Security.Principal.IPrincipal, System.Collections.Generic.IDictionary<string, object>, System.Collections.Generic.IDictionary<string, object>, object>;
+using AuthenticateDelegate = System.Func<string[], System.Action<System.Security.Principal.IPrincipal, System.Collections.Generic.IDictionary<string, object>, System.Collections.Generic.IDictionary<string, object>, object>, object, System.Threading.Tasks.Task>;
 
 namespace Owin.Types
 {
     public partial struct OwinRequest
     {
-        private static readonly Action<IIdentity, object> CallbackDelegate = (identity, state) => ((Action<IIdentity>)state).Invoke(identity);
+        private static readonly AuthenticateCallbackDelegate AuthenticatePrincipalExtraPropertiesDelegate = (principal, extra, properties, state) => ((Action<IPrincipal, IDictionary<string, object>, IDictionary<string, object>>)state).Invoke(principal, extra, properties);
+        private static readonly AuthenticateCallbackDelegate AuthenticatePrincipalExtraDelegate = (principal, extra, properties, state) => ((Action<IPrincipal, IDictionary<string, object>>)state).Invoke(principal, extra);
+        private static readonly AuthenticateCallbackDelegate AuthenticatePrincipalDelegate = (principal, extra, properties, state) => ((Action<IPrincipal>)state).Invoke(principal);
+        private static readonly AuthenticateCallbackDelegate GetAuthenticationTypesExtraDelegate = (principal, extra, properties, state) => ((Action<IDictionary<string, object>>)state).Invoke(extra);
 
         public IPrincipal User
         {
@@ -31,20 +37,56 @@ namespace Owin.Types
             set { Set(OwinConstants.Security.User, value); }
         }
 
-        public GetIdentitiesDelegate GetIdentitiesDelegate
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures",
+            Justification = "Following Owin conventions.")]
+        public AuthenticateDelegate AuthenticateDelegate
         {
-            get { return Get<GetIdentitiesDelegate>(OwinConstants.Security.GetIdentities); }
-            set { Set(OwinConstants.Security.GetIdentities, value); }
+            get { return Get<AuthenticateDelegate>(OwinConstants.Security.Authenticate); }
+            set { Set(OwinConstants.Security.Authenticate, value); }
         }
 
-        public Task GetIdentities(string[] authenticationTypes, Action<IIdentity, object> callback, object state)
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures",
+            Justification = "Following Owin conventions.")]
+        public Task GetAuthenticationTypes(Action<IDictionary<string, object>, object> callback, object state)
         {
-            return GetIdentitiesDelegate.Invoke(authenticationTypes, callback, state);
+            return AuthenticateDelegate.Invoke(null, (ignore1, ignore2, extra, innerState) =>
+                callback.Invoke(extra, innerState), state);
         }
 
-        public Task GetIdentities(string[] authenticationTypes, Action<IIdentity> callback)
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures",
+            Justification = "Following Owin conventions.")]
+        public Task GetAuthenticationTypes(Action<IDictionary<string, object>, object> callback)
         {
-            return GetIdentitiesDelegate.Invoke(authenticationTypes, CallbackDelegate, callback);
+            return AuthenticateDelegate.Invoke(null, GetAuthenticationTypesExtraDelegate, callback);
+        }
+
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures",
+            Justification = "Following Owin conventions.")]
+        public Task Authenticate(string[] authenticationTypes, Action<IPrincipal, IDictionary<string, object>,
+            IDictionary<string, object>, object> callback, object state)
+        {
+            return AuthenticateDelegate.Invoke(authenticationTypes, callback, state);
+        }
+
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures",
+            Justification = "Following Owin conventions.")]
+        public Task Authenticate(string[] authenticationTypes, Action<IPrincipal, IDictionary<string, object>,
+            IDictionary<string, object>> callback)
+        {
+            return AuthenticateDelegate.Invoke(authenticationTypes, AuthenticatePrincipalExtraPropertiesDelegate, callback);
+        }
+
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures",
+            Justification = "Following Owin conventions.")]
+        public Task Authenticate(string[] authenticationTypes, Action<IPrincipal,
+            IDictionary<string, object>> callback)
+        {
+            return AuthenticateDelegate.Invoke(authenticationTypes, AuthenticatePrincipalExtraDelegate, callback);
+        }
+
+        public Task Authenticate(string[] authenticationTypes, Action<IPrincipal> callback)
+        {
+            return AuthenticateDelegate.Invoke(authenticationTypes, AuthenticatePrincipalDelegate, callback);
         }
     }
 }

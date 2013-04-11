@@ -14,7 +14,9 @@
 // limitations under the License.
 // </copyright>
 
-using System.Linq;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Claims;
 using System.Security.Principal;
 
 namespace Owin.Types.Extensions
@@ -23,37 +25,28 @@ namespace Owin.Types.Extensions
     {
         public static void SignIn(this OwinResponse response, IPrincipal user)
         {
-            response.Grant = user;
+            SignIn(response, user, null);
         }
 
-        // public static void SignOut(this OwinResponse response, params string[] authenticationTypes)
-        // {
-            // This is all incorrect
-            // var signout = new ClaimsPrincipal();
-            // if (authenticationTypes != null && authenticationTypes.Length != 0)
-            // {
-            //    signout.AddIdentities(authenticationTypes.Select(
-            //        authenticationType => new ClaimsIdentity(authenticationType)));
-            // }
-            // response.Set("security.Signout", signout);
-        // }
+        public static void SignIn(this OwinResponse response, IPrincipal user, IDictionary<string, object> extra)
+        {
+            response.SignIn = new Tuple<IPrincipal, IDictionary<string, object>>(user, extra);
+        }
 
-        // public static void Unauthorized(this OwinResponse response, params string[] authenticationTypes)
-        // {
-            // This is all incorrect
-            // var challenge = new ClaimsPrincipal();
-            // if (authenticationTypes != null && authenticationTypes.Length != 0)
-            // {
-            //    challenge.AddIdentities(authenticationTypes.Select(
-            //        authenticationType => new ClaimsIdentity(authenticationType)));
-            // }
-            // Unauthorized(response, challenge);
-        // }
+        public static void SignOut(this OwinResponse response, params string[] authenticationTypes)
+        {
+            response.SignOut = authenticationTypes;
+        }
 
-        // public static void Unauthorized(this OwinResponse response, IPrincipal challenge)
-        // {
-        //    response.StatusCode = 401;
-        //    response.Challenge = challenge;
-        // }
+        public static void Unauthorized(this OwinResponse response, params string[] authenticationTypes)
+        {
+            Unauthorized(response, authenticationTypes, null);
+        }
+
+        public static void Unauthorized(this OwinResponse response, string[] authenticationTypes, Claim[] claims)
+        {
+            response.StatusCode = 401;
+            response.Challenge = new Tuple<string[], Claim[]>(authenticationTypes, claims);
+        }
     }
 }
