@@ -12,6 +12,9 @@
     <tags>OWIN</tags>
     <dependencies>
     </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.IdentityModel" />
+    </frameworkAssemblies>
   </metadata>
   <files>
     <file src="**\*.cs" target="content\App_Packages\$id$.$version$" />
