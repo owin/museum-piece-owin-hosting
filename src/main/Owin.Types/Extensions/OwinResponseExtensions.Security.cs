@@ -28,9 +28,9 @@ namespace Owin.Types.Extensions
             SignIn(response, user, null);
         }
 
-        public static void SignIn(this OwinResponse response, IPrincipal user, IDictionary<string, object> extra)
+        public static void SignIn(this OwinResponse response, IPrincipal user, IDictionary<string, string> extra)
         {
-            response.SignIn = new Tuple<IPrincipal, IDictionary<string, object>>(user, extra);
+            response.SignIn = new Tuple<IPrincipal, IDictionary<string, string>>(user, extra);
         }
 
         public static void SignOut(this OwinResponse response, params string[] authenticationTypes)

@@ -26,9 +26,9 @@ namespace Owin.Types
     {
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures",
             Justification = "Following Owin conventions.")]
-        public Tuple<IPrincipal, IDictionary<string, object>> SignIn
+        public Tuple<IPrincipal, IDictionary<string, string>> SignIn
         {
-            get { return Get<Tuple<IPrincipal, IDictionary<string, object>>>(OwinConstants.Security.SignIn); }
+            get { return Get<Tuple<IPrincipal, IDictionary<string, string>>>(OwinConstants.Security.SignIn); }
             set { Set(OwinConstants.Security.SignIn, value); }
         }
 
