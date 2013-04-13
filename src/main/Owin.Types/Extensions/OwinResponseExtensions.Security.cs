@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Claims;
 using System.Security.Principal;
 
 namespace Owin.Types.Extensions
@@ -43,10 +42,10 @@ namespace Owin.Types.Extensions
             Unauthorized(response, authenticationTypes, null);
         }
 
-        public static void Unauthorized(this OwinResponse response, string[] authenticationTypes, Claim[] claims)
+        public static void Unauthorized(this OwinResponse response, string[] authenticationTypes, IDictionary<string, string> extra)
         {
             response.StatusCode = 401;
-            response.Challenge = new Tuple<string[], Claim[]>(authenticationTypes, claims);
+            response.Challenge = Tuple.Create(authenticationTypes, extra);
         }
     }
 }

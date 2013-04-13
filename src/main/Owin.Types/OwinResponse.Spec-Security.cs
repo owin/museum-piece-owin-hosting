@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IdentityModel.Claims;
 using System.Security.Principal;
 
 namespace Owin.Types
@@ -40,9 +39,12 @@ namespace Owin.Types
             set { Set(OwinConstants.Security.SignOut, value); }
         }
 
-        public Tuple<string[], Claim[]> Challenge
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Tuple contains IDictionary")]
+        [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays",
+            Justification = "Using an array rather than a collection for this property for performance reasons.")]
+        public Tuple<string[], IDictionary<string, string>> Challenge
         {
-            get { return Get<Tuple<string[], Claim[]>>(OwinConstants.Security.Challenge); }
+            get { return Get<Tuple<string[], IDictionary<string, string>>>(OwinConstants.Security.Challenge); }
             set { Set(OwinConstants.Security.Challenge, value); }
         }
     }
