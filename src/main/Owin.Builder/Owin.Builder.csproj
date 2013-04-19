@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppBuilder.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="NotFound.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

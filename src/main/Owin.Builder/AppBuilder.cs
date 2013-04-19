@@ -47,8 +47,8 @@ namespace Owin.Builder
             _conversions = new Dictionary<Tuple<Type, Type>, Delegate>();
             _middleware = new List<Tuple<Type, Delegate, object[]>>();
 
-            _properties["builder.AddSignatureConversion"] = new Action<Delegate>(AddSignatureConversion);
-            _properties["builder.DefaultApp"] = NotFound;
+            _properties[Constants.BuilderAddConversion] = new Action<Delegate>(AddSignatureConversion);
+            _properties[Constants.BuilderDefaultApp] = NotFound;
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace Owin.Builder
         private object BuildInternal(Type signature)
         {
             object app;
-            if (!_properties.TryGetValue("builder.DefaultApp", out app))
+            if (!_properties.TryGetValue(Constants.BuilderDefaultApp, out app))
             {
                 app = NotFound;
             }
@@ -271,13 +271,13 @@ namespace Owin.Builder
 
         private static Delegate ToMemberDelegate(Type signature, object app)
         {
-            MethodInfo signatureMethod = signature.GetMethod("Invoke");
+            MethodInfo signatureMethod = signature.GetMethod(Constants.Invoke);
             ParameterInfo[] signatureParameters = signatureMethod.GetParameters();
 
             MethodInfo[] methods = app.GetType().GetMethods();
             foreach (MethodInfo method in methods)
             {
-                if (method.Name != "Invoke")
+                if (method.Name != Constants.Invoke)
                 {
                     continue;
                 }
@@ -341,7 +341,7 @@ namespace Owin.Builder
             MethodInfo[] methods = middlewareObject.GetType().GetMethods();
             foreach (MethodInfo method in methods)
             {
-                if (method.Name != "Initialize")
+                if (method.Name != Constants.Initialize)
                 {
                     continue;
                 }
@@ -379,7 +379,7 @@ namespace Owin.Builder
             MethodInfo[] methods = middlewareObject.GetType().GetMethods();
             foreach (MethodInfo method in methods)
             {
-                if (method.Name != "Invoke")
+                if (method.Name != Constants.Invoke)
                 {
                     continue;
                 }
