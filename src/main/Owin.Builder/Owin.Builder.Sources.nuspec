@@ -14,9 +14,8 @@
       <dependency id="Owin" version="1.0"/>
     </dependencies>
   </metadata>
-  <files>
-    <file src="**\*.cs" target="content\App_Packages\$id$.$version$" />
+    <file src="*.cs" target="content\App_Packages\$id$.$version$" />
+    <file src="*.resx" target="content\App_Packages\$id$.$version$" />
     <file src="*.txt" />
   </files>
 </package>
-

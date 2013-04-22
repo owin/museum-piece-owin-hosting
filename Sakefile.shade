@@ -48,6 +48,7 @@ use-standard-goals features='nuget,xunit,stylecop'
     var projectName='${Path.GetFileName(projectDir)}'
     
     copy sourceDir='${projectDir}' include='**/*.cs' exclude='**/App_Packages/**/*' outputDir='${BUILD_DIR}\${projectName}' overwrite='${true}'
+    copy sourceDir='${projectDir}' include='**/*.resx' exclude='**/App_Packages/**/*' outputDir='${BUILD_DIR}\${projectName}' overwrite='${true}'
     copy sourceDir='.' include='LICENSE.txt' outputDir='${BUILD_DIR}\${projectName}' overwrite='${true}'
     copy sourceDir='.' include='NOTICE.txt' outputDir='${BUILD_DIR}\${projectName}' overwrite='${true}'
 
