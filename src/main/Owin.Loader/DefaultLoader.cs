@@ -80,7 +80,7 @@ namespace Owin.Loader
             if (string.IsNullOrWhiteSpace(startupName))
             {
                 startupName = GetDefaultConfigurationString(
-                    assembly => new[] { "Startup", assembly.GetName().Name + ".Startup" });
+                    assembly => new[] { Constants.Startup, assembly.GetName().Name + "." + Constants.Startup });
             }
 
             var typeAndMethod = GetTypeAndMethodNameForConfigurationString(startupName);
@@ -92,7 +92,7 @@ namespace Owin.Loader
 
             var type = typeAndMethod.Item1;
             // default to the "Configuration" method if only the type name was provided
-            var methodName = typeAndMethod.Item2 ?? "Configuration";
+            var methodName = typeAndMethod.Item2 ?? Constants.Configuration;
             var methodInfo = type.GetMethod(methodName);
 
             var startup = MakeDelegate(type, methodInfo);
@@ -111,10 +111,10 @@ namespace Owin.Loader
                     }
 
                     object value;
-                    if (!builder.Properties.TryGetValue("host.AppName", out value) ||
+                    if (!builder.Properties.TryGetValue(Constants.HostAppName, out value) ||
                         String.IsNullOrWhiteSpace(Convert.ToString(value, CultureInfo.InvariantCulture)))
                     {
-                        builder.Properties["host.AppName"] = type.FullName;
+                        builder.Properties[Constants.HostAppName] = type.FullName;
                     }
                     startup(builder);
                 };
