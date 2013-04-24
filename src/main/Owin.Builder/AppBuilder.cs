@@ -47,8 +47,8 @@ namespace Owin.Builder
             _conversions = new Dictionary<Tuple<Type, Type>, Delegate>();
             _middleware = new List<Tuple<Type, Delegate, object[]>>();
 
-            _properties["builder.AddSignatureConversion"] = new Action<Delegate>(AddSignatureConversion);
-            _properties["builder.DefaultApp"] = NotFound;
+            _properties[Constants.BuilderAddConversion] = new Action<Delegate>(AddSignatureConversion);
+            _properties[Constants.BuilderDefaultApp] = NotFound;
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace Owin.Builder
             Type parameterType = GetParameterType(conversion);
             if (parameterType == null)
             {
-                throw new ArgumentException("Conversion delegate must take one parameter", "conversion");
+                throw new ArgumentException(BuilderResources.Exception_ConversionTakesOneParameter, "conversion");
             }
             Tuple<Type, Type> key = Tuple.Create(conversion.Method.ReturnType, parameterType);
             _conversions[key] = conversion;
@@ -174,7 +174,7 @@ namespace Owin.Builder
         private object BuildInternal(Type signature)
         {
             object app;
-            if (!_properties.TryGetValue("builder.DefaultApp", out app))
+            if (!_properties.TryGetValue(Constants.BuilderDefaultApp, out app))
             {
                 app = NotFound;
             }
@@ -213,7 +213,7 @@ namespace Owin.Builder
                 return multiHop;
             }
             throw new ArgumentException(
-                string.Format(CultureInfo.CurrentCulture, "No conversion available between {0} and {1}", app.GetType(), signature), 
+                string.Format(CultureInfo.CurrentCulture, BuilderResources.Exception_NoConversionExists, app.GetType(), signature), 
                 "signature");
         }
 
@@ -271,13 +271,13 @@ namespace Owin.Builder
 
         private static Delegate ToMemberDelegate(Type signature, object app)
         {
-            MethodInfo signatureMethod = signature.GetMethod("Invoke");
+            MethodInfo signatureMethod = signature.GetMethod(Constants.Invoke);
             ParameterInfo[] signatureParameters = signatureMethod.GetParameters();
 
             MethodInfo[] methods = app.GetType().GetMethods();
             foreach (MethodInfo method in methods)
             {
-                if (method.Name != "Invoke")
+                if (method.Name != Constants.Invoke)
                 {
                     continue;
                 }
@@ -332,7 +332,7 @@ namespace Owin.Builder
                 return ToConstructorMiddlewareFactory(middlewareObject, args, ref middlewareDelegate);
             }
 
-            throw new NotSupportedException((middlewareObject ?? string.Empty).ToString());
+            throw new NotSupportedException(BuilderResources.Exception_MiddlewareNotSupported + (middlewareObject ?? string.Empty).ToString());
         }
 
         // Instance pattern: public void Initialize(AppFunc next, string arg1, string arg2), public Task Invoke(IDictionary<...> env)
@@ -341,7 +341,7 @@ namespace Owin.Builder
             MethodInfo[] methods = middlewareObject.GetType().GetMethods();
             foreach (MethodInfo method in methods)
             {
-                if (method.Name != "Initialize")
+                if (method.Name != Constants.Initialize)
                 {
                     continue;
                 }
@@ -379,7 +379,7 @@ namespace Owin.Builder
             MethodInfo[] methods = middlewareObject.GetType().GetMethods();
             foreach (MethodInfo method in methods)
             {
-                if (method.Name != "Invoke")
+                if (method.Name != Constants.Invoke)
                 {
                     continue;
                 }
@@ -432,7 +432,8 @@ namespace Owin.Builder
                 return Tuple.Create(parameters[0].ParameterType, middlewareDelegate, args);
             }
 
-            throw new MissingMethodException(middlewareType.FullName, "ctor(" + (args.Length + 1) + ")");
+            throw new MissingMethodException(middlewareType.FullName,
+                string.Format(CultureInfo.CurrentCulture, BuilderResources.Exception_NoConstructorFound, args.Length + 1));
         }
 
         private static bool TestArgForParameter(Type parameterType, object arg)

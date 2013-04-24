@@ -16,6 +16,7 @@
 
 using System;
 using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
@@ -38,3 +39,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("0.9.9")]
 [assembly: AssemblyInformationalVersion("0.9.9")]
 [assembly: CLSCompliant(false)]
+[assembly: NeutralResourcesLanguage("en-US")]
